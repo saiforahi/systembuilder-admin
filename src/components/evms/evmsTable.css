@@ -1,0 +1,17 @@
+.card-details2{
+    font-size: 14px;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    color:rgb(23,43,77);
+    font-weight: 400;
+text-transform: capitalize;
+mix-blend-mode: normal;
+}
+.p-header-4{
+    font-weight: 500 !important;
+    color: rgb(107, 119, 140);
+
+}
+.evmsval{
+    color: green;
+}

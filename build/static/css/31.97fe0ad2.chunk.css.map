@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/pages/wbs-board/Board.css"],"names":[],"mappings":"AAAA,QACI,kBAAmB,CACnB,eAAgB,CAChB,sBACJ,CAEA,QACI,yBACJ","file":"31.97fe0ad2.chunk.css","sourcesContent":[".flxgwB {\r\n    white-space: nowrap;\r\n    overflow: hidden;\r\n    text-overflow: ellipsis;\r\n}\r\n\r\n.bgOcuh {\r\n    padding-right: 0 !important;\r\n}"]}
