@@ -1,10 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux';
-import { USER_ID } from '../Config';
-import { fetchPersonalDetails } from '../store/slices/ProfileSlice';
-import { fetchProjectsThunk } from '../store/slices/ProjectsSlice';
-import { fetchWbsThunk } from '../store/slices/WbsSlice';
-import { fetchProjectsForPMThunk } from '../store/slices/ProjectsSlice';
+
 import {
   TheContent,
   TheSidebar,
@@ -12,12 +8,13 @@ import {
   TheHeader
 } from './index'
 import './TheLayout.css'
-import { has_group } from '../helper';
 import { fetchBrandsThunk } from '../store/slices/brandsSlice';
+import { fetchLaptopList } from '../store/slices/laptopsSlice';
 const TheLayout = () => {
   const dispatch = useDispatch()
   React.useEffect(()=>{
     dispatch(fetchBrandsThunk())
+    dispatch(fetchLaptopList())
   },[])
   return (
     <div className="c-app c-default-layout">

@@ -1,9 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 import ConfigSlice from './slices/ConfigSlice'
 import DrawerSlice from './slices/DrawerSlice'
-import ProfileSlice from './slices/ProfileSlice'
+import profileSlice from './slices/ProfileSlice'
 import SidebarSlice from './slices/SideBarSlice'
 import brandsSlice from './slices/brandsSlice'
+import laptopsSlice from './slices/laptopsSlice'
 
 export default configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export default configureStore({
     config: ConfigSlice,
     sidebar: SidebarSlice,
     brands: brandsSlice,
-    profile:ProfileSlice,
+    profile:profileSlice,
+    laptops:laptopsSlice
   },
 })

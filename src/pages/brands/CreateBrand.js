@@ -65,7 +65,7 @@ const CreateBrand = () => {
                                             {/**submit buttons */}
                                             <div className="col-md-12">
                                                 <div className="projectwbs-form-button-holders mt-3">
-                                                    <CButton type="button" onClick={formCreateBrand.handleSubmit} className="create-btn-prjctwbs create-wbs">Create WBS</CButton>
+                                                    <CButton type="button" onClick={formCreateBrand.handleSubmit} className="create-btn-prjctwbs create-wbs">Create Brand</CButton>
                                                     <CButton type="button" className="create-btn-prjctwbs cancel-wbs">Cancel</CButton>
                                                 </div>
                                             </div>

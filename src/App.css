@@ -36,11 +36,29 @@
     transform: rotate(360deg);
   }
 }
-.error{
+
+.error {
   color: red;
   font-size: 0.8rem;
 }
+
 .table-sm th, .table-sm td {
   padding: 0.3rem;
   text-align: center;
+}
+
+.fileContainer .deleteImage {
+  position: absolute;
+  top: -9 px;
+  right: -9 px;
+  color: #fff;
+  background: #b10b0b !important;
+  border-radius: 50%;
+  text-align: center;
+  cursor: pointer;
+  font-size: 26px;
+  font-weight: bold;
+  line-height: 30px;
+  width: 30 px;
+  height: 30 px;
 }
