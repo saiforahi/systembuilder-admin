@@ -5,6 +5,7 @@ import profileSlice from './slices/ProfileSlice'
 import SidebarSlice from './slices/SideBarSlice'
 import brandsSlice from './slices/brandsSlice'
 import laptopsSlice from './slices/laptopsSlice'
+import osSlice from './slices/osSlice'
 
 export default configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export default configureStore({
     sidebar: SidebarSlice,
     brands: brandsSlice,
     profile:profileSlice,
-    laptops:laptopsSlice
+    laptops:laptopsSlice,
+    os: osSlice
   },
 })

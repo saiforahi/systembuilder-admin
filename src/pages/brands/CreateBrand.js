@@ -2,7 +2,6 @@ import { CContainer, CRow, CCol, CCard, CCardHeader, CCardBody, CForm, CLabel, C
 import React, {useState} from 'react'
 import './brands-styles.css'
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProjectsThunk, fetchProjectsAssigneeThunk, fetchWbsThunk } from '../../store/slices/ProjectsSlice';
 import Select from "react-select";
 import { useFormik } from 'formik';
 import { API } from '../../Config';
@@ -36,7 +35,7 @@ const CreateBrand = () => {
         onSubmit:createBrand
     })
     React.useEffect(() => {
-        dispatch(fetchProjectsThunk(5))
+        
     }, [])
 
     

@@ -10,11 +10,13 @@ import {
 import './TheLayout.css'
 import { fetchBrandsThunk } from '../store/slices/brandsSlice';
 import { fetchLaptopList } from '../store/slices/laptopsSlice';
+import { fetchOSThunk } from '../store/slices/osSlice';
 const TheLayout = () => {
   const dispatch = useDispatch()
   React.useEffect(()=>{
     dispatch(fetchBrandsThunk())
     dispatch(fetchLaptopList())
+    dispatch(fetchOSThunk())
   },[])
   return (
     <div className="c-app c-default-layout">

@@ -2,7 +2,8 @@ import { CContainer, CFormGroup, CButtonClose, CImg, CRow, CCol, CCard, CCardHea
 import React, { useState } from 'react'
 import '../brands/brands-styles.css'
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProjectsThunk, fetchProjectsAssigneeThunk, fetchWbsThunk } from '../../store/slices/ProjectsSlice';
+
+import CreatableSelect from 'react-select/creatable';
 import Select from "react-select";
 import { useFormik } from 'formik';
 import { API } from '../../Config';
@@ -10,7 +11,7 @@ import swal from 'sweetalert';
 import { useHistory } from 'react-router-dom';
 import { Stack, Tile, SimpleSlides, AnimatedSlides } from "react-easy-image";
 import ImageUploader from "react-images-upload";
-import Dropzone from 'react-dropzone-uploader'
+import { push_item } from '../../store/slices/osSlice';
 const Create = (props) => {
     const dispatch = useDispatch()
     let history = useHistory()
@@ -56,7 +57,39 @@ const Create = (props) => {
             formCreateLaptop.setFieldValue('brand', option.value)
         }
     }
-    
+    const os = useSelector(state => state.os.options)
+    const [selectedOS,setOS]=useState('')
+    const handleOSChange = (option,value,actionMeta) => {
+        console.log(option,value)
+        setOS(option)
+    }
+    const handleOSCreate=(value)=>{
+        console.log('create',value)
+        setOS({value:value,label:value})
+        dispatch(push_item(value)) 
+    }
+    const [storages,setStorages] = useState([])
+    const [selectedStorage,setSelectedStorage]=useState('')
+    const handleStorageChange = (option,value,actionMeta) => {
+        console.log(option,value)
+        setSelectedStorage(option)
+    }
+    const handleStorageCreate=(value)=>{
+        console.log('create',value)
+        setSelectedStorage({value:value,label:value})
+        setStorages([...storages,{value:value,label:value}])
+    }
+    const [memories,setMemories] = useState([])
+    const [selectedMemory,setSelectedMemory]=useState('')
+    const handleMemoryChange = (option,value,actionMeta) => {
+        console.log(option,value)
+        setSelectedMemory(option)
+    }
+    const handleMemoryCreate=(value)=>{
+        console.log('create',value)
+        setSelectedMemory({value:value,label:value})
+        setMemories([...memories,{value:value,label:value}])
+    }
     const formCreateLaptop = useFormik({
         initialValues: {
             name: '',
@@ -67,11 +100,29 @@ const Create = (props) => {
         validateOnChange: true,
         onSubmit: createlaptop
     })
+    function initialize(){
+        API.get('laptops/specification/list/storage').then(res=>{
+            console.log('stotrages',res.data)
+            let temp=[]
+            Array.from(res.data.data).forEach((item,idx)=>{
+                temp.push({value:item,label:item})
+            })
+            setStorages(temp)
+        })
+        API.get('laptops/specification/list/memory').then(res=>{
+            console.log('memories',res.data)
+            let temp=[]
+            Array.from(res.data.data).forEach((item,idx)=>{
+                temp.push({value:item,label:item})
+            })
+            setMemories(temp)
+        })
+    }
     React.useEffect(() => {
-        dispatch(fetchProjectsThunk(5))
+        initialize()
     }, [])
-    
-    
+
+
     return (
         <>
             <CContainer>
@@ -97,10 +148,61 @@ const Create = (props) => {
                                                     Brand
                                                 </CLabel>
                                                 <Select
-                                                    className="custom-forminput-6"
+                                                    classNamePrefix="custom-forminput-6"
                                                     options={brands}
                                                     isClearable={true}
                                                     onChange={handleBrandChange}
+                                                />
+                                                {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>}
+                                            </div>
+                                            <div className="col-lg-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Operating System
+                                                </CLabel>
+                                                <CreatableSelect
+                                                    aria-labelledby="Operating Systems"
+                                                    closeMenuOnSelect={true}
+                                                    classNamePrefix="custom-forminput-6"
+                                                    onChange={handleOSChange}
+                                                    // onInputChange={handleOSInputChange}
+                                                    onCreateOption={handleOSCreate}
+                                                    options={os}
+                                                    value={selectedOS}
+                                                    isClearable={true}
+                                                />
+                                                {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>}
+                                            </div>
+                                            <div className="col-lg-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Storage
+                                                </CLabel>
+                                                <CreatableSelect
+                                                    aria-labelledby="Storages"
+                                                    closeMenuOnSelect={true}
+                                                    classNamePrefix="custom-forminput-6"
+                                                    onChange={handleStorageChange}
+                                                    // onInputChange={handleOSInputChange}
+                                                    onCreateOption={handleStorageCreate}
+                                                    options={storages}
+                                                    value={selectedStorage}
+                                                    isClearable={true}
+                                                />
+                                                {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>}
+                                            </div>
+                                            <div className="col-lg-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Memory
+                                                </CLabel>
+                                                <CreatableSelect
+                                                    aria-labelledby="Memories"
+                                                    closeMenuOnSelect={true}
+                                                    classNamePrefix="custom-forminput-6"
+                                                    onChange={handleMemoryChange}
+                                                    // onInputChange={handleOSInputChange}
+                                                    onCreateOption={handleMemoryCreate}
+                                                    options={memories}
+                                                    value={selectedMemory}
+                                                    isClearable={true}
                                                 />
                                                 {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>}
                                             </div>
