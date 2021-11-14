@@ -1,0 +1,1 @@
+{"version":3,"sources":["pages/products/Products.js"],"names":["Products"],"mappings":"mIAAA,uBASeA,UAPA,WACX,OACI","file":"static/js/17.7eec1f46.chunk.js","sourcesContent":["import React from 'react'\r\n\r\nconst Products=()=>{\r\n    return(\r\n        <>\r\n        </>\r\n    )\r\n}\r\n\r\nexport default Products"],"sourceRoot":""}

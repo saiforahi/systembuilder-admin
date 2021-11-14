@@ -1,11 +1,11 @@
 import axios from 'axios';
-const status = 'dev'
-export const API_URL = status === 'prod' ? 'http://systembuilderbd.com/' : 'http://localhost:8000/api/'
+const status = 'prod'
+export const API_URL = status === 'prod' ? 'https://test.virtualdr.com.bd/api/' : 'http://localhost:8000/api/'
 export const TOKEN = "access_token"
 export const USER = "auth_user"
 export const ROLES = "auth_roles"
 export const USER_ID = "user_id"
-export const BASE_URL = status === 'prod' ? 'http://systembuilderbd.com' : 'http://localhost:8000'
+export const BASE_URL = status === 'prod' ? 'https://test.virtualdr.com.bd' : 'http://localhost:8000'
 export const credentials = {
   "GOOGLE_CLIENT_ID": "705019730299-kfb5arnuisah2135tka05uka6h7v901a.apps.googleusercontent.com",
   "FACEBOOK_APP_ID": "788095958681659"
@@ -16,7 +16,7 @@ export const API = axios.create({
   headers: {
     "Authorization": `Bearer ${localStorage.getItem(TOKEN)}`,
     "Content-Type": "application/json",
-   "Access-Control-Allow-Origin": "*"
+  //  "Access-Control-Allow-Origin": "*"
   }
 })
 export const FILE_API = axios.create({
@@ -25,8 +25,9 @@ export const FILE_API = axios.create({
   headers: {
     "Authorization": `Bearer ${localStorage.getItem(TOKEN)}`,
     "Content-Type": "multipart/form-data",
-   "Access-Control-Allow-Origin": "*"
-  }
+    // "Access-Control-Allow-Origin": "*"
+  },
+  support_credentials:true
 })
 API.interceptors.request.use(
   function(config) {
@@ -57,8 +58,9 @@ export const PUBLIC_API = axios.create({
   timeout: 100000,
   headers:{
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*"
-  }
+    // "Access-Control-Allow-Origin": "*",
+  },
+  support_credentials:true
 })
 
 export const PUBLIC_FORM_API = axios.create({

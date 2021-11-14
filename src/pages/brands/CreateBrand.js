@@ -7,6 +7,7 @@ import { useFormik } from 'formik';
 import { API } from '../../Config';
 import swal from 'sweetalert';
 import { useHistory } from 'react-router-dom';
+import { fetchBrandsThunk } from '../../store/slices/brandsSlice';
 
 const CreateBrand = () => {
     const dispatch = useDispatch()
@@ -15,6 +16,7 @@ const CreateBrand = () => {
         API.post('brands/create',values).then((res)=>{
             console.log(res)
             if(res.status==200){
+                dispatch(fetchBrandsThunk())
                 history.push('/dashboard/brands')
                 swal('Created!','A new Brand Created','success')
             }
