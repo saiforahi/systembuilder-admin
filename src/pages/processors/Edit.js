@@ -12,8 +12,8 @@ import { useHistory } from 'react-router-dom';
 import { Stack, Tile, SimpleSlides, AnimatedSlides } from "react-easy-image";
 import ImageUploader from "react-images-upload";
 import { push_item } from '../../store/slices/osSlice';
-import { fetchLaptopList } from '../../store/slices/laptopsSlice';
-const Create = (props) => {
+import {useParams} from "react-router-dom";
+const Edit = (props) => {
     const dispatch = useDispatch()
     let history = useHistory()
     const [images, setImages] = useState([])
@@ -66,7 +66,6 @@ const Create = (props) => {
         FILE_API.post('laptops/create', formData).then((res) => {
             console.log(res)
             if (res.status == 201) {
-                dispatch(fetchLaptopList())
                 history.push('/dashboard/laptops')
                 swal('Created!', 'A new laptop Created', 'success')
             }
@@ -385,4 +384,4 @@ const Create = (props) => {
         </>
     )
 }
-export default Create;
+export default Edit;

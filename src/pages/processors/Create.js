@@ -221,7 +221,7 @@ const Create = (props) => {
                 <CRow>
                     <div className="col-md-8 offset-md-2 col-sm-12">
                         <CCard className="custom-wbs-card-1">
-                            <CCardHeader className="project-wbs-1"> <h4 className="section-name-wbscreate">Add Laptop</h4>
+                            <CCardHeader className="project-wbs-1"> <h4 className="section-name-wbscreate">Add Processor</h4>
                             </CCardHeader>
                             <CCardBody>
                                 <CContainer>
@@ -247,7 +247,7 @@ const Create = (props) => {
                                                 />
                                                 {/* {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>} */}
                                             </div>
-                                            <div className="col-lg-12 mb-3">
+                                            {/* <div className="col-lg-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Processor
                                                 </CLabel>
@@ -263,8 +263,8 @@ const Create = (props) => {
                                                     isClearable={true}
                                                 />
                                                 {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>}
-                                            </div>
-                                            <div className="col-lg-12 mb-3">
+                                            </div> */}
+                                            {/* <div className="col-lg-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Operating System
                                                 </CLabel>
@@ -280,8 +280,8 @@ const Create = (props) => {
                                                     isClearable={true}
                                                 />
                                                 {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>}
-                                            </div>
-                                            <div className="col-lg-12 mb-3">
+                                            </div> */}
+                                            {/* <div className="col-lg-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Graphics Card
                                                 </CLabel>
@@ -297,8 +297,8 @@ const Create = (props) => {
                                                     isClearable={true}
                                                 />
                                                 {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>}
-                                            </div>
-                                            <div className="col-lg-12 mb-3">
+                                            </div> */}
+                                            {/* <div className="col-lg-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Storage
                                                 </CLabel>
@@ -314,8 +314,8 @@ const Create = (props) => {
                                                     isClearable={true}
                                                 />
                                                 {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>}
-                                            </div>
-                                            <div className="col-lg-12 mb-3">
+                                            </div> */}
+                                            {/* <div className="col-lg-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Memory
                                                 </CLabel>
@@ -331,7 +331,7 @@ const Create = (props) => {
                                                     isClearable={true}
                                                 />
                                                 {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>}
-                                            </div>
+                                            </div> */}
                                             <div className="col-lg-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Color

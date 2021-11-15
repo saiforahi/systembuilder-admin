@@ -62,6 +62,7 @@ const TheSidebar = () => {
           {has_group('admin') && <CSidebarNavItem to="/dashboard/products/create-new-product" name="Add New Product" className="vo-navItem" ></CSidebarNavItem>}
           <CSidebarNavItem to="/dashboard/products" name="All Products" className="vo-navItem"  ></CSidebarNavItem>
           <CSidebarNavItem to="/dashboard/laptops" name="Laptops" className="vo-navItem"  ></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/processors" name="Processors" className="vo-navItem"  ></CSidebarNavItem>
           {/* <CSidebarNavItem to="/dashboard/Projects/completed-projects" name="Completed Projects" className="vo-navItem" ></CSidebarNavItem> */}
 
 
