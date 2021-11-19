@@ -1,4 +1,4 @@
-import { CContainer, CFormGroup, CButtonClose, CImg, CRow, CCol, CCard, CCardHeader, CCardBody, CForm, CLabel, CInput, CButton, CSelect, CTextarea, CAlert } from '@coreui/react';
+import { CContainer, CCardFooter,CFormGroup, CButtonClose, CImg, CRow, CCol, CCard, CCardHeader, CCardBody, CForm, CLabel, CInput, CButton, CSelect, CTextarea, CAlert } from '@coreui/react';
 import React, { useState } from 'react'
 import '../brands/brands-styles.css'
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,13 +6,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import CreatableSelect from 'react-select/creatable';
 import Select from "react-select";
 import { useFormik } from 'formik';
-import { FILE_API,API } from '../../Config';
+import { FILE_API, API } from '../../Config';
 import swal from 'sweetalert';
 import { useHistory } from 'react-router-dom';
 import { Stack, Tile, SimpleSlides, AnimatedSlides } from "react-easy-image";
 import ImageUploader from "react-images-upload";
 import { push_item } from '../../store/slices/osSlice';
 import { fetchLaptopList } from '../../store/slices/laptopsSlice';
+import { fetchProcessorsList } from '../../store/slices/processorsSlice';
 const Create = (props) => {
     const dispatch = useDispatch()
     let history = useHistory()
@@ -33,42 +34,37 @@ const Create = (props) => {
         setAvatars([...avatars, URL.createObjectURL(file)]);
     }
     // const [selectedBrand,setSelectedBrand] = useState()
-    const brands = useSelector(state => {
-        let temp = []
-        Array.from(state.brands.data).forEach((item, idx) => {
-            temp.push({ value: item.id, label: item.name, data: item })
-        })
-        return temp
-    })
+    
     const createlaptop = (values) => {
         let formData = new FormData()
-        formData.append('name',values.name)
-        if(pictures.length>0){
-            formData.append('total_images',pictures[0].length)
+        formData.append('name', values.name)
+        if (pictures.length > 0) {
+            formData.append('total_images', pictures[0].length)
             // formData.append('images',pictures[0])
-            console.log('pictures',pictures[0])
-            for(let index=0;index<pictures[0].length;index++){
-                console.log('picture'.concat(index),pictures[0][index])
-                formData.append('image'+(index+1),pictures[0][index])
+            console.log('pictures', pictures[0])
+            for (let index = 0; index < pictures[0].length; index++) {
+                console.log('picture'.concat(index), pictures[0][index])
+                formData.append('image' + (index + 1), pictures[0][index])
             }
         }
-        const specs ={
-            os : selectedOS.value,
-            brand: values.brand,
-            storage: selectedStorage.value,
-            memory: selectedMemory.value,
-            processor: selectedProcessor.value,
-            graphic : selectedGraphic.value,
-            color: selectedColor.value
+        const general_specs = {
+            socket: selectedSocket.value,
+            pcie:selectedPCIe.value,
+            manufacturing_process : selectedManufacturingProcess.value,
         }
-        formData.append('price',price)
-        formData.append('specifications',JSON.stringify(specs))
-        FILE_API.post('laptops/create', formData).then((res) => {
+        formData.append('price', price)
+        formData.append('brand', selectedBrand.value)
+        formData.append('model', selectedModel.value)
+        formData.append('general_specs', JSON.stringify(general_specs))
+        for (var pair of formData.entries()) {
+            console.log(pair[0]+ ', ' + pair[1]); 
+        }
+        FILE_API.post('processors/create', formData).then((res) => {
             console.log(res)
             if (res.status == 201) {
-                dispatch(fetchLaptopList())
-                history.push('/dashboard/laptops')
-                swal('Created!', 'A new laptop Created', 'success')
+                dispatch(fetchProcessorsList())
+                history.push('/dashboard/processors')
+                swal('Created!', 'A new processor Created', 'success')
             }
         })
     }
@@ -77,88 +73,84 @@ const Create = (props) => {
         if (!values.name) errors.name = "Name is required"
         return errors
     }
-    const handleBrandChange = (option, actionMeta) => {
-        if (actionMeta.action == 'select-option') {
-            formCreateLaptop.setFieldValue('brand', option.value)
-        }
+    
+    const [manufacturing_processes,setManufacturingProcesses] = useState([])
+    const [selectedManufacturingProcess, setSelectedManufacturingProcess] = useState()
+    const handleManufacturingProcessChange = (option, value, actionMeta) => {
+        console.log(option, value)
+        setSelectedManufacturingProcess(option)
     }
-    const os = useSelector(state => state.os.options)
-    const [selectedOS,setOS]=useState('')
-    const handleOSChange = (option,value,actionMeta) => {
-        console.log(option,value)
-        setOS(option)
+    const handleManufacturingProcessCreate = (value) => {
+        console.log('create', value)
+        setSelectedManufacturingProcess({ value: value, label: value })
+        setManufacturingProcesses([...manufacturing_processes, { value: value, label: value }])
     }
-    const handleOSCreate=(value)=>{
-        console.log('create',value)
-        setOS({value:value,label:value})
-        dispatch(push_item(value)) 
+    const [pcies, setPCIes] = useState([])
+    const [selectedPCIe, setSelectedPCIe] = useState('')
+    const handlePCIeChange = (option, value, actionMeta) => {
+        console.log(option, value)
+        setSelectedPCIe(option)
     }
-    const [storages,setStorages] = useState([])
-    const [selectedStorage,setSelectedStorage]=useState('')
-    const handleStorageChange = (option,value,actionMeta) => {
-        console.log(option,value)
-        setSelectedStorage(option)
+    const handlePCIeCreate = (value) => {
+        console.log('create', value)
+        setSelectedPCIe({ value: value, label: value })
+        setPCIes([...pcies, { value: value, label: value }])
     }
-    const handleStorageCreate=(value)=>{
-        console.log('create',value)
-        setSelectedStorage({value:value,label:value})
-        setStorages([...storages,{value:value,label:value}])
+    const [brands, setBrands] = useState([])
+    const [selectedBrand, setSelectedBrand] = useState()
+    const handleBrandChange = (option, value, actionMeta) => {
+        console.log(option, value)
+        setSelectedBrand(option)
     }
-    const [memories,setMemories] = useState([])
-    const [selectedMemory,setSelectedMemory]=useState('')
-    const handleMemoryChange = (option,value,actionMeta) => {
-        console.log(option,value)
-        setSelectedMemory(option)
+    const handleBrandCreate = (value) => {
+        console.log('create', value)
+        setSelectedBrand({ value: value, label: value })
+        setBrands([...brands, { value: value, label: value }])
     }
-    const handleMemoryCreate=(value)=>{
-        console.log('create',value)
-        setSelectedMemory({value:value,label:value})
-        setMemories([...memories,{value:value,label:value}])
+    const [sockets, setSockets] = useState([])
+    const [selectedSocket, setSelectedSocket] = useState('')
+    const handleSocketChange = (option, value, actionMeta) => {
+        console.log(option, value)
+        setSelectedSocket(option)
     }
-    const [processors,setProcessors] = useState([])
-    const [selectedProcessor,setSelectedProcessor]=useState('')
-    const handleProcessorChange = (option,value,actionMeta) => {
-        console.log(option,value)
-        setSelectedProcessor(option)
+    const handleSocketCreate = (value) => {
+        console.log('create', value)
+        setSelectedSocket({ value: value, label: value })
+        setSockets([...sockets, { value: value, label: value }])
     }
-    const handleProcessorCreate=(value)=>{
-        console.log('create',value)
-        setSelectedProcessor({value:value,label:value})
-        setProcessors([...processors,{value:value,label:value}])
+    const [models, setModels] = useState([])
+    const [selectedModel, setSelectedModel] = useState('')
+    const handleModelChange = (option, value, actionMeta) => {
+        console.log(option, value)
+        setSelectedModel(option)
     }
-    const [colors,setColors] = useState([])
-    const [selectedColor,setSelectedColor]=useState('')
-    const handleColorChange = (option,value,actionMeta) => {
-        console.log(option,value)
-        setSelectedColor(option)
+    const handleModelCreate = (value) => {
+        console.log('create', value)
+        setSelectedModel({ value: value, label: value })
+        setModels([...models, { value: value, label: value }])
     }
-    const handleColorCreate=(value)=>{
-        console.log('create',value)
-        setSelectedColor({value:value,label:value})
-        setColors([...colors,{value:value,label:value}])
-    }
-    const [price,setPrice]=useState()
-    const [graphics,setGraphics] = useState([])
-    const [selectedGraphic,setSelectedGraphic]=useState('')
-    const handleGraphicChange = (option,value,actionMeta) => {
-        console.log(option,value)
+    const [price, setPrice] = useState()
+    const [graphics, setGraphics] = useState([])
+    const [selectedGraphic, setSelectedGraphic] = useState('')
+    const handleGraphicChange = (option, value, actionMeta) => {
+        console.log(option, value)
         setSelectedGraphic(option)
     }
-    const handleGraphicCreate=(value)=>{
-        console.log('create',value)
-        setSelectedGraphic({value:value,label:value})
-        setGraphics([...processors,{value:value,label:value}])
+    const handleGraphicCreate = (value) => {
+        console.log('create', value)
+        setSelectedGraphic({ value: value, label: value })
+        setGraphics([...graphics, { value: value, label: value }])
     }
-    const reset_form=()=>{
+    const reset_form = () => {
         setSelectedGraphic(null)
-        setSelectedMemory(null)
-        setSelectedProcessor(null)
-        setSelectedStorage(null)
-        setOS(null)
-        formCreateLaptop.handleReset()
+        setSelectedBrand(null)
+        setSelectedSocket(null)
+        setSelectedPCIe(null)
+        setSelectedManufacturingProcess(null)
+        formCreateProcessor.handleReset()
         setPictures([])
     }
-    const formCreateLaptop = useFormik({
+    const formCreateProcessor = useFormik({
         initialValues: {
             name: '',
             brand: ''
@@ -168,46 +160,46 @@ const Create = (props) => {
         validateOnChange: true,
         onSubmit: createlaptop
     })
-    function initialize(){
-        API.get('laptops/specification/list/storage').then(res=>{
-            console.log('stotrages',res.data)
-            let temp=[]
-            Array.from(res.data.data).forEach((item,idx)=>{
-                temp.push({value:item,label:item})
+    function initialize() {
+        API.get('processors/specification/list/general/pcie').then(res => {
+            console.log('pcies', res.data)
+            let temp = []
+            Array.from(res.data.data).forEach((item, idx) => {
+                temp.push({ value: item, label: item })
             })
-            setStorages(temp)
+            setPCIes(temp)
         })
-        API.get('laptops/specification/list/memory').then(res=>{
-            console.log('memories',res.data)
-            let temp=[]
-            Array.from(res.data.data).forEach((item,idx)=>{
-                temp.push({value:item,label:item})
+        API.get('processors/specification/list/brand/none').then(res => {
+            console.log('memories', res.data)
+            let temp = []
+            Array.from(res.data.data).forEach((item, idx) => {
+                temp.push({ value: item, label: item })
             })
-            setMemories(temp)
+            setBrands(temp)
         })
-        API.get('laptops/specification/list/processor').then(res=>{
-            console.log('processors',res.data)
-            let temp=[]
-            Array.from(res.data.data).forEach((item,idx)=>{
-                temp.push({value:item,label:item})
+        API.get('processors/specification/list/general/socket').then(res => {
+            console.log('sockets', res.data)
+            let temp = []
+            Array.from(res.data.data).forEach((item, idx) => {
+                temp.push({ value: item, label: item })
             })
-            setProcessors(temp)
+            setSockets(temp)
         })
-        API.get('laptops/specification/list/graphic').then(res=>{
-            console.log('graphics',res.data)
-            let temp=[]
-            Array.from(res.data.data).forEach((item,idx)=>{
-                temp.push({value:item,label:item})
+        API.get('processors/specification/list/general/manufacturing_process').then(res => {
+            console.log('manufacturing_process', res.data)
+            let temp = []
+            Array.from(res.data.data).forEach((item, idx) => {
+                temp.push({ value: item, label: item })
             })
-            setGraphics(temp)
+            setManufacturingProcesses(temp)
         })
-        API.get('laptops/specification/list/color').then(res=>{
-            console.log('colors',res.data)
-            let temp=[]
-            Array.from(res.data.data).forEach((item,idx)=>{
-                temp.push({value:item,label:item})
+        API.get('processors/specification/list/model/none').then(res => {
+            console.log('models', res.data)
+            let temp = []
+            Array.from(res.data.data).forEach((item, idx) => {
+                temp.push({ value: item, label: item })
             })
-            setColors(temp)
+            setModels(temp)
         })
     }
     React.useEffect(() => {
@@ -219,7 +211,7 @@ const Create = (props) => {
         <>
             <CContainer>
                 <CRow>
-                    <div className="col-md-8 offset-md-2 col-sm-12">
+                    <div className="col-md-12 col-sm-12">
                         <CCard className="custom-wbs-card-1">
                             <CCardHeader className="project-wbs-1"> <h4 className="section-name-wbscreate">Add Processor</h4>
                             </CCardHeader>
@@ -228,77 +220,99 @@ const Create = (props) => {
                                     <CForm>
                                         <CRow>
                                             {/**Brand Name */}
-                                            <div className="col-lg-12 mb-3">
+                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Name
                                                 </CLabel>
-                                                <CInput className="custom-forminput-6" id="name" name="name" type="text" values={formCreateLaptop.values.name} onChange={formCreateLaptop.handleChange} />
-                                                {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>}
+                                                <CInput className="custom-forminput-6" id="name" name="name" type="text" values={formCreateProcessor.values.name} onChange={formCreateProcessor.handleChange} />
+                                                {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>}
                                             </div>
-                                            <div className="col-lg-12 mb-3">
+                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Brand
                                                 </CLabel>
-                                                <Select
+                                                <CreatableSelect
+                                                    aria-labelledby="Memories"
+                                                    closeMenuOnSelect={true}
                                                     classNamePrefix="custom-forminput-6"
-                                                    options={brands}
-                                                    isClearable={true}
                                                     onChange={handleBrandChange}
+                                                    // onInputChange={handleOSInputChange}
+                                                    onCreateOption={handleBrandCreate}
+                                                    options={brands}
+                                                    value={selectedBrand}
+                                                    isClearable={true}
                                                 />
-                                                {/* {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>} */}
+                                                {/* {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>} */}
                                             </div>
-                                            {/* <div className="col-lg-12 mb-3">
+                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
-                                                    Processor
+                                                    Model
+                                                </CLabel>
+                                                <CreatableSelect
+                                                    aria-labelledby="Memories"
+                                                    closeMenuOnSelect={true}
+                                                    classNamePrefix="custom-forminput-6"
+                                                    onChange={handleModelChange}
+                                                    // onInputChange={handleOSInputChange}
+                                                    onCreateOption={handleModelCreate}
+                                                    options={models}
+                                                    value={selectedModel}
+                                                    isClearable={true}
+                                                />
+                                                {/* {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>} */}
+                                            </div>
+                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Socket
                                                 </CLabel>
                                                 <CreatableSelect
                                                     aria-labelledby="Operating Systems"
                                                     closeMenuOnSelect={true}
                                                     classNamePrefix="custom-forminput-6"
-                                                    onChange={handleProcessorChange}
+                                                    onChange={handleSocketChange}
                                                     // onInputChange={handleOSInputChange}
-                                                    onCreateOption={handleProcessorCreate}
-                                                    options={processors}
-                                                    value={selectedProcessor}
+                                                    onCreateOption={handleSocketCreate}
+                                                    options={sockets}
+                                                    value={selectedSocket}
                                                     isClearable={true}
                                                 />
-                                                {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>}
-                                            </div> */}
-                                            {/* <div className="col-lg-12 mb-3">
+                                                {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>}
+                                            </div>
+                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
-                                                    Operating System
+                                                    Manufacturing Process
                                                 </CLabel>
                                                 <CreatableSelect
                                                     aria-labelledby="Operating Systems"
                                                     closeMenuOnSelect={true}
                                                     classNamePrefix="custom-forminput-6"
-                                                    onChange={handleOSChange}
+                                                    onChange={handleManufacturingProcessChange}
                                                     // onInputChange={handleOSInputChange}
-                                                    onCreateOption={handleOSCreate}
-                                                    options={os}
-                                                    value={selectedOS}
+                                                    onCreateOption={handleManufacturingProcessCreate}
+                                                    options={manufacturing_processes}
+                                                    value={selectedManufacturingProcess}
                                                     isClearable={true}
                                                 />
-                                                {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>}
-                                            </div> */}
-                                            {/* <div className="col-lg-12 mb-3">
+                                                {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>}
+                                            </div>
+                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
-                                                    Graphics Card
+                                                Maximum Number of PCIe Lanes
                                                 </CLabel>
                                                 <CreatableSelect
                                                     aria-labelledby="Operating Systems"
                                                     closeMenuOnSelect={true}
                                                     classNamePrefix="custom-forminput-6"
-                                                    onChange={handleGraphicChange}
+                                                    onChange={handlePCIeChange}
                                                     // onInputChange={handleOSInputChange}
-                                                    onCreateOption={handleGraphicCreate}
-                                                    options={graphics}
-                                                    value={selectedGraphic}
+                                                    onCreateOption={handlePCIeCreate}
+                                                    options={pcies}
+                                                    value={selectedPCIe}
                                                     isClearable={true}
                                                 />
-                                                {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>}
-                                            </div> */}
-                                            {/* <div className="col-lg-12 mb-3">
+                                                {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>}
+                                            </div>
+                                            {/* <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Storage
                                                 </CLabel>
@@ -313,9 +327,9 @@ const Create = (props) => {
                                                     value={selectedStorage}
                                                     isClearable={true}
                                                 />
-                                                {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>}
+                                                {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>}
                                             </div> */}
-                                            {/* <div className="col-lg-12 mb-3">
+                                            {/* <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Memory
                                                 </CLabel>
@@ -323,61 +337,48 @@ const Create = (props) => {
                                                     aria-labelledby="Memories"
                                                     closeMenuOnSelect={true}
                                                     classNamePrefix="custom-forminput-6"
-                                                    onChange={handleMemoryChange}
+                                                    onChange={handleBrandChange}
                                                     // onInputChange={handleOSInputChange}
                                                     onCreateOption={handleMemoryCreate}
                                                     options={memories}
-                                                    value={selectedMemory}
+                                                    value={selectedBrand}
                                                     isClearable={true}
                                                 />
-                                                {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>}
+                                                {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>}
                                             </div> */}
-                                            <div className="col-lg-12 mb-3">
-                                                <CLabel className="custom-label-wbs5">
-                                                    Color
-                                                </CLabel>
-                                                <CreatableSelect
-                                                    aria-labelledby="Memories"
-                                                    closeMenuOnSelect={true}
-                                                    classNamePrefix="custom-forminput-6"
-                                                    onChange={handleColorChange}
-                                                    // onInputChange={handleOSInputChange}
-                                                    onCreateOption={handleColorCreate}
-                                                    options={colors}
-                                                    value={selectedColor}
-                                                    isClearable={true}
-                                                />
-                                                {/* {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>} */}
-                                            </div>
-                                            <div className="col-lg-12 mb-3">
+                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Price (BDT)
                                                 </CLabel>
-                                                <CInput type="number" value={price} onChange={(event)=>setPrice(event.target.value)}/>
-                                                {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>}
+                                                <CInput type="number" value={price} onChange={(event) => setPrice(event.target.value)} />
+                                                {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>}
                                             </div>
+
                                             <div className="col-lg-12 mb-3">
                                                 <ImageUploader
                                                     {...props}
                                                     withIcon={true}
                                                     onChange={onDrop}
-                                                    imgExtension={[".jpg", ".gif", ".png", ".gif",".jpeg"]}
+                                                    imgExtension={[".jpg", ".gif", ".png", ".gif", ".jpeg"]}
                                                     maxFileSize={5242880}
                                                     withPreview={true}
                                                     singleImage={false}
                                                 />
                                             </div>
                                             {/**submit buttons */}
-                                            <div className="col-md-12">
-                                                <div className="projectwbs-form-button-holders mt-3">
-                                                    <CButton type="button" onClick={formCreateLaptop.handleSubmit} className="create-btn-prjctwbs create-wbs">Add</CButton>
-                                                    <CButton type="button" className="create-btn-prjctwbs cancel-wbs">Cancel</CButton>
-                                                </div>
-                                            </div>
+
                                         </CRow>
                                     </CForm>
                                 </CContainer>
                             </CCardBody>
+                            <CCardFooter>
+                                <div className="col-md-12">
+                                    <div className="projectwbs-form-button-holders mt-3">
+                                        <CButton type="button" onClick={formCreateProcessor.handleSubmit} className="create-btn-prjctwbs create-wbs">Add</CButton>
+                                        <CButton type="button" className="create-btn-prjctwbs cancel-wbs">Cancel</CButton>
+                                    </div>
+                                </div>
+                            </CCardFooter>
                         </CCard>
                     </div>
                 </CRow>

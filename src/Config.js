@@ -1,5 +1,5 @@
 import axios from 'axios';
-const status = 'prod'
+const status = 'dev'
 export const API_URL = status === 'prod' ? 'https://test.virtualdr.com.bd/api/' : 'http://localhost:8000/api/'
 export const TOKEN = "access_token"
 export const USER = "auth_user"

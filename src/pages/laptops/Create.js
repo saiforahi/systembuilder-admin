@@ -147,7 +147,7 @@ const Create = (props) => {
     const handleGraphicCreate=(value)=>{
         console.log('create',value)
         setSelectedGraphic({value:value,label:value})
-        setGraphics([...processors,{value:value,label:value}])
+        setGraphics([...graphics,{value:value,label:value}])
     }
     const reset_form=()=>{
         setSelectedGraphic(null)
