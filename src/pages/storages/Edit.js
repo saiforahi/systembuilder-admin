@@ -12,8 +12,8 @@ import { useHistory } from 'react-router-dom';
 import { Stack, Tile, SimpleSlides, AnimatedSlides } from "react-easy-image";
 import ImageUploader from "react-images-upload";
 import { push_item } from '../../store/slices/osSlice';
-import { fetchLaptopList } from '../../store/slices/laptopsSlice';
-const Create = (props) => {
+import {useParams} from "react-router-dom";
+const Edit = (props) => {
     const dispatch = useDispatch()
     let history = useHistory()
     const [images, setImages] = useState([])
@@ -33,29 +33,13 @@ const Create = (props) => {
         setAvatars([...avatars, URL.createObjectURL(file)]);
     }
     // const [selectedBrand,setSelectedBrand] = useState()
-    
-    const [brands,setBrands] = useState([])
-    const [selectedBrand,setSelectedBrand]=useState('')
-    const handleBrandChange = (option,value,actionMeta) => {
-        console.log(option,value)
-        setSelectedBrand(option)
-    }
-    const handleBrandCreate=(value)=>{
-        console.log('create',value)
-        setSelectedBrand({value:value,label:value})
-        setBrands([...brands,{value:value,label:value}])
-    }
-    const [models, setModels] = useState([])
-    const [selectedModel, setSelectedModel] = useState('')
-    const handleModelChange = (option, value, actionMeta) => {
-        console.log(option, value)
-        setSelectedModel(option)
-    }
-    const handleModelCreate = (value) => {
-        console.log('create', value)
-        setSelectedModel({ value: value, label: value })
-        setModels([...models, { value: value, label: value }])
-    }
+    const brands = useSelector(state => {
+        let temp = []
+        Array.from(state.brands.data).forEach((item, idx) => {
+            temp.push({ value: item.id, label: item.name, data: item })
+        })
+        return temp
+    })
     const createlaptop = (values) => {
         let formData = new FormData()
         formData.append('name',values.name)
@@ -70,8 +54,7 @@ const Create = (props) => {
         }
         const specs ={
             os : selectedOS.value,
-            brand: selectedBrand.value,
-            model: selectedModel.value,
+            brand: values.brand,
             storage: selectedStorage.value,
             memory: selectedMemory.value,
             processor: selectedProcessor.value,
@@ -83,7 +66,6 @@ const Create = (props) => {
         FILE_API.post('laptops/create', formData).then((res) => {
             console.log(res)
             if (res.status == 201) {
-                dispatch(fetchLaptopList())
                 history.push('/dashboard/laptops')
                 swal('Created!', 'A new laptop Created', 'success')
             }
@@ -94,7 +76,11 @@ const Create = (props) => {
         if (!values.name) errors.name = "Name is required"
         return errors
     }
-    
+    const handleBrandChange = (option, actionMeta) => {
+        if (actionMeta.action == 'select-option') {
+            formCreateLaptop.setFieldValue('brand', option.value)
+        }
+    }
     const os = useSelector(state => state.os.options)
     const [selectedOS,setOS]=useState('')
     const handleOSChange = (option,value,actionMeta) => {
@@ -160,7 +146,7 @@ const Create = (props) => {
     const handleGraphicCreate=(value)=>{
         console.log('create',value)
         setSelectedGraphic({value:value,label:value})
-        setGraphics([...graphics,{value:value,label:value}])
+        setGraphics([...processors,{value:value,label:value}])
     }
     const reset_form=()=>{
         setSelectedGraphic(null)
@@ -173,7 +159,8 @@ const Create = (props) => {
     }
     const formCreateLaptop = useFormik({
         initialValues: {
-            name: ''
+            name: '',
+            brand: ''
         },
         validate: validateForm,
         validateOnBlur: true,
@@ -181,22 +168,6 @@ const Create = (props) => {
         onSubmit: createlaptop
     })
     function initialize(){
-        API.get('laptops/specification/list/brand').then(res=>{
-            console.log('colors',res.data)
-            let temp=[]
-            Array.from(res.data.data).forEach((item,idx)=>{
-                temp.push({value:item,label:item})
-            })
-            setBrands(temp)
-        })
-        API.get('laptops/specification/list/model').then(res=>{
-            console.log('colors',res.data)
-            let temp=[]
-            Array.from(res.data.data).forEach((item,idx)=>{
-                temp.push({value:item,label:item})
-            })
-            // setModels(temp)
-        })
         API.get('laptops/specification/list/storage').then(res=>{
             console.log('stotrages',res.data)
             let temp=[]
@@ -267,33 +238,11 @@ const Create = (props) => {
                                                 <CLabel className="custom-label-wbs5">
                                                     Brand
                                                 </CLabel>
-                                                <CreatableSelect
-                                                    aria-labelledby="Operating Systems"
-                                                    closeMenuOnSelect={true}
+                                                <Select
                                                     classNamePrefix="custom-forminput-6"
-                                                    onChange={handleBrandChange}
-                                                    // onInputChange={handleOSInputChange}
-                                                    onCreateOption={handleBrandCreate}
                                                     options={brands}
-                                                    value={selectedBrand}
                                                     isClearable={true}
-                                                />
-                                                {/* {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>} */}
-                                            </div>
-                                            <div className="col-lg-12 mb-3">
-                                                <CLabel className="custom-label-wbs5">
-                                                    Model
-                                                </CLabel>
-                                                <CreatableSelect
-                                                    aria-labelledby="Operating Systems"
-                                                    closeMenuOnSelect={true}
-                                                    classNamePrefix="custom-forminput-6"
-                                                    onChange={handleModelChange}
-                                                    // onInputChange={handleOSInputChange}
-                                                    onCreateOption={handleModelCreate}
-                                                    options={models}
-                                                    value={selectedModel}
-                                                    isClearable={true}
+                                                    onChange={handleBrandChange}
                                                 />
                                                 {/* {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>} */}
                                             </div>
@@ -435,4 +384,4 @@ const Create = (props) => {
         </>
     )
 }
-export default Create;
+export default Edit;

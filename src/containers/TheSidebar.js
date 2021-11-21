@@ -60,9 +60,12 @@ const TheSidebar = () => {
         {/**Projects */}
         <CSidebarNavDropdown icon="cib-ghost" name="Products" className="vo-navItem">
           {has_group('admin') && <CSidebarNavItem to="/dashboard/products/create-new-product" name="Add New Product" className="vo-navItem" ></CSidebarNavItem>}
-          <CSidebarNavItem to="/dashboard/products" name="All Products" className="vo-navItem"  ></CSidebarNavItem>
-          <CSidebarNavItem to="/dashboard/laptops" name="Laptops" className="vo-navItem"  ></CSidebarNavItem>
-          <CSidebarNavItem to="/dashboard/processors" name="Processors" className="vo-navItem"  ></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/products" name="All Products" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/laptops" name="Laptops" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/processors" name="Processors" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/storages" name="Storages" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/memories" name="Memories" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/motherboards" name="Mother Boards" className="vo-navItem" disabled></CSidebarNavItem>
           {/* <CSidebarNavItem to="/dashboard/Projects/completed-projects" name="Completed Projects" className="vo-navItem" ></CSidebarNavItem> */}
 
 

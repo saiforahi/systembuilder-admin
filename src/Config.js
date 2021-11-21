@@ -1,11 +1,11 @@
 import axios from 'axios';
-const status = 'dev'
-export const API_URL = status === 'prod' ? 'https://test.virtualdr.com.bd/api/' : 'http://localhost:8000/api/'
+const status = 'prod'
+export const API_URL = status === 'prod' ? 'https://systembuilderbd.com/api/' : 'http://localhost:8000/api/'
 export const TOKEN = "access_token"
 export const USER = "auth_user"
 export const ROLES = "auth_roles"
 export const USER_ID = "user_id"
-export const BASE_URL = status === 'prod' ? 'https://test.virtualdr.com.bd' : 'http://localhost:8000'
+export const BASE_URL = status === 'prod' ? 'https://systembuilderbd.com' : 'http://localhost:8000'
 export const credentials = {
   "GOOGLE_CLIENT_ID": "705019730299-kfb5arnuisah2135tka05uka6h7v901a.apps.googleusercontent.com",
   "FACEBOOK_APP_ID": "788095958681659"

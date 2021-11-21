@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 /dist
+build
 react-web-app/view/node_modules
 react-web-app/view/package-lock.json
 package-lock.json
