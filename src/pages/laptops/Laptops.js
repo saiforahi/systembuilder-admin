@@ -14,7 +14,7 @@ const Laptops = () => {
     const laptops = useSelector(state =>{
         let temp=[]
         Array.from(state.laptops.data).forEach((element,idx) => {
-            temp.push({'#':idx+1,id:element.id,'Name':element.name,deleted_at:element.deleted_at})
+            temp.push({'#':idx+1,id:element.id,'Name':element.name,'Brand':element.brand,'Model':element.model,'Processor':JSON.parse(element.specifications).processor,deleted_at:element.deleted_at})
         });
         return temp
     })
@@ -75,6 +75,9 @@ const Laptops = () => {
                                             _classes: "font-weight-bold",
                                         },
                                         "Name",
+                                        "Brand",
+                                        "Model",
+                                        "Processor",
                                         {
                                             key: "Action",
                                             label: "Actions",

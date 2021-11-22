@@ -13,8 +13,11 @@ import { Stack, Tile, SimpleSlides, AnimatedSlides } from "react-easy-image";
 import ImageUploader from "react-images-upload";
 import { push_item } from '../../store/slices/osSlice';
 import { fetchLaptopList } from '../../store/slices/laptopsSlice';
+import LinearProgress from '@mui/material/LinearProgress';
 const Create = (props) => {
     const dispatch = useDispatch()
+    const [submitted,setSubmitted] = useState(false)
+    const [loaded,setLoaded]=useState(false)
     let history = useHistory()
     const [images, setImages] = useState([])
     const [avatars, setAvatars] = useState([])
@@ -57,6 +60,7 @@ const Create = (props) => {
         setModels([...models, { value: value, label: value }])
     }
     const createlaptop = (values) => {
+        setSubmitted(true)
         let formData = new FormData()
         formData.append('name',values.name)
         if(pictures.length>0){
@@ -79,14 +83,19 @@ const Create = (props) => {
             color: selectedColor.value
         }
         formData.append('price',price)
+        formData.append('brand',selectedBrand.value)
+        formData.append('model',selectedModel.value)
         formData.append('specifications',JSON.stringify(specs))
         FILE_API.post('laptops/create', formData).then((res) => {
             console.log(res)
             if (res.status == 201) {
                 dispatch(fetchLaptopList())
+                setSubmitted(false)
                 history.push('/dashboard/laptops')
                 swal('Created!', 'A new laptop Created', 'success')
             }
+        }).catch(e=>{
+            setSubmitted(false)
         })
     }
     const validateForm = (values) => {
@@ -182,10 +191,10 @@ const Create = (props) => {
     })
     function initialize(){
         API.get('laptops/specification/list/brand').then(res=>{
-            console.log('colors',res.data)
+            console.log('brands',res.data)
             let temp=[]
             Array.from(res.data.data).forEach((item,idx)=>{
-                temp.push({value:item,label:item})
+                temp.push({value:item.brand,label:item.brand})
             })
             setBrands(temp)
         })
@@ -193,9 +202,9 @@ const Create = (props) => {
             console.log('colors',res.data)
             let temp=[]
             Array.from(res.data.data).forEach((item,idx)=>{
-                temp.push({value:item,label:item})
+                temp.push({value:item.model,label:item.model})
             })
-            // setModels(temp)
+            setModels(temp)
         })
         API.get('laptops/specification/list/storage').then(res=>{
             console.log('stotrages',res.data)
@@ -418,11 +427,11 @@ const Create = (props) => {
                                                 />
                                             </div>
                                             {/**submit buttons */}
-                                            <div className="col-md-12">
+                                            <div className="col-md-12">{ submitted? <LinearProgress/>:
                                                 <div className="projectwbs-form-button-holders mt-3">
                                                     <CButton type="button" onClick={formCreateLaptop.handleSubmit} className="create-btn-prjctwbs create-wbs">Add</CButton>
-                                                    <CButton type="button" className="create-btn-prjctwbs cancel-wbs">Cancel</CButton>
-                                                </div>
+                                                    <CButton type="button" onClick={reset_form} className="create-btn-prjctwbs cancel-wbs">Reset</CButton>
+                                                </div>}
                                             </div>
                                         </CRow>
                                     </CForm>

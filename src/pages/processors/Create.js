@@ -2,17 +2,13 @@ import { CContainer, CCardFooter,CFormGroup, CButtonClose, CImg, CRow, CCol, CCa
 import React, { useState } from 'react'
 import '../brands/brands-styles.css'
 import { useDispatch, useSelector } from 'react-redux';
-
 import CreatableSelect from 'react-select/creatable';
-import Select from "react-select";
 import { useFormik } from 'formik';
 import { FILE_API, API } from '../../Config';
 import swal from 'sweetalert';
 import { useHistory } from 'react-router-dom';
-import { Stack, Tile, SimpleSlides, AnimatedSlides } from "react-easy-image";
 import ImageUploader from "react-images-upload";
-import { push_item } from '../../store/slices/osSlice';
-import { fetchLaptopList } from '../../store/slices/laptopsSlice';
+import LinearProgress from '@mui/material/LinearProgress';
 import { fetchProcessorsList } from '../../store/slices/processorsSlice';
 const Create = (props) => {
     const dispatch = useDispatch()
@@ -34,8 +30,9 @@ const Create = (props) => {
         setAvatars([...avatars, URL.createObjectURL(file)]);
     }
     // const [selectedBrand,setSelectedBrand] = useState()
-    
+    const [submitted,setSubmitted]=useState(false)
     const createlaptop = (values) => {
+        setSubmitted(true)
         let formData = new FormData()
         formData.append('name', values.name)
         if (pictures.length > 0) {
@@ -60,12 +57,15 @@ const Create = (props) => {
             console.log(pair[0]+ ', ' + pair[1]); 
         }
         FILE_API.post('processors/create', formData).then((res) => {
+            setSubmitted(false)
             console.log(res)
             if (res.status == 201) {
                 dispatch(fetchProcessorsList())
                 history.push('/dashboard/processors')
                 swal('Created!', 'A new processor Created', 'success')
             }
+        }).catch(err=>{
+            setSubmitted(false)
         })
     }
     const validateForm = (values) => {
@@ -372,11 +372,11 @@ const Create = (props) => {
                                 </CContainer>
                             </CCardBody>
                             <CCardFooter>
-                                <div className="col-md-12">
+                                <div className="col-md-12">{submitted? <LinearProgress/>:
                                     <div className="projectwbs-form-button-holders mt-3">
                                         <CButton type="button" onClick={formCreateProcessor.handleSubmit} className="create-btn-prjctwbs create-wbs">Add</CButton>
-                                        <CButton type="button" className="create-btn-prjctwbs cancel-wbs">Cancel</CButton>
-                                    </div>
+                                        <CButton type="button" onClick={reset_form} className="create-btn-prjctwbs cancel-wbs">Reset</CButton>
+                                    </div>}
                                 </div>
                             </CCardFooter>
                         </CCard>
