@@ -8,7 +8,7 @@ const AssignedProjectsDashboard = () => {
     const dispatch = useDispatch()
     const wbs = useSelector(state => state.wbs.data);
     React.useEffect(() => {
-        dispatch(fetchUserWiseWbsThunk(localStorage.getItem(USER_ID)))
+        dispatch(fetchUserWiseWbsThunk(sessionStorage.getItem(USER_ID)))
     }, [])
     return (
         <>

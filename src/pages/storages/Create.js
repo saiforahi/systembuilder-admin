@@ -100,17 +100,6 @@ const Create = (props) => {
         setSelectedInterface({ value: value, label: value })
         setInterfaces([...interfaces, { value: value, label: value }])
     }
-    const [pcies, setPCIes] = useState([])
-    const [selectedPCIe, setSelectedPCIe] = useState('')
-    const handlePCIeChange = (option, value, actionMeta) => {
-        console.log(option, value)
-        setSelectedPCIe(option)
-    }
-    const handlePCIeCreate = (value) => {
-        console.log('create', value)
-        setSelectedPCIe({ value: value, label: value })
-        setPCIes([...pcies, { value: value, label: value }])
-    }
     const [brands, setBrands] = useState([])
     const [selectedBrand, setSelectedBrand] = useState()
     const handleBrandChange = (option, value, actionMeta) => {
@@ -123,7 +112,7 @@ const Create = (props) => {
         setBrands([...brands, { value: value, label: value }])
     }
     const [drive_capacities, setDriveCapacities] = useState([])
-    const [selectedDriveCapacity, setSelectedDriveCapacity] = useState('')
+    const [selectedDriveCapacity, setSelectedDriveCapacity] = useState()
     const handleDriveCapacityChange = (option, value, actionMeta) => {
         console.log(option, value)
         setSelectedDriveCapacity(option)
@@ -136,7 +125,7 @@ const Create = (props) => {
 
     //write speed
     const [write_speeds, setWriteSpeeds] = useState([])
-    const [selectedWriteSpeed, setSelectedWriteSpeed] = useState('')
+    const [selectedWriteSpeed, setSelectedWriteSpeed] = useState()
     const handleWriteSpeedChange = (option, value, actionMeta) => {
         console.log(option, value)
         setSelectedWriteSpeed(option)
@@ -148,7 +137,7 @@ const Create = (props) => {
     }
     //read
     const [read_speeds, setReadSpeeds] = useState([])
-    const [selectedReadSpeed, setSelectedReadSpeed] = useState('')
+    const [selectedReadSpeed, setSelectedReadSpeed] = useState()
     const handleReadSpeedChange = (option, value, actionMeta) => {
         console.log(option, value)
         setSelectedReadSpeed(option)
@@ -160,7 +149,7 @@ const Create = (props) => {
     }
     //drive type
     const [drive_types, setDriveTypes] = useState([])
-    const [selectedDriveType, setSelectedDriveType] = useState('')
+    const [selectedDriveType, setSelectedDriveType] = useState()
     const handleDriveTypeChange = (option, value, actionMeta) => {
         console.log(option, value)
         setSelectedDriveType(option)
@@ -172,7 +161,7 @@ const Create = (props) => {
     }
     //form-factor
     const [form_factors, setFormFactors] = useState([])
-    const [selectedFormFactor, setSelectedFormFactor] = useState('')
+    const [selectedFormFactor, setSelectedFormFactor] = useState()
     const handleFormFactorChange = (option, value, actionMeta) => {
         console.log(option, value)
         setSelectedFormFactor(option)
@@ -184,7 +173,7 @@ const Create = (props) => {
     }
     //encryption
     const [encryptions, setEncryptions] = useState([])
-    const [selectedEncryption, setSelectedEncryption] = useState('')
+    const [selectedEncryption, setSelectedEncryption] = useState()
     const handleEncryptionChange = (option, value, actionMeta) => {
         console.log(option, value)
         setSelectedEncryption(option)
@@ -207,17 +196,7 @@ const Create = (props) => {
         setModels([...models, { value: value, label: value }])
     }
     const [price, setPrice] = useState()
-    const [graphics, setGraphics] = useState([])
-    const [selectedGraphic, setSelectedGraphic] = useState('')
-    const handleGraphicChange = (option, value, actionMeta) => {
-        console.log(option, value)
-        setSelectedGraphic(option)
-    }
-    const handleGraphicCreate = (value) => {
-        console.log('create', value)
-        setSelectedGraphic({ value: value, label: value })
-        setGraphics([...graphics, { value: value, label: value }])
-    }
+    
     const reset_form = () => {
         setSelectedGraphic(null)
         setSelectedBrand(null)

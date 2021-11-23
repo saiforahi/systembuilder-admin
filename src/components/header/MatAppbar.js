@@ -100,7 +100,7 @@ export default function MatAppbar() {
     handleMobileMenuClose();
   };
   function logout(){
-    localStorage.clear()
+    sessionStorage.clear()
     history.push('/')
   }
   const handleMobileMenuOpen = (event) => {

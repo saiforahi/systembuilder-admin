@@ -8,7 +8,7 @@ const ScheduleMeetings = () => {
     const dispatch = useDispatch()
     const meeting = useSelector(state => state.meeting.data);
     React.useEffect(() => {
-        dispatch(fetchMeetingList(localStorage.getItem(USER_ID)))
+        dispatch(fetchMeetingList(sessionStorage.getItem(USER_ID)))
     }, [])
     return (
         <>

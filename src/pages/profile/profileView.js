@@ -105,10 +105,10 @@ const UserProfile = () => {
         return errors
     }
     const update_profile = (values) => {
-        API.post('auth/profile/update/' + localStorage.getItem(USER_ID) + '/', profile_update_form.values).then((res) => {
+        API.post('auth/profile/update/' + sessionStorage.getItem(USER_ID) + '/', profile_update_form.values).then((res) => {
             console.log(res)
             if (res.status == 201 && res.data.success == 'True') {
-                dispatch(fetchPersonalDetails(localStorage.getItem(USER_ID)))
+                dispatch(fetchPersonalDetails(sessionStorage.getItem(USER_ID)))
                 setVisible(false)
                 swal('Updated!', 'Your Profile has been updated', 'success')
             }
@@ -118,7 +118,7 @@ const UserProfile = () => {
         let image_form_data = new FormData()
         image_form_data.append('profile_pic', image)
         console.log('image', image)
-        FILE_API.post('auth/change/profile/image/' + localStorage.getItem(USER_ID) + '/', image_form_data).then((res) => {
+        FILE_API.post('auth/change/profile/image/' + sessionStorage.getItem(USER_ID) + '/', image_form_data).then((res) => {
             if (res.status == 201) {
                 swal('Updated!', 'Profile Picture Updated', 'success')
             }

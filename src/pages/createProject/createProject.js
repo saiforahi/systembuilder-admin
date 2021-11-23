@@ -170,7 +170,7 @@ const CreateNewProject = () => {
       estimated_person: "",
       planned_delivery_date: "",
       assignee: [],
-      pm: localStorage.getItem(USER_ID),
+      pm: sessionStorage.getItem(USER_ID),
       planned_hours: "",
       planned_value: "",
       remaining_hours: ""

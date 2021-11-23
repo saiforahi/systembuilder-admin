@@ -12,7 +12,7 @@ const ProjectsTableDashboard = () => {
     const dispatch = useDispatch()
     const projects = useSelector(state => state.projects.data);
     React.useEffect(() => {
-        dispatch(fetchProjectsThunk(localStorage.getItem(USER_ID)))
+        dispatch(fetchProjectsThunk(sessionStorage.getItem(USER_ID)))
     }, [])
     return (
         <>

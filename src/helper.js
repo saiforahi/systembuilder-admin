@@ -2,7 +2,7 @@ import { ROLES } from "./Config"
 
 export const user_groups=()=>{
     //let temp=[]
-    let groups = localStorage.getItem(ROLES).split(',')
+    let groups = sessionStorage.getItem(ROLES).split(',')
     return groups
 }
 

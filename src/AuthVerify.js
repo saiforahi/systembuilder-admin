@@ -6,7 +6,7 @@ class AuthVerify extends Component {
     constructor(props) {
       super(props);
       props.history.listen(() => {
-        const token = JSON.parse(localStorage.getItem("TOKEN"));
+        const token = JSON.parse(sessionStorage.getItem("TOKEN"));
         if (token) {
           const decodedDate = new Date(token.time);
           if (decodedDate < Date.now()) {

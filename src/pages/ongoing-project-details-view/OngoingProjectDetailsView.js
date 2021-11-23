@@ -70,7 +70,7 @@ const OngoingDetailsView = () => {
                 // let temp = project
                 // temp.project.task_delivery_order = res.data.data
                 // setProject(temp)
-                dispatch(fetchProjectsThunk(localStorage.getItem(USER_ID)))
+                dispatch(fetchProjectsThunk(sessionStorage.getItem(USER_ID)))
                 swal('Updated', 'Task Delivery Order name has been updated', 'success')
             }
         }).catch(err => {

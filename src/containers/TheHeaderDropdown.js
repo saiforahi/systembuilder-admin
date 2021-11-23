@@ -14,13 +14,13 @@ import { useSelector, useDispatch } from 'react-redux';
 
 const TheHeaderDropdown = () => {
   let history = useHistory();
-  const profile_details = JSON.parse(localStorage.getItem(USER))
+  const profile_details = JSON.parse(sessionStorage.getItem(USER))
   function logout() {
     API.get('logout').then((res) => {
-      localStorage.clear()
+      sessionStorage.clear()
       history.push('/')
     }).catch(err => {
-      localStorage.clear()
+      sessionStorage.clear()
       history.push('/')
     })
 
