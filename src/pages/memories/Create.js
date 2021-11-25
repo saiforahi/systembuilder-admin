@@ -11,26 +11,15 @@ import swal from 'sweetalert';
 import { useHistory } from 'react-router-dom';
 import ImageUploader from "react-images-upload";
 import { fetchStoragesList } from '../../store/slices/storagesSlice';
+import { fetchMemoriesThunk } from '../../store/slices/memoriesSlice';
 const Create = (props) => {
     const dispatch = useDispatch()
     const [submitted,setSubmitted]=useState(false)
     let history = useHistory()
-    const [images, setImages] = useState([])
-    const [avatars, setAvatars] = useState([])
     const [pictures, setPictures] = useState([])
     const onDrop = picture => {
         setPictures([...pictures, picture]);
     };
-    const deleteFile = (idx) => {
-        const new_images = images.filter((item, index) => index !== idx);
-        setImages(new_images);
-        const new_avatars = avatars.filter((item, index) => index !== idx);
-        setAvatars(new_avatars);
-    }
-    const onImageChange = (file) => {
-        setImages([...images, file]);
-        setAvatars([...avatars, URL.createObjectURL(file)]);
-    }
     // const [selectedBrand,setSelectedBrand] = useState()
     
     const createStorage = (values) => {
@@ -46,169 +35,166 @@ const Create = (props) => {
                 formData.append('image' + (index + 1), pictures[0][index])
             }
         }
-        const storage_specs = {
-            drive_capacity: selectedDriveCapacity.value
+        const general_specs = {
+            part_number: selectedPartNumber.value
         }
-        const performance_specs = {
-            interface: selectedInterface.value,
-            write_speed: selectedWriteSpeed.value,
-            read_speed: selectedReadSpeed.value
+        const memory_specs = {
+            memory: selectedMemory.value!==null?selectedMemory.value:'',
+            ram_size: selectedRAMsize.value,
+            latency: selectedLatency.value
         }
-        const physical_specs = {
-            drive_type: selectedDriveType.value,
-            form_factor: selectedFormFactor.value
-        }
-        const reliability_specs = {
-            encryption: selectedEncryption.value
+        const additional_specs={
+            dimm:selectedDimmType.value
         }
         formData.append('price', price)
         formData.append('brand', selectedBrand.value)
         formData.append('model', selectedModel.value)
-        formData.append('storage_specs', JSON.stringify(storage_specs))
-        formData.append('performance_specs', JSON.stringify(performance_specs))
-        formData.append('physical_specs', JSON.stringify(physical_specs))
-        formData.append('reliability_specs', JSON.stringify(reliability_specs))
+        formData.append('general_specs', JSON.stringify(general_specs))
+        formData.append('memory_specs', JSON.stringify(memory_specs))
+        formData.append('additional_specs', JSON.stringify(additional_specs))
         for (var pair of formData.entries()) {
             console.log(pair[0]+ ', ' + pair[1]); 
         }
-        FILE_API.post('storages/create', formData).then((res) => {
+        FILE_API.post('memories/create', formData).then((res) => {
             setSubmitted(false)
             console.log(res)
             if (res.status == 201) {
-                dispatch(fetchStoragesList())
-                history.push('/dashboard/storages')
-                swal('Created!', 'A new storage Created', 'success')
+                dispatch(fetchMemoriesThunk())
+                history.push('/dashboard/memories')
+                swal('Created!', 'A new memory Created', 'success')
             }
         }).catch(err=>{
             setSubmitted(false)
         })
     }
-    const validateForm = (values) => {
-        const errors = {}
-        if (!values.name) errors.name = "Name is required"
-        return errors
-    }
     
-    const [interfaces,setInterfaces] = useState([])
-    const [selectedInterface, setSelectedInterface] = useState()
-    const handleInterfaceChange = (option, value, actionMeta) => {
+    
+    const [ram_sizes,setRAMsizes] = useState([])
+    const [selectedRAMsize, setSelectedRAMsize] = useState(null)
+    const handleRAMChange = (option, value, actionMeta) => {
         console.log(option, value)
-        setSelectedInterface(option)
+        setSelectedRAMsize(option)
     }
-    const handleInterfaceCreate = (value) => {
+    const handleRAMCreate = (value) => {
         console.log('create', value)
-        setSelectedInterface({ value: value, label: value })
-        setInterfaces([...interfaces, { value: value, label: value }])
+        setSelectedRAMsize({ value: value, label: value })
+        setRAMsizes([...ram_sizes, { value: value, label: value }])
     }
     const [brands, setBrands] = useState([])
-    const [selectedBrand, setSelectedBrand] = useState()
+    const [selectedBrand, setSelectedBrand] = useState(null)
     const handleBrandChange = (option, value, actionMeta) => {
         console.log(option, value)
         setSelectedBrand(option)
+        formCreateMemory.setFieldValue('brand',option.value)
     }
     const handleBrandCreate = (value) => {
         console.log('create', value)
         setSelectedBrand({ value: value, label: value })
+        formCreateMemory.setFieldValue('brand',value)
         setBrands([...brands, { value: value, label: value }])
     }
-    const [drive_capacities, setDriveCapacities] = useState([])
-    const [selectedDriveCapacity, setSelectedDriveCapacity] = useState()
-    const handleDriveCapacityChange = (option, value, actionMeta) => {
+    const [memories, setMemories] = useState([])
+    const [selectedMemory, setSelectedMemory] = useState(null)
+    const handleMemoryChange = (option, value, actionMeta) => {
         console.log(option, value)
-        setSelectedDriveCapacity(option)
+        setSelectedMemory(option)
+        formCreateMemory.setFieldValue('memory',option.value)
     }
-    const handleDriveCapacityCreate = (value) => {
+    const handleMemoryCreate = (value) => {
         console.log('create', value)
-        setSelectedDriveCapacity({ value: value, label: value })
-        setDriveCapacities([...drive_capacities, { value: value, label: value }])
+        setSelectedMemory({ value: value, label: value })
+        formCreateMemory.setFieldValue('memory',value)
+        setMemories([...memories, { value: value, label: value }])
     }
 
     //write speed
-    const [write_speeds, setWriteSpeeds] = useState([])
-    const [selectedWriteSpeed, setSelectedWriteSpeed] = useState()
-    const handleWriteSpeedChange = (option, value, actionMeta) => {
+    const [latencies, setLatencies] = useState([])
+    const [selectedLatency, setSelectedLatency] = useState(null)
+    const handleLatencyChange = (option, value, actionMeta) => {
         console.log(option, value)
-        setSelectedWriteSpeed(option)
+        formCreateMemory.setFieldValue('latency',option.value)
+        setSelectedLatency(option)
     }
-    const handleWiteSpeedCreate = (value) => {
+    const handleLatencyCreate = (value) => {
         console.log('create', value)
-        setSelectedWriteSpeed({ value: value, label: value })
-        setWriteSpeeds([...write_speeds, { value: value, label: value }])
+        setSelectedLatency({ value: value, label: value })
+        formCreateMemory.setFieldValue('latency',value)
+        setLatencies([...latencies, { value: value, label: value }])
     }
     //read
-    const [read_speeds, setReadSpeeds] = useState([])
-    const [selectedReadSpeed, setSelectedReadSpeed] = useState()
-    const handleReadSpeedChange = (option, value, actionMeta) => {
+    const [dimm_types, setDimmTypes] = useState([])
+    const [selectedDimmType, setSelectedDimmType] = useState(null)
+    const handleDimmChange = (option, value, actionMeta) => {
         console.log(option, value)
-        setSelectedReadSpeed(option)
+        setSelectedDimmType(option)
     }
-    const handleReadSpeedCreate = (value) => {
+    const handleDimmCreate = (value) => {
         console.log('create', value)
-        setSelectedReadSpeed({ value: value, label: value })
-        setReadSpeeds([...read_speeds, { value: value, label: value }])
+        setSelectedDimmType({ value: value, label: value })
+        setDimmTypes([...dimm_types, { value: value, label: value }])
     }
     //drive type
-    const [drive_types, setDriveTypes] = useState([])
-    const [selectedDriveType, setSelectedDriveType] = useState()
-    const handleDriveTypeChange = (option, value, actionMeta) => {
+    const [part_numbers, setPartNumbers] = useState([])
+    const [selectedPartNumber, setSelectedPartNumber] = useState(null)
+    const handlePartNumberChange = (option, value, actionMeta) => {
         console.log(option, value)
-        setSelectedDriveType(option)
+        setSelectedPartNumber(option)
     }
-    const handleDriveTypeCreate = (value) => {
+    const handlePartNumberCreate = (value) => {
         console.log('create', value)
-        setSelectedDriveType({ value: value, label: value })
-        setDriveTypes([...drive_types, { value: value, label: value }])
+        setSelectedPartNumber({ value: value, label: value })
+        setPartNumbers([...part_numbers, { value: value, label: value }])
     }
-    //form-factor
-    const [form_factors, setFormFactors] = useState([])
-    const [selectedFormFactor, setSelectedFormFactor] = useState()
-    const handleFormFactorChange = (option, value, actionMeta) => {
-        console.log(option, value)
-        setSelectedFormFactor(option)
-    }
-    const handleFormFactorCreate = (value) => {
-        console.log('create', value)
-        setSelectedFormFactor({ value: value, label: value })
-        setFormFactors([...form_factors, { value: value, label: value }])
-    }
-    //encryption
-    const [encryptions, setEncryptions] = useState([])
-    const [selectedEncryption, setSelectedEncryption] = useState()
-    const handleEncryptionChange = (option, value, actionMeta) => {
-        console.log(option, value)
-        setSelectedEncryption(option)
-    }
-    const handleEncryptionCreate = (value) => {
-        console.log('create', value)
-        setSelectedEncryption({ value: value, label: value })
-        setEncryptions([...encryptions, { value: value, label: value }])
-    }
+    
     //model
     const [models, setModels] = useState([])
     const [selectedModel, setSelectedModel] = useState('')
     const handleModelChange = (option, value, actionMeta) => {
         console.log(option, value)
+        formCreateMemory.setFieldValue('model',option.value)
         setSelectedModel(option)
     }
     const handleModelCreate = (value) => {
         console.log('create', value)
         setSelectedModel({ value: value, label: value })
+        formCreateMemory.setFieldValue('model',value)
         setModels([...models, { value: value, label: value }])
     }
     const [price, setPrice] = useState()
     
     const reset_form = () => {
         setSelectedBrand(null)
-        setSelectedDriveCapacity(null)
-        setSelectedInterface(null)
-        setSelectedWriteSpeed(null)
-        setSelectedReadSpeed(null)
-        formCreateStorage.handleReset()
+        setSelectedMemory(null)
+        setSelectedLatency(null)
+        setSelectedDimmType(null)
+        formCreateMemory.handleReset()
         setPictures([])
     }
-    const formCreateStorage = useFormik({
+    const validateForm = (values) => {
+        const errors = {}
+        if (!values.name) errors.name = "Name is required"
+        if (!values.brand) errors.brand = "Brand is required"
+        if (!values.model) errors.model = "Model is required"
+        // if (!values.price) errors.price = "Price is required"
+        // if (!values.memory) errors.memory = "Memory is required"
+        // if (!values.ram_size) errors.ram_size = "RAM Size is required"
+        // if (!values.latency) errors.latency = "Latency is required"
+        // if (!values.dimm_type) errors.dimm_type = "DIMM is required"
+        // if (!values.part_number) errors.part_number = "Part Number is required"
+       
+        return errors
+    }
+    const formCreateMemory = useFormik({
         initialValues: {
-            name: ''
+            name: '',
+            brand: '',
+            model:'',
+            price:'',
+            ram_size:'',
+            memory:'',
+            latency:'',
+            part_number:'',
+            dimm_type:''
         },
         validate: validateForm,
         validateOnBlur: true,
@@ -216,7 +202,7 @@ const Create = (props) => {
         onSubmit: createStorage
     })
     function initialize() {
-        API.get('storages/specification/list/model/none').then(res => {
+        API.get('memories/specification/list/model/none').then(res => {
             console.log('models', res.data)
             let temp = []
             Array.from(res.data.data).forEach((item, idx) => {
@@ -224,7 +210,7 @@ const Create = (props) => {
             })
             setModels(temp)
         })
-        API.get('storages/specification/list/brand/none').then(res => {
+        API.get('memories/specification/list/brand/none').then(res => {
             console.log('brands', res.data)
             let temp = []
             Array.from(res.data.data).forEach((item, idx) => {
@@ -232,53 +218,37 @@ const Create = (props) => {
             })
             setBrands(temp)
         })
-        API.get('storages/specification/list/storage/drive_capacity').then(res => {
-            console.log('drive_capacities', res.data)
+        API.get('memories/specification/list/memory/memory').then(res => {
+            console.log('memories', res.data)
             let temp = []
             Array.from(res.data.data).forEach((item, idx) => {
                 temp.push({ value: item, label: item })
             })
-            setDriveCapacities(temp)
+            setMemories(temp)
         })
-        API.get('storages/specification/list/performance/interface').then(res => {
-            console.log('interfaces', res.data)
+        API.get('memories/specification/list/memory/ram').then(res => {
+            console.log('ram_sizes', res.data)
             let temp = []
             Array.from(res.data.data).forEach((item, idx) => {
                 temp.push({ value: item, label: item })
             })
-            setInterfaces(temp)
+            setRAMsizes(temp)
         })
-        API.get('storages/specification/list/performance/write_speed').then(res => {
+        API.get('memories/specification/list/memory/latency').then(res => {
             console.log('write_speed', res.data)
             let temp = []
             Array.from(res.data.data).forEach((item, idx) => {
                 temp.push({ value: item, label: item })
             })
-            setWriteSpeeds(temp)
+            setLatencies(temp)
         })
-        API.get('storages/specification/list/performance/read_speed').then(res => {
+        API.get('memories/specification/list/additional/dimm').then(res => {
             console.log('read_speed', res.data)
             let temp = []
             Array.from(res.data.data).forEach((item, idx) => {
                 temp.push({ value: item, label: item })
             })
-            setReadSpeeds(temp)
-        })
-        API.get('storages/specification/list/physical/form_factor').then(res => {
-            console.log('form_factor', res.data)
-            let temp = []
-            Array.from(res.data.data).forEach((item, idx) => {
-                temp.push({ value: item, label: item })
-            })
-            setFormFactors(temp)
-        })
-        API.get('storages/specification/list/physical/drive_type').then(res => {
-            console.log('drive_type', res.data)
-            let temp = []
-            Array.from(res.data.data).forEach((item, idx) => {
-                temp.push({ value: item, label: item })
-            })
-            setDriveTypes(temp)
+            setDimmTypes(temp)
         })
     }
     React.useEffect(() => {
@@ -292,7 +262,7 @@ const Create = (props) => {
                 <CRow>
                     <div className="col-md-12 col-sm-12">
                         <CCard className="custom-wbs-card-1">
-                            <CCardHeader className="project-wbs-1"> <h4 className="section-name-wbscreate">Add Storage</h4>
+                            <CCardHeader className="project-wbs-1"> <h4 className="section-name-wbscreate">Add Memory</h4>
                             </CCardHeader>
                             <CCardBody>
                                 <CContainer>
@@ -303,8 +273,8 @@ const Create = (props) => {
                                                 <CLabel className="custom-label-wbs5">
                                                     Name
                                                 </CLabel>
-                                                <CInput className="custom-forminput-6" id="name" name="name" type="text" values={formCreateStorage.values.name} onChange={formCreateStorage.handleChange} />
-                                                {formCreateStorage.errors.name && formCreateStorage.touched.name && <small class="error">{formCreateStorage.errors.name}</small>}
+                                                <CInput className="custom-forminput-6" id="name" name="name" type="text" values={formCreateMemory.values.name} onChange={formCreateMemory.handleChange} />
+                                                {formCreateMemory.errors.name && formCreateMemory.touched.name && <small class="error">{formCreateMemory.errors.name}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -321,7 +291,7 @@ const Create = (props) => {
                                                     value={selectedBrand}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateStorage.errors.name && formCreateStorage.touched.name && <small>{formCreateStorage.errors.name}</small>} */}
+                                                {formCreateMemory.errors.brand && formCreateMemory.touched.brand && <small>{formCreateMemory.errors.brand}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -338,133 +308,99 @@ const Create = (props) => {
                                                     value={selectedModel}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateStorage.errors.name && formCreateStorage.touched.name && <small>{formCreateStorage.errors.name}</small>} */}
+                                                {formCreateMemory.errors.model && formCreateMemory.touched.model && <small>{formCreateMemory.errors.model}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
-                                                    Drive Capacity
+                                                    Memory
                                                 </CLabel>
                                                 <CreatableSelect
                                                     aria-labelledby="Operating Systems"
                                                     closeMenuOnSelect={true}
                                                     classNamePrefix="custom-forminput-6"
-                                                    onChange={handleDriveCapacityChange}
+                                                    onChange={handleMemoryChange}
                                                     // onInputChange={handleOSInputChange}
-                                                    onCreateOption={handleDriveCapacityCreate}
-                                                    options={drive_capacities}
-                                                    value={selectedDriveCapacity}
+                                                    onCreateOption={handleMemoryCreate}
+                                                    options={memories}
+                                                    value={selectedMemory}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateStorage.errors.name && formCreateStorage.touched.name && <small>{formCreateStorage.errors.name}</small>} */}
+                                                {/* {formCreateMemory.errors.name && formCreateMemory.touched.name && <small>{formCreateMemory.errors.name}</small>} */}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
-                                                    Interface
+                                                    RAM size
                                                 </CLabel>
                                                 <CreatableSelect
                                                     aria-labelledby="Operating Systems"
                                                     closeMenuOnSelect={true}
                                                     classNamePrefix="custom-forminput-6"
-                                                    onChange={handleInterfaceChange}
+                                                    onChange={handleRAMChange}
                                                     // onInputChange={handleOSInputChange}
-                                                    onCreateOption={handleInterfaceCreate}
-                                                    options={interfaces}
-                                                    value={selectedInterface}
+                                                    onCreateOption={handleRAMCreate}
+                                                    options={ram_sizes}
+                                                    value={selectedRAMsize}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateStorage.errors.name && formCreateStorage.touched.name && <small>{formCreateStorage.errors.name}</small>} */}
+                                                {/* {formCreateMemory.errors.name && formCreateMemory.touched.name && <small>{formCreateMemory.errors.name}</small>} */}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
-                                                Write Speed
+                                                CAS Latency
                                                 </CLabel>
                                                 <CreatableSelect
                                                     aria-labelledby="Operating Systems"
                                                     closeMenuOnSelect={true}
                                                     classNamePrefix="custom-forminput-6"
-                                                    onChange={handleWriteSpeedChange}
+                                                    onChange={handleLatencyChange}
                                                     // onInputChange={handleOSInputChange}
-                                                    onCreateOption={handleWiteSpeedCreate}
-                                                    options={write_speeds}
-                                                    value={selectedWriteSpeed}
+                                                    onCreateOption={handleLatencyCreate}
+                                                    options={latencies}
+                                                    value={selectedLatency}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateStorage.errors.name && formCreateStorage.touched.name && <small>{formCreateStorage.errors.name}</small>} */}
+                                                {/* {formCreateMemory.errors.name && formCreateMemory.touched.name && <small>{formCreateMemory.errors.name}</small>} */}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
-                                                Read Speed
+                                                DIMM type
                                                 </CLabel>
                                                 <CreatableSelect
                                                     aria-labelledby="Operating Systems"
                                                     closeMenuOnSelect={true}
                                                     classNamePrefix="custom-forminput-6"
-                                                    onChange={handleReadSpeedChange}
+                                                    onChange={handleDimmChange}
                                                     // onInputChange={handleOSInputChange}
-                                                    onCreateOption={handleReadSpeedCreate}
-                                                    options={read_speeds}
-                                                    value={selectedReadSpeed}
+                                                    onCreateOption={handleDimmCreate}
+                                                    options={dimm_types}
+                                                    value={selectedDimmType}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateStorage.errors.name && formCreateStorage.touched.name && <small>{formCreateStorage.errors.name}</small>} */}
+                                                {/* {formCreateMemory.errors.name && formCreateMemory.touched.name && <small>{formCreateMemory.errors.name}</small>} */}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
-                                                    Drive Type
+                                                    Part Number
                                                 </CLabel>
                                                 <CreatableSelect
                                                     aria-labelledby="Storages"
                                                     closeMenuOnSelect={true}
                                                     classNamePrefix="custom-forminput-6"
-                                                    onChange={handleDriveTypeChange}
+                                                    onChange={handlePartNumberChange}
                                                     // onInputChange={handleOSInputChange}
-                                                    onCreateOption={handleDriveTypeCreate}
-                                                    options={drive_types}
-                                                    value={selectedDriveType}
+                                                    onCreateOption={handlePartNumberCreate}
+                                                    options={part_numbers}
+                                                    value={selectedPartNumber}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateStorage.errors.name && formCreateStorage.touched.name && <small>{formCreateStorage.errors.name}</small>} */}
-                                            </div>
-                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
-                                                <CLabel className="custom-label-wbs5">
-                                                    Form Factor
-                                                </CLabel>
-                                                <CreatableSelect
-                                                    aria-labelledby="Memories"
-                                                    closeMenuOnSelect={true}
-                                                    classNamePrefix="custom-forminput-6"
-                                                    onChange={handleFormFactorChange}
-                                                    // onInputChange={handleOSInputChange}
-                                                    onCreateOption={handleFormFactorCreate}
-                                                    options={form_factors}
-                                                    value={selectedFormFactor}
-                                                    isClearable={true}
-                                                />
-                                                {/* {formCreateStorage.errors.name && formCreateStorage.touched.name && <small>{formCreateStorage.errors.name}</small>} */}
-                                            </div>
-                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
-                                                <CLabel className="custom-label-wbs5">
-                                                    Encryption
-                                                </CLabel>
-                                                <CreatableSelect
-                                                    aria-labelledby="Memories"
-                                                    closeMenuOnSelect={true}
-                                                    classNamePrefix="custom-forminput-6"
-                                                    onChange={handleEncryptionChange}
-                                                    // onInputChange={handleOSInputChange}
-                                                    onCreateOption={handleEncryptionCreate}
-                                                    options={encryptions}
-                                                    value={selectedEncryption}
-                                                    isClearable={true}
-                                                />
-                                                {/* {formCreateStorage.errors.name && formCreateStorage.touched.name && <small>{formCreateStorage.errors.name}</small>} */}
+                                                {/* {formCreateMemory.errors.name && formCreateMemory.touched.name && <small>{formCreateMemory.errors.name}</small>} */}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Price (BDT)
                                                 </CLabel>
                                                 <CInput type="number" value={price} onChange={(event) => setPrice(event.target.value)} />
-                                                {formCreateStorage.errors.name && formCreateStorage.touched.name && <small>{formCreateStorage.errors.name}</small>}
+                                                {formCreateMemory.errors.name && formCreateMemory.touched.name && <small>{formCreateMemory.errors.name}</small>}
                                             </div>
 
                                             <div className="col-lg-12 mb-3">
@@ -487,7 +423,7 @@ const Create = (props) => {
                             <CCardFooter>
                                 <div className="col-md-12">{ submitted? <LinearProgress/>:
                                     <div className="projectwbs-form-button-holders mt-3">
-                                        <CButton type="button" onClick={formCreateStorage.handleSubmit} className="create-btn-prjctwbs create-wbs">Add</CButton>
+                                        <CButton type="button" disabled={!formCreateMemory.isValid} onClick={formCreateMemory.handleSubmit} className="create-btn-prjctwbs create-wbs">Add</CButton>
                                         <CButton type="button" onClick={reset_form} className="create-btn-prjctwbs cancel-wbs">Reset</CButton>
                                     </div>}
                                 </div>

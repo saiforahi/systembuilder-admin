@@ -6,13 +6,13 @@ import { Link, useHistory } from 'react-router-dom'
 import {API} from '../../Config'
 import { fetchStoragesList } from '../../store/slices/storagesSlice'
 
-const Storages = () => {
+const Memories = () => {
     const dispatch = useDispatch()
     let history = useHistory()
     
-    const storages = useSelector(state =>{
+    const memories = useSelector(state =>{
         let temp=[]
-        Array.from(state.storages.data).forEach((element,idx) => {
+        Array.from(state.memories.data).forEach((element,idx) => {
             temp.push({'#':idx+1,id:element.id,'Name':element.name,deleted_at:element.deleted_at})
         });
         return temp
@@ -28,7 +28,7 @@ const Storages = () => {
           })
           .then((willDelete) => {
             if (willDelete) {
-              API.delete('storages/delete/'+storage_id).then(response=>{
+              API.delete('memories/delete/'+storage_id).then(response=>{
                 if(response.data.success==true){
                   dispatch(fetchStoragesList())
                   swal("Poof! Your selected Car record has been deleted!", {
@@ -57,7 +57,7 @@ const Storages = () => {
             <CContainer>
                 <CRow className="align-items-center">
                     <CCol md="8" className="mb-3 mb-xl-0 text-left offset-md-2">
-                        <Link to="/dashboard/storages/create"><CButton shape="round" color="primary">Add</CButton></Link>
+                        <Link to="/dashboard/memories/create"><CButton shape="round" color="primary">Add</CButton></Link>
                     </CCol>
                 </CRow>
                 <hr></hr>
@@ -65,11 +65,11 @@ const Storages = () => {
                     <CCol md="8" className="offset-md-2">
                         <CCard className="custom-wbs-card-1">
                             <CCardHeader>
-                                <h3>Storages</h3>
+                                <h5>Memories</h5>
                             </CCardHeader>
                             <CCardBody>
                                 <CDataTable
-                                    items={storages}
+                                    items={memories}
                                     fields={[
                                         {
                                             key: "#",
@@ -99,7 +99,7 @@ const Storages = () => {
                                             (item) => (
                                                 <td>
                                                     <CBadge>
-                                                        <CButton disabled={is_trashed(item.deleted_at)} onClick={() => _delete(item.id)} type="button" size="sm" color="danger">Delete</CButton> <CButton onClick={() => { history.push({ pathname: '/dashboard/storages/details', state: { brand: item } }) }} size="sm" type="button" color="primary">Edit</CButton>
+                                                        <CButton disabled={is_trashed(item.deleted_at)} onClick={() => _delete(item.id)} type="button" size="sm" color="danger">Delete</CButton> <CButton onClick={() => { history.push({ pathname: '/dashboard/memories/details', state: { brand: item } }) }} size="sm" type="button" color="primary">Edit</CButton>
                                                     </CBadge>
                                                 </td>
                                             )
@@ -114,4 +114,4 @@ const Storages = () => {
     )
 }
 
-export default Storages
+export default Memories

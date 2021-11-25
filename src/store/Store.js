@@ -8,6 +8,7 @@ import laptopsSlice from './slices/laptopsSlice'
 import osSlice from './slices/osSlice'
 import processorsSlice from './slices/processorsSlice'
 import storagesSlice from './slices/storagesSlice'
+import memoriesSlice from './slices/memoriesSlice'
 
 export default configureStore({
   reducer: {
@@ -19,6 +20,7 @@ export default configureStore({
     laptops:laptopsSlice,
     processors: processorsSlice,
     os: osSlice,
-    storages:storagesSlice
+    storages:storagesSlice,
+    memories:memoriesSlice
   },
 })

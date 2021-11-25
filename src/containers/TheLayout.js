@@ -13,6 +13,7 @@ import { fetchLaptopList } from '../store/slices/laptopsSlice';
 import { fetchOSThunk } from '../store/slices/osSlice';
 import { fetchProcessorsList } from '../store/slices/processorsSlice';
 import { fetchStoragesList } from '../store/slices/storagesSlice';
+import { fetchMemoriesThunk } from '../store/slices/memoriesSlice';
 const TheLayout = () => {
   const dispatch = useDispatch()
   React.useEffect(()=>{
@@ -21,6 +22,7 @@ const TheLayout = () => {
     dispatch(fetchOSThunk())
     dispatch(fetchProcessorsList())
     dispatch(fetchStoragesList())
+    dispatch(fetchMemoriesThunk())
   },[])
   return (
     <div className="c-app c-default-layout">

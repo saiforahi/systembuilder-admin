@@ -14,7 +14,10 @@ const routes = [
     { path: '/dashboard/processors/edit/:id',exact:true, name: 'Edit Processor', component: React.lazy(()=>import('../pages/processors/Edit'))},
     { path: '/dashboard/storages',exact:true, name: 'Storages', component: React.lazy(()=>import('../pages/storages/Storages'))},
     { path: '/dashboard/storages/create',exact:true, name: 'Create Storage', component: React.lazy(()=>import('../pages/storages/Create'))},
-    { path: '/dashboard/storages/edit/:id',exact:true, name: 'Edit Storage', component: React.lazy(()=>import('../pages/storages/Edit'))}
+    { path: '/dashboard/storages/edit/:id',exact:true, name: 'Edit Storage', component: React.lazy(()=>import('../pages/storages/Edit'))},
+    { path: '/dashboard/memories',exact:true, name: 'Memories', component: React.lazy(()=>import('../pages/memories/Memories'))},
+    { path: '/dashboard/memories/create',exact:true, name: 'Create Memory', component: React.lazy(()=>import('../pages/memories/Create'))},
+    { path: '/dashboard/memories/edit/:id',exact:true, name: 'Edit Memory', component: React.lazy(()=>import('../pages/memories/Edit'))}
 ]
 
 export default routes
