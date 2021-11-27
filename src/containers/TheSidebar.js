@@ -58,41 +58,36 @@ const TheSidebar = () => {
         /> */}
         <CSidebarNavItem to="/dashboard" icon="cil-speedometer" name="Dashboard" className="vo-navItem"></CSidebarNavItem>
         {/**Projects */}
-        <CSidebarNavDropdown icon="cib-ghost" name="Products" className="vo-navItem">
+        <CSidebarNavDropdown icon="cil-laptop" name="Computers" className="vo-navItem">
           {has_group('admin') && <CSidebarNavItem to="/dashboard/products/create-new-product" name="Add New Product" className="vo-navItem" ></CSidebarNavItem>}
           <CSidebarNavItem to="/dashboard/products" name="All Products" className="vo-navItem"></CSidebarNavItem>
           <CSidebarNavItem to="/dashboard/laptops" name="Laptops" className="vo-navItem"></CSidebarNavItem>
-          <CSidebarNavItem to="/dashboard/processors" name="Processors" className="vo-navItem"></CSidebarNavItem>
-          <CSidebarNavItem to="/dashboard/storages" name="Storages" className="vo-navItem"></CSidebarNavItem>
-          <CSidebarNavItem to="/dashboard/memories" name="Memories" className="vo-navItem"></CSidebarNavItem>
-          <CSidebarNavItem to="/dashboard/motherboards" name="Mother Boards" className="vo-navItem" disabled></CSidebarNavItem>
+          
           {/* <CSidebarNavItem to="/dashboard/Projects/completed-projects" name="Completed Projects" className="vo-navItem" ></CSidebarNavItem> */}
-
-
-
         </CSidebarNavDropdown>
         {/**Meetings */}
         {/* <CSidebarNavItem to="/dashboard/meetings" icon="cil-view-module" name="Basic Data" className="vo-navItem"></CSidebarNavItem> */}
         {/**WBS */}
+        <CSidebarNavDropdown icon="cib-ghost" name="Components" className="vo-navItem">
+          <CSidebarNavItem to="/dashboard/processors" name="Processors" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/storages" name="Storages" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/memories" name="Memories" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/graphics" name="Graphics Cards" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/motherboards" name="Mother Boards" className="vo-navItem" disabled></CSidebarNavItem>
+        </CSidebarNavDropdown>
+        <CSidebarNavDropdown icon="cib-ghost" name="Accessories" className="vo-navItem">
+          <CSidebarNavItem to="/dashboard/headphones" name="Head Phones" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/speakers" name="Speakers" className="vo-navItem"></CSidebarNavItem>
+        </CSidebarNavDropdown>
         <CSidebarNavDropdown icon="cil-spreadsheet" name="Basic Data" className="vo-navItem">
           <CSidebarNavItem to="/dashboard/brands" name="Brands" className="vo-navItem"  ></CSidebarNavItem>
           {/* <CSidebarNavItem to="/dashboard/WBS/board" name="Board" className="vo-navItem" ></CSidebarNavItem> */}
 
         </CSidebarNavDropdown>
-        {/**EVMS */}
-        {/* <CSidebarNavItem to="/dashboard/EVMS"name="EVMS" icon="cil-chart-line" className="vo-navItem"></CSidebarNavItem> */}
-        {/* {has_group('admin') && <CSidebarNavDropdown icon="cil-chart-line" name="EVMS" className="vo-navItem">
-          <CSidebarNavItem to="/dashboard/EVMS/create" name="Create EVMS" className="vo-navItem"  ></CSidebarNavItem>
-          <CSidebarNavItem to="/dashboard/EVMS/view" name="View EVMS" className="vo-navItem" ></CSidebarNavItem>
-        </CSidebarNavDropdown>} */}
-        {/* *Profile
-        <CSidebarNavItem to="/dashboard/profile" name="Profile" icon="cil-user" className="vo-navItem"></CSidebarNavItem>
-
-        {/**Timecards */}
-        {/* <CSidebarNavItem to="/dashboard/timecards" name="Timecards" icon="cil-library" className="vo-navItem"></CSidebarNavItem> */}
-
-        {/**Shared Docs */}
-        {/* <CSidebarNavItem to="/dashboard/shared-documents" name="Shared Documents" icon="cil-folder-open" className="vo-navItem"></CSidebarNavItem> */}
+        <CSidebarNavDropdown icon="cil-settings" name="Settings" className="vo-navItem">
+          <CSidebarNavItem to="/dashboard/headphones" name="Mail Box" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/speakers" name="Maintenence" className="vo-navItem"></CSidebarNavItem>
+        </CSidebarNavDropdown>
 
       </CSidebarNav>
       <CSidebarMinimizer />

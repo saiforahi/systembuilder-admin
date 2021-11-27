@@ -10,8 +10,8 @@ import { FILE_API, API } from '../../Config';
 import swal from 'sweetalert';
 import { useHistory } from 'react-router-dom';
 import ImageUploader from "react-images-upload";
-import { fetchStoragesList } from '../../store/slices/storagesSlice';
-import { fetchMemoriesThunk } from '../../store/slices/memoriesSlice';
+import { fetchGraphicsCardsThunk } from '../../store/slices/graphicsCardsSlice';
+
 const Create = (props) => {
     const dispatch = useDispatch()
     const [submitted,setSubmitted]=useState(false)
@@ -40,7 +40,7 @@ const Create = (props) => {
         }
         const memory_specs = {
             memory: selectedMemory.value!==null?selectedMemory.value:'',
-            ram_size: selectedRAMsize.value,
+            ram_size: selectedChipSet.value,
             latency: selectedLatency.value
         }
         const additional_specs={
@@ -55,13 +55,13 @@ const Create = (props) => {
         for (var pair of formData.entries()) {
             console.log(pair[0]+ ', ' + pair[1]); 
         }
-        FILE_API.post('memories/create', formData).then((res) => {
+        FILE_API.post('graphics/create', formData).then((res) => {
             setSubmitted(false)
             console.log(res)
             if (res.status == 201) {
-                dispatch(fetchMemoriesThunk())
+                dispatch(fetchGraphicsCardsThunk())
                 history.push('/dashboard/memories')
-                swal('Created!', 'A new memory Created', 'success')
+                swal('Created!', 'A new Graphics Card Created', 'success')
             }
         }).catch(err=>{
             setSubmitted(false)
@@ -69,16 +69,16 @@ const Create = (props) => {
     }
     
     
-    const [ram_sizes,setRAMsizes] = useState([])
-    const [selectedRAMsize, setSelectedRAMsize] = useState(null)
-    const handleRAMChange = (option, value, actionMeta) => {
+    const [chipsets,setChipSets] = useState([])
+    const [selectedChipSet, setSelectedChipSet] = useState(null)
+    const handleChipSetChange = (option, value, actionMeta) => {
         console.log(option, value)
-        setSelectedRAMsize(option)
+        setSelectedChipSet(option)
     }
-    const handleRAMCreate = (value) => {
+    const handleChipSetCreate = (value) => {
         console.log('create', value)
-        setSelectedRAMsize({ value: value, label: value })
-        setRAMsizes([...ram_sizes, { value: value, label: value }])
+        setSelectedChipSet({ value: value, label: value })
+        setChipSets([...chipsets, { value: value, label: value }])
     }
     const [brands, setBrands] = useState([])
     const [selectedBrand, setSelectedBrand] = useState(null)
@@ -227,12 +227,12 @@ const Create = (props) => {
             setMemories(temp)
         })
         API.get('memories/specification/list/memory/ram').then(res => {
-            console.log('ram_sizes', res.data)
+            console.log('chipsets', res.data)
             let temp = []
             Array.from(res.data.data).forEach((item, idx) => {
                 temp.push({ value: item, label: item })
             })
-            setRAMsizes(temp)
+            setChipSets(temp)
         })
         API.get('memories/specification/list/memory/latency').then(res => {
             console.log('write_speed', res.data)
@@ -262,7 +262,7 @@ const Create = (props) => {
                 <CRow>
                     <div className="col-md-12 col-sm-12">
                         <CCard className="custom-wbs-card-1">
-                            <CCardHeader className="project-wbs-1"> <h4 className="section-name-wbscreate">Add Memory</h4>
+                            <CCardHeader className="project-wbs-1"> <h4 className="section-name-wbscreate">Add Graphics Card</h4>
                             </CCardHeader>
                             <CCardBody>
                                 <CContainer>
@@ -329,17 +329,17 @@ const Create = (props) => {
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
-                                                    RAM size
+                                                    Chipset
                                                 </CLabel>
                                                 <CreatableSelect
                                                     aria-labelledby="Operating Systems"
                                                     closeMenuOnSelect={true}
                                                     classNamePrefix="custom-forminput-6"
-                                                    onChange={handleRAMChange}
+                                                    onChange={handleChipSetChange}
                                                     // onInputChange={handleOSInputChange}
-                                                    onCreateOption={handleRAMCreate}
-                                                    options={ram_sizes}
-                                                    value={selectedRAMsize}
+                                                    onCreateOption={handleChipSetCreate}
+                                                    options={chipsets}
+                                                    value={selectedChipSet}
                                                     isClearable={true}
                                                 />
                                                 {/* {formCreateMemory.errors.name && formCreateMemory.touched.name && <small class="error">{formCreateMemory.errors.name}</small>} */}
