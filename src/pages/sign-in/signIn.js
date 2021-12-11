@@ -6,12 +6,12 @@ import {
   CLabel,
   CInput,
   CFormText,
- CInputCheckbox,
+  CInputCheckbox,
   CButton,
 } from "@coreui/react";
 import hidePwdImg from '../../assets/icons/Showpass-show.svg';
 import showPwdImg from '../../assets/icons/Hide.svg';
-import { Link,Redirect,useHistory } from "react-router-dom";
+import { Link, Redirect, useHistory } from "react-router-dom";
 import { PUBLIC_API, ROLES, TOKEN, USER, USER_ID } from "../../Config";
 import { useFormik } from "formik";
 import { useLocation } from "react-router";
@@ -19,7 +19,7 @@ import { useSnackbar } from "notistack";
 const SignIn = () => {
   let history = useHistory();
   let location = useLocation()
-  const validate_login_form=(values)=>{
+  const validate_login_form = (values) => {
     console.log(values);
     const errors = {};
     if (!values.email) errors.email = "Email is required!"
@@ -31,25 +31,25 @@ const SignIn = () => {
   // const [password, setPwd] = useState('');
   const [isRevealPwd, setIsRevealPwd] = useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const login=()=>{  
-    PUBLIC_API.post('login',formLogin.values).then((res)=>{
-      console.log('login response',res.data)
-      if(res.data.success === true){
-        sessionStorage.setItem(TOKEN,res.data.token)
+  const login = () => {
+    PUBLIC_API.post('login', formLogin.values).then((res) => {
+      console.log('login response', res.data)
+      if (res.data.success === true) {
+        sessionStorage.setItem(TOKEN, res.data.token)
         let expires_after = new Date()
         sessionStorage.setItem('TOKEN', JSON.stringify({
-          time: new Date(expires_after.getFullYear(),expires_after.getMonth(),expires_after.getDate()+2,expires_after.getUTCHours(),expires_after.getMinutes(),expires_after.getSeconds()),
+          time: new Date(expires_after.getFullYear(), expires_after.getMonth(), expires_after.getDate() + 2, expires_after.getUTCHours(), expires_after.getMinutes(), expires_after.getSeconds()),
           data: res.data.token
         }));
-        sessionStorage.setItem(ROLES,res.data.roles)
-        sessionStorage.setItem(USER_ID,res.data.user.id)
-        sessionStorage.setItem(USER,JSON.stringify(res.data.user))
-        history.push({pathname:'/dashboard',state:{from:'login'}})
+        sessionStorage.setItem(ROLES, res.data.roles)
+        sessionStorage.setItem(USER_ID, res.data.user.id)
+        sessionStorage.setItem(USER, JSON.stringify(res.data.user))
+        history.push({ pathname: '/dashboard', state: { from: 'login' } })
       }
-    }).catch(err=>{
+    }).catch(err => {
       console.log(err)
-      if(err?.response?.data?.message){
-        enqueueSnackbar(err.response.data.message,{variant:"warning"})
+      if (err?.response?.data?.message) {
+        enqueueSnackbar(err.response.data.message, { variant: "warning" })
       }
       // if(err.response.status == 403){
       //   enqueueSnackbar('Your account is not active yet',{variant:"warning"})
@@ -57,31 +57,31 @@ const SignIn = () => {
     })
   }
   const formLogin = useFormik({
-    initialValues:{
-      email:'',
-      password:''
+    initialValues: {
+      email: '',
+      password: ''
     },
-    validateOnChange:true,
-    validateOnBlur:true,
+    validateOnChange: true,
+    validateOnBlur: true,
     validate: validate_login_form,
     onSubmit: login
   })
   const handleKeyPress = (event) => {
-    if(event.key === 'Enter'){
+    if (event.key === 'Enter') {
       login(formLogin.values)
     }
   }
-  
-  useEffect(()=>{
-    if(location.state?.registration){
+
+  useEffect(() => {
+    if (location.state?.registration) {
       enqueueSnackbar('Registration Succefull, Please verify email to login', { variant: 'info' })
     }
-  },[])
+  }, [])
   return (
     <>
-      {sessionStorage.getItem(TOKEN)?<Redirect to="/dashboard"/>:<div className="signin-content">
+      {sessionStorage.getItem(TOKEN) ? <Redirect to="/dashboard" /> : <div className="signin-content">
         <div className="container">
-          <div className="row">
+          <div className="row mt-5">
             {/**Form section */}
             <div className="col-lg-6 contents">
               <div className="row justify-content-center">
@@ -118,24 +118,24 @@ const SignIn = () => {
                           Password
                         </CLabel>
                         <div className="password-container">
-                        <CInput
-                          type={isRevealPwd ? "text" : "password"}
-                          id="password"
-                          name="password"
-                          value={formLogin.values.password}
-                          onChange={formLogin.handleChange}
-                          className="custom-formgroup-signin"
-                          onKeyPress={handleKeyPress}
-                        />
+                          <CInput
+                            type={isRevealPwd ? "text" : "password"}
+                            id="password"
+                            name="password"
+                            value={formLogin.values.password}
+                            onChange={formLogin.handleChange}
+                            className="custom-formgroup-signin"
+                            onKeyPress={handleKeyPress}
+                          />
                           <img className="pwd-container-img"
-                        title={isRevealPwd ? "Hide password" : "Show password"}
-                        src={isRevealPwd ? hidePwdImg : showPwdImg}
-                        onClick={() => setIsRevealPwd(prevState => !prevState)}
-                      />
-                      </div>
+                            title={isRevealPwd ? "Hide password" : "Show password"}
+                            src={isRevealPwd ? hidePwdImg : showPwdImg}
+                            onClick={() => setIsRevealPwd(prevState => !prevState)}
+                          />
+                        </div>
                       </div>
                       <div className="show-flex">
-                        <div className="rem">
+                        {/* <div className="rem">
                           
                           <CInputCheckbox
                             className="mb-3 custom-check"
@@ -146,7 +146,7 @@ const SignIn = () => {
                             }}
                           />
                           <CLabel htmlFor="remember" className="custom-check-label">Remember me</CLabel>
-                        </div>
+                        </div> */}
 
                         <div className="forgot">
                           <Link className="forgot-link" to="/forgot-password">Forgot Password</Link>
@@ -159,9 +159,9 @@ const SignIn = () => {
                       </div>
                     </CForm>
                     {/**Go to register */}
-                    <div className="mb-4 mt-3">
+                    {/* <div className="mb-4 mt-3">
                       <h5 className="final-footer-1"><span className="dum-text-1">Don't have an account?</span><Link className="registration-link-1" to="/register">Register</Link></h5>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
