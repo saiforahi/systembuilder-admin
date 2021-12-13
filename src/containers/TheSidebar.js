@@ -88,7 +88,7 @@ const TheSidebar = () => {
         </CSidebarNavDropdown>
         <hr/>
         <CSidebarNavDropdown icon="cil-spreadsheet" name="Orders" className="vo-navItem">
-          <CSidebarNavItem to="/dashboard/brands" name="List" className="vo-navItem"  ></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/orders" name="List" className="vo-navItem"  ></CSidebarNavItem>
           {/* <CSidebarNavItem to="/dashboard/WBS/board" name="Board" className="vo-navItem" ></CSidebarNavItem> */}
 
         </CSidebarNavDropdown>

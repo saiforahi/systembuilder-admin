@@ -20,7 +20,11 @@ const routes = [
     { path: '/dashboard/memories/edit/:id',exact:true, name: 'Edit Memory', component: React.lazy(()=>import('../pages/memories/Edit'))},
     { path: '/dashboard/graphics',exact:true, name: 'Graphics', component: React.lazy(()=>import('../pages/graphics-cards/Cards'))},
     { path: '/dashboard/graphics/create',exact:true, name: 'Create Grpahics Card', component: React.lazy(()=>import('../pages/graphics-cards/Create'))},
-    { path: '/dashboard/graphics/edit/:id',exact:true, name: 'Edit Grpahics Card', component: React.lazy(()=>import('../pages/graphics-cards/Edit'))}
+    { path: '/dashboard/graphics/edit/:id',exact:true, name: 'Edit Grpahics Card', component: React.lazy(()=>import('../pages/graphics-cards/Edit'))},
+    //order
+    { path: '/dashboard/orders',exact:true, name: 'Orders', component: React.lazy(()=>import('../pages/orders/Orders'))},
+    { path: '/dashboard/orders/create',exact:true, name: 'Create Order', component: React.lazy(()=>import('../pages/orders/Create'))},
+    { path: '/dashboard/orders/edit/:id',exact:true, name: 'Edit Order', component: React.lazy(()=>import('../pages/orders/Edit'))}
 ]
 
 export default routes

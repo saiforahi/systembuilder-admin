@@ -5,7 +5,7 @@ import swal from 'sweetalert'
 import { Link, useHistory } from 'react-router-dom'
 import {API} from '../../Config'
 import { fetchProcessorsList } from '../../store/slices/processorsSlice'
-const Processors = () => {
+const Orders = () => {
     const dispatch = useDispatch()
     let history = useHistory()
     const processors = useSelector(state =>{
@@ -63,7 +63,7 @@ const Processors = () => {
                     <CCol md="8" className="offset-md-2">
                         <CCard className="custom-wbs-card-1">
                             <CCardHeader>
-                                <h3>Processors</h3>
+                                <h3>Orders</h3>
                             </CCardHeader>
                             <CCardBody>
                                 <CDataTable
@@ -97,7 +97,7 @@ const Processors = () => {
                                             (item) => (
                                                 <td>
                                                     <CBadge>
-                                                        <CButton disabled={is_trashed(item.deleted_at)} onClick={() => delete_laptop(item.id)} type="button" size="sm" color="danger">Delete</CButton> {is_trashed(item.deleted_at)==false && <CButton onClick={() => { history.push({ pathname: '/dashboard/laptops/details', state: { brand: item } }) }} size="sm" type="button" color="primary">Edit</CButton>}
+                                                        <CButton disabled={is_trashed(item.deleted_at)} onClick={() => delete_laptop(item.id)} type="button" size="sm" color="danger">Delete</CButton> {is_trashed(item.deleted_at)==false &&<CButton onClick={() => { history.push({ pathname: '/dashboard/laptops/details', state: { brand: item } }) }} size="sm" type="button" color="primary">Edit</CButton>}
                                                     </CBadge>
                                                 </td>
                                             )
@@ -112,4 +112,4 @@ const Processors = () => {
     )
 }
 
-export default Processors
+export default Orders
