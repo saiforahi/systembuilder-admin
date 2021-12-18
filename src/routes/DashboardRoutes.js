@@ -24,7 +24,7 @@ const routes = [
     //order
     { path: '/dashboard/orders',exact:true, name: 'Orders', component: React.lazy(()=>import('../pages/orders/Orders'))},
     { path: '/dashboard/orders/create',exact:true, name: 'Create Order', component: React.lazy(()=>import('../pages/orders/Create'))},
-    { path: '/dashboard/orders/edit/:id',exact:true, name: 'Edit Order', component: React.lazy(()=>import('../pages/orders/Edit'))}
+    { path: '/dashboard/orders/details/:id',exact:true, name: 'Order Details', component: React.lazy(()=>import('../pages/orders/Details'))}
 ]
 
 export default routes

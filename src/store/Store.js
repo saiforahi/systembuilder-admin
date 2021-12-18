@@ -10,6 +10,7 @@ import processorsSlice from './slices/processorsSlice'
 import storagesSlice from './slices/storagesSlice'
 import memoriesSlice from './slices/memoriesSlice'
 import graphicsCardsSlice from './slices/graphicsCardsSlice'
+import ordersSlice from './slices/ordersSlice'
 
 export default configureStore({
   reducer: {
@@ -23,6 +24,7 @@ export default configureStore({
     os: osSlice,
     storages:storagesSlice,
     memories:memoriesSlice,
-    graphics: graphicsCardsSlice
+    graphics: graphicsCardsSlice,
+    orders: ordersSlice
   },
 })

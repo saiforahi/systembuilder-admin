@@ -4,19 +4,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import swal from 'sweetalert'
 import { Link, useHistory } from 'react-router-dom'
 import {API} from '../../Config'
-import { fetchProcessorsList } from '../../store/slices/processorsSlice'
+import { fetchOrdersThunk } from '../../store/slices/ordersSlice'
 const Orders = () => {
     const dispatch = useDispatch()
     let history = useHistory()
-    const processors = useSelector(state =>{
+    const orders = useSelector(state =>{
         let temp=[]
-        Array.from(state.processors.data).forEach((element,idx) => {
-            temp.push({'#':idx+1,id:element.id,'Name':element.name,deleted_at:element.deleted_at})
+        Array.from(state.orders.data).forEach((element,idx) => {
+            temp.push({'#':idx+1,id:element.id,'Tracking Code':element.tracking_code,'Customer':element.customer_name,'Payment Type':element.payment_type.name,'Payment Status':element.payment_status,deleted_at:element.deleted_at})
         });
         return temp
     })
-    const delete_laptop=(processor_id)=>{
-        console.log('id',processor_id)
+    const delete_order=(order_id)=>{
+        console.log('id',order_id)
         swal({
             title: "Are you sure?",
             text: "Once deleted, you will be able to recover this record from Archieve!",
@@ -26,9 +26,9 @@ const Orders = () => {
           })
           .then((willDelete) => {
             if (willDelete) {
-              API.delete('processors/delete/'+processor_id).then(response=>{
+              API.delete('orders/delete/'+order_id).then(response=>{
                 if(response.data.success==true){
-                  dispatch(fetchProcessorsList())
+                  dispatch(fetchOrdersThunk())
                   swal("Poof! Your selected Car record has been deleted!", {
                     icon: "success",
                   });
@@ -50,6 +50,9 @@ const Orders = () => {
     const is_trashed=(deleted_at)=>{
         return deleted_at==null?false:true
     }
+    React.useEffect(()=>{
+        dispatch(fetchOrdersThunk())
+    },[])
     return (
         <>
             <CContainer>
@@ -67,14 +70,14 @@ const Orders = () => {
                             </CCardHeader>
                             <CCardBody>
                                 <CDataTable
-                                    items={processors}
+                                    items={orders}
                                     fields={[
                                         {
                                             key: "#",
                                             _style: { width: "5%" },
                                             _classes: "font-weight-bold",
                                         },
-                                        "Name",
+                                        "Tracking Code","Customer","Payment Type","Payment Status",
                                         {
                                             key: "Action",
                                             label: "Actions",
@@ -97,7 +100,7 @@ const Orders = () => {
                                             (item) => (
                                                 <td>
                                                     <CBadge>
-                                                        <CButton disabled={is_trashed(item.deleted_at)} onClick={() => delete_laptop(item.id)} type="button" size="sm" color="danger">Delete</CButton> {is_trashed(item.deleted_at)==false &&<CButton onClick={() => { history.push({ pathname: '/dashboard/laptops/details', state: { brand: item } }) }} size="sm" type="button" color="primary">Edit</CButton>}
+                                                        <CButton disabled={is_trashed(item.deleted_at)} onClick={() => delete_order(item.id)} type="button" size="sm" color="danger">Delete</CButton> {is_trashed(item.deleted_at)==false &&<CButton onClick={() => { history.push('/dashboard/orders/details/'+item.id)}} size="sm" type="button" color="primary">Details</CButton>}
                                                     </CBadge>
                                                 </td>
                                             )
