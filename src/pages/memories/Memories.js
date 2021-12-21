@@ -13,7 +13,7 @@ const Memories = () => {
     const memories = useSelector(state =>{
         let temp=[]
         Array.from(state.memories.data).forEach((element,idx) => {
-            temp.push({'#':idx+1,id:element.id,'Name':element.name,deleted_at:element.deleted_at})
+            temp.push({'#':idx+1,id:element.id,'Name':element.name,'Stock':element.product.stock?element.product.stock:0,deleted_at:element.deleted_at})
         });
         return temp
     })
@@ -77,6 +77,7 @@ const Memories = () => {
                                             _classes: "font-weight-bold",
                                         },
                                         "Name",
+                                        "Stock",
                                         {
                                             key: "Action",
                                             label: "Actions",

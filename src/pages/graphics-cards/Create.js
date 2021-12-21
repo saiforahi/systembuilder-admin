@@ -26,6 +26,7 @@ const Create = (props) => {
         setSubmitted(true)
         let formData = new FormData()
         formData.append('name', values.name)
+        formData.append('stock',values.stock)
         if (pictures.length > 0) {
             formData.append('total_images', pictures[0].length)
             // formData.append('images',pictures[0])
@@ -85,12 +86,12 @@ const Create = (props) => {
     const handleBrandChange = (option, value, actionMeta) => {
         console.log(option, value)
         setSelectedBrand(option)
-        formCreateMemory.setFieldValue('brand',option.value)
+        formCreateGraphicsCard.setFieldValue('brand',option.value)
     }
     const handleBrandCreate = (value) => {
         console.log('create', value)
         setSelectedBrand({ value: value, label: value })
-        formCreateMemory.setFieldValue('brand',value)
+        formCreateGraphicsCard.setFieldValue('brand',value)
         setBrands([...brands, { value: value, label: value }])
     }
     const [memories, setMemories] = useState([])
@@ -98,12 +99,12 @@ const Create = (props) => {
     const handleMemoryChange = (option, value, actionMeta) => {
         console.log(option, value)
         setSelectedMemory(option)
-        formCreateMemory.setFieldValue('memory',option.value)
+        formCreateGraphicsCard.setFieldValue('memory',option.value)
     }
     const handleMemoryCreate = (value) => {
         console.log('create', value)
         setSelectedMemory({ value: value, label: value })
-        formCreateMemory.setFieldValue('memory',value)
+        formCreateGraphicsCard.setFieldValue('memory',value)
         setMemories([...memories, { value: value, label: value }])
     }
 
@@ -112,13 +113,13 @@ const Create = (props) => {
     const [selectedLatency, setSelectedLatency] = useState(null)
     const handleLatencyChange = (option, value, actionMeta) => {
         console.log(option, value)
-        formCreateMemory.setFieldValue('latency',option.value)
+        formCreateGraphicsCard.setFieldValue('latency',option.value)
         setSelectedLatency(option)
     }
     const handleLatencyCreate = (value) => {
         console.log('create', value)
         setSelectedLatency({ value: value, label: value })
-        formCreateMemory.setFieldValue('latency',value)
+        formCreateGraphicsCard.setFieldValue('latency',value)
         setLatencies([...latencies, { value: value, label: value }])
     }
     //read
@@ -151,13 +152,13 @@ const Create = (props) => {
     const [selectedModel, setSelectedModel] = useState('')
     const handleModelChange = (option, value, actionMeta) => {
         console.log(option, value)
-        formCreateMemory.setFieldValue('model',option.value)
+        formCreateGraphicsCard.setFieldValue('model',option.value)
         setSelectedModel(option)
     }
     const handleModelCreate = (value) => {
         console.log('create', value)
         setSelectedModel({ value: value, label: value })
-        formCreateMemory.setFieldValue('model',value)
+        formCreateGraphicsCard.setFieldValue('model',value)
         setModels([...models, { value: value, label: value }])
     }
     const [price, setPrice] = useState()
@@ -167,7 +168,7 @@ const Create = (props) => {
         setSelectedMemory(null)
         setSelectedLatency(null)
         setSelectedDimmType(null)
-        formCreateMemory.handleReset()
+        formCreateGraphicsCard.handleReset()
         setPictures([])
     }
     const validateForm = (values) => {
@@ -184,7 +185,7 @@ const Create = (props) => {
        
         return errors
     }
-    const formCreateMemory = useFormik({
+    const formCreateGraphicsCard = useFormik({
         initialValues: {
             name: '',
             brand: '',
@@ -194,7 +195,8 @@ const Create = (props) => {
             memory:'',
             latency:'',
             part_number:'',
-            dimm_type:''
+            dimm_type:'',
+            stock:''
         },
         validate: validateForm,
         validateOnBlur: true,
@@ -273,8 +275,8 @@ const Create = (props) => {
                                                 <CLabel className="custom-label-wbs5">
                                                     Name
                                                 </CLabel>
-                                                <CInput className="custom-forminput-6" id="name" name="name" type="text" values={formCreateMemory.values.name} onChange={formCreateMemory.handleChange} />
-                                                {formCreateMemory.errors.name && formCreateMemory.touched.name && <small class="error">{formCreateMemory.errors.name}</small>}
+                                                <CInput className="custom-forminput-6" id="name" name="name" type="text" values={formCreateGraphicsCard.values.name} onChange={formCreateGraphicsCard.handleChange} />
+                                                {formCreateGraphicsCard.errors.name && formCreateGraphicsCard.touched.name && <small class="error">{formCreateGraphicsCard.errors.name}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -291,7 +293,7 @@ const Create = (props) => {
                                                     value={selectedBrand}
                                                     isClearable={true}
                                                 />
-                                                {formCreateMemory.errors.brand && formCreateMemory.touched.brand && <small class="error">{formCreateMemory.errors.brand}</small>}
+                                                {formCreateGraphicsCard.errors.brand && formCreateGraphicsCard.touched.brand && <small class="error">{formCreateGraphicsCard.errors.brand}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -308,7 +310,14 @@ const Create = (props) => {
                                                     value={selectedModel}
                                                     isClearable={true}
                                                 />
-                                                {formCreateMemory.errors.model && formCreateMemory.touched.model && <small class="error">{formCreateMemory.errors.model}</small>}
+                                                {formCreateGraphicsCard.errors.model && formCreateGraphicsCard.touched.model && <small class="error">{formCreateGraphicsCard.errors.model}</small>}
+                                            </div>
+                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Stock
+                                                </CLabel>
+                                                <CInput className="custom-forminput-6" id="stock" name="stock" type="number" values={formCreateGraphicsCard.values.stock} onChange={formCreateGraphicsCard.handleChange} />
+                                                {/* {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>} */}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -325,7 +334,7 @@ const Create = (props) => {
                                                     value={selectedMemory}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateMemory.errors.name && formCreateMemory.touched.name && <small class="error">{formCreateMemory.errors.name}</small>} */}
+                                                {/* {formCreateGraphicsCard.errors.name && formCreateGraphicsCard.touched.name && <small class="error">{formCreateGraphicsCard.errors.name}</small>} */}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -342,7 +351,7 @@ const Create = (props) => {
                                                     value={selectedChipSet}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateMemory.errors.name && formCreateMemory.touched.name && <small class="error">{formCreateMemory.errors.name}</small>} */}
+                                                {/* {formCreateGraphicsCard.errors.name && formCreateGraphicsCard.touched.name && <small class="error">{formCreateGraphicsCard.errors.name}</small>} */}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -359,7 +368,7 @@ const Create = (props) => {
                                                     value={selectedLatency}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateMemory.errors.name && formCreateMemory.touched.name && <small class="error">{formCreateMemory.errors.name}</small>} */}
+                                                {/* {formCreateGraphicsCard.errors.name && formCreateGraphicsCard.touched.name && <small class="error">{formCreateGraphicsCard.errors.name}</small>} */}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -376,7 +385,7 @@ const Create = (props) => {
                                                     value={selectedDimmType}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateMemory.errors.name && formCreateMemory.touched.name && <small class="error">{formCreateMemory.errors.name}</small>} */}
+                                                {/* {formCreateGraphicsCard.errors.name && formCreateGraphicsCard.touched.name && <small class="error">{formCreateGraphicsCard.errors.name}</small>} */}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -393,14 +402,14 @@ const Create = (props) => {
                                                     value={selectedPartNumber}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateMemory.errors.name && formCreateMemory.touched.name && <small class="error">{formCreateMemory.errors.name}</small>} */}
+                                                {/* {formCreateGraphicsCard.errors.name && formCreateGraphicsCard.touched.name && <small class="error">{formCreateGraphicsCard.errors.name}</small>} */}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Price (BDT)
                                                 </CLabel>
                                                 <CInput type="number" value={price} onChange={(event) => setPrice(event.target.value)} />
-                                                {formCreateMemory.errors.name && formCreateMemory.touched.name && <small>{formCreateMemory.errors.name}</small>}
+                                                {formCreateGraphicsCard.errors.name && formCreateGraphicsCard.touched.name && <small>{formCreateGraphicsCard.errors.name}</small>}
                                             </div>
 
                                             <div className="col-lg-12 mb-3">
@@ -423,7 +432,7 @@ const Create = (props) => {
                             <CCardFooter>
                                 <div className="col-md-12">{ submitted? <LinearProgress/>:
                                     <div className="projectwbs-form-button-holders mt-3">
-                                        <CButton type="button" disabled={!formCreateMemory.isValid} onClick={formCreateMemory.handleSubmit} className="create-btn-prjctwbs create-wbs">Add</CButton>
+                                        <CButton type="button" disabled={!formCreateGraphicsCard.isValid} onClick={formCreateGraphicsCard.handleSubmit} className="create-btn-prjctwbs create-wbs">Add</CButton>
                                         <CButton type="button" onClick={reset_form} className="create-btn-prjctwbs cancel-wbs">Reset</CButton>
                                     </div>}
                                 </div>

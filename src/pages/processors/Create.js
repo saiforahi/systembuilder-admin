@@ -35,6 +35,7 @@ const Create = (props) => {
         setSubmitted(true)
         let formData = new FormData()
         formData.append('name', values.name)
+        formData.append('stock', values.stock)
         if (pictures.length > 0) {
             formData.append('total_images', pictures[0].length)
             // formData.append('images',pictures[0])
@@ -153,7 +154,8 @@ const Create = (props) => {
     const formCreateProcessor = useFormik({
         initialValues: {
             name: '',
-            brand: ''
+            brand: '',
+            stock:''
         },
         validate: validateForm,
         validateOnBlur: true,
@@ -259,6 +261,13 @@ const Create = (props) => {
                                                     value={selectedModel}
                                                     isClearable={true}
                                                 />
+                                                {/* {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>} */}
+                                            </div>
+                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Stock
+                                                </CLabel>
+                                                <CInput className="custom-forminput-6" id="stock" name="stock" type="number" values={formCreateProcessor.values.stock} onChange={formCreateProcessor.handleChange} />
                                                 {/* {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>} */}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">

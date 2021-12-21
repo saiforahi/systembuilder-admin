@@ -13,7 +13,7 @@ const Cards = () => {
     const graphics = useSelector(state =>{
         let temp=[]
         Array.from(state.graphics.data).forEach((element,idx) => {
-            temp.push({'#':idx+1,id:element.id,'Name':element.name,deleted_at:element.deleted_at})
+            temp.push({'#':idx+1,id:element.id,'Name':element.name,'Stock':element.product.stock,deleted_at:element.deleted_at})
         });
         return temp
     })
@@ -77,6 +77,7 @@ const Cards = () => {
                                             _classes: "font-weight-bold",
                                         },
                                         "Name",
+                                        "Stock",
                                         {
                                             key: "Action",
                                             label: "Actions",

@@ -11,7 +11,7 @@ const Processors = () => {
     const processors = useSelector(state =>{
         let temp=[]
         Array.from(state.processors.data).forEach((element,idx) => {
-            temp.push({'#':idx+1,id:element.id,'Name':element.name,deleted_at:element.deleted_at})
+            temp.push({'#':idx+1,id:element.id,'Name':element.name,'Stock':element.product.stock,deleted_at:element.deleted_at})
         });
         return temp
     })
@@ -75,6 +75,7 @@ const Processors = () => {
                                             _classes: "font-weight-bold",
                                         },
                                         "Name",
+                                        "Stock",
                                         {
                                             key: "Action",
                                             label: "Actions",
