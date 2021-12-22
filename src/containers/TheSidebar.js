@@ -90,7 +90,10 @@ const TheSidebar = () => {
         <CSidebarNavDropdown icon="cil-spreadsheet" name="Orders" className="vo-navItem">
           <CSidebarNavItem to="/dashboard/orders" name="List" className="vo-navItem"  ></CSidebarNavItem>
           {/* <CSidebarNavItem to="/dashboard/WBS/board" name="Board" className="vo-navItem" ></CSidebarNavItem> */}
-
+        </CSidebarNavDropdown>
+        <CSidebarNavDropdown icon="cil-spreadsheet" name="Sales" className="vo-navItem">
+          <CSidebarNavItem to="/dashboard/sales" name="List" className="vo-navItem"  ></CSidebarNavItem>
+          {/* <CSidebarNavItem to="/dashboard/WBS/board" name="Board" className="vo-navItem" ></CSidebarNavItem> */}
         </CSidebarNavDropdown>
         <CSidebarNavDropdown icon="cil-settings" name="Settings" className="vo-navItem">
           <CSidebarNavItem to="/dashboard/headphones" name="Mail Box" className="vo-navItem"></CSidebarNavItem>
