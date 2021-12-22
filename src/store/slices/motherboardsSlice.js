@@ -7,28 +7,28 @@ const initialState = {
 }
 
 
-export const fetchMemoriesThunk = createAsyncThunk('memories/fetchMemoriesThunk', async (user_id) => {
-  const response = await JsonClient.get('memories/all')
-  console.log("memories", response.data)
+export const fetchMotherboardsThunk = createAsyncThunk('motherboards/fetchMotherboardsThunk', async (user_id) => {
+  const response = await JsonClient.get('motherboards/all')
+  console.log("motherboards", response.data)
   return response.data
 })
 
-export const memoriesSlice = createSlice({
-  name: 'memories',
+export const motherboardsSlice = createSlice({
+  name: 'motherboards',
   initialState,
   reducers: {
 
   },
   extraReducers: {
-    [fetchMemoriesThunk.pending]: (state, action) => {
+    [fetchMotherboardsThunk.pending]: (state, action) => {
       state.status = 'loading'
     },
-    [fetchMemoriesThunk.fulfilled]: (state, action) => {
+    [fetchMotherboardsThunk.fulfilled]: (state, action) => {
       state.status = 'succeeded'
       // Add any fetched posts to the array
       state.data = action.payload
     },
-    [fetchMemoriesThunk.rejected]: (state, action) => {
+    [fetchMotherboardsThunk.rejected]: (state, action) => {
       state.status = 'failed'
       state.error = action.error.message
     },
@@ -37,4 +37,4 @@ export const memoriesSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 
-export default memoriesSlice.reducer
+export default motherboardsSlice.reducer

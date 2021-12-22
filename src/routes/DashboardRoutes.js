@@ -24,7 +24,11 @@ const routes = [
     //order
     { path: '/dashboard/orders',exact:true, name: 'Orders', component: React.lazy(()=>import('../pages/orders/Orders'))},
     { path: '/dashboard/orders/create',exact:true, name: 'Create Order', component: React.lazy(()=>import('../pages/orders/Create'))},
-    { path: '/dashboard/orders/details/:id',exact:true, name: 'Order Details', component: React.lazy(()=>import('../pages/orders/Details'))}
+    { path: '/dashboard/orders/details/:id',exact:true, name: 'Order Details', component: React.lazy(()=>import('../pages/orders/Details'))},
+    //
+    { path: '/dashboard/motherboards',exact:true, name: 'Graphics', component: React.lazy(()=>import('../pages/motherboards/Motherboards'))},
+    { path: '/dashboard/motherboards/create',exact:true, name: 'Create Grpahics Card', component: React.lazy(()=>import('../pages/motherboards/Create'))},
+    { path: '/dashboard/motherboards/edit/:id',exact:true, name: 'Edit Grpahics Card', component: React.lazy(()=>import('../pages/motherboards/Edit'))},
 ]
 
 export default routes

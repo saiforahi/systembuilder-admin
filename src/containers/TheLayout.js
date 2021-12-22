@@ -14,6 +14,7 @@ import { fetchOSThunk } from '../store/slices/osSlice';
 import { fetchProcessorsList } from '../store/slices/processorsSlice';
 import { fetchStoragesList } from '../store/slices/storagesSlice';
 import { fetchMemoriesThunk } from '../store/slices/memoriesSlice';
+import { fetchMotherboardsThunk } from '../store/slices/motherboardsSlice';
 const TheLayout = () => {
   const dispatch = useDispatch()
   React.useEffect(()=>{
@@ -23,6 +24,7 @@ const TheLayout = () => {
     dispatch(fetchProcessorsList())
     dispatch(fetchStoragesList())
     dispatch(fetchMemoriesThunk())
+    dispatch(fetchMotherboardsThunk())
   },[])
   return (
     <div className="c-app c-default-layout">
