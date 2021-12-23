@@ -75,7 +75,8 @@ const TheSidebar = () => {
           <CSidebarNavItem to="/dashboard/storages" name="Storages" className="vo-navItem"></CSidebarNavItem>
           <CSidebarNavItem to="/dashboard/memories" name="Memories" className="vo-navItem"></CSidebarNavItem>
           <CSidebarNavItem to="/dashboard/graphics" name="Graphics Cards" className="vo-navItem"></CSidebarNavItem>
-          <CSidebarNavItem to="/dashboard/motherboards" name="Mother Boards" className="vo-navItem" disabled></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/motherboards" name="Mother Boards" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/powersupplies" name="Power Supplies" className="vo-navItem"></CSidebarNavItem>
         </CSidebarNavDropdown>
         <CSidebarNavDropdown icon="cib-ghost" name="Accessories" className="vo-navItem">
           <CSidebarNavItem to="/dashboard/headphones" name="Head Phones" className="vo-navItem"></CSidebarNavItem>

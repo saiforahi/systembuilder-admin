@@ -28,10 +28,16 @@ const routes = [
     //sales
     { path: '/dashboard/sales',exact:true, name: 'Orders', component: React.lazy(()=>import('../pages/sales/Sales'))},
     
-    //
+    //motherboard
     { path: '/dashboard/motherboards',exact:true, name: 'Graphics', component: React.lazy(()=>import('../pages/motherboards/Motherboards'))},
     { path: '/dashboard/motherboards/create',exact:true, name: 'Create Grpahics Card', component: React.lazy(()=>import('../pages/motherboards/Create'))},
     { path: '/dashboard/motherboards/edit/:id',exact:true, name: 'Edit Grpahics Card', component: React.lazy(()=>import('../pages/motherboards/Edit'))},
+
+    //power supplies
+    //motherboard
+    { path: '/dashboard/powersupplies',exact:true, name: 'Graphics', component: React.lazy(()=>import('../pages/powersupplies/PowerSupplies'))},
+    { path: '/dashboard/powersupplies/create',exact:true, name: 'Create Grpahics Card', component: React.lazy(()=>import('../pages/powersupplies/Create'))},
+    { path: '/dashboard/powersupplies/edit/:id',exact:true, name: 'Edit Grpahics Card', component: React.lazy(()=>import('../pages/powersupplies/Edit'))},
 ]
 
 export default routes
