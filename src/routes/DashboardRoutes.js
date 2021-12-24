@@ -34,10 +34,19 @@ const routes = [
     { path: '/dashboard/motherboards/edit/:id',exact:true, name: 'Edit Grpahics Card', component: React.lazy(()=>import('../pages/motherboards/Edit'))},
 
     //power supplies
-    //motherboard
-    { path: '/dashboard/powersupplies',exact:true, name: 'Graphics', component: React.lazy(()=>import('../pages/powersupplies/PowerSupplies'))},
-    { path: '/dashboard/powersupplies/create',exact:true, name: 'Create Grpahics Card', component: React.lazy(()=>import('../pages/powersupplies/Create'))},
-    { path: '/dashboard/powersupplies/edit/:id',exact:true, name: 'Edit Grpahics Card', component: React.lazy(()=>import('../pages/powersupplies/Edit'))},
+    { path: '/dashboard/powersupplies',exact:true, name: 'Power Supplies', component: React.lazy(()=>import('../pages/powersupplies/PowerSupplies'))},
+    { path: '/dashboard/powersupplies/create',exact:true, name: 'Create Power Supply', component: React.lazy(()=>import('../pages/powersupplies/Create'))},
+    { path: '/dashboard/powersupplies/edit/:id',exact:true, name: 'Edit Power Supply', component: React.lazy(()=>import('../pages/powersupplies/Edit'))},
+
+    //power supplies
+    { path: '/dashboard/cpucases',exact:true, name: 'CPU Casings', component: React.lazy(()=>import('../pages/casings/Casings'))},
+    { path: '/dashboard/cpucases/create',exact:true, name: 'Create CPU Case', component: React.lazy(()=>import('../pages/casings/Create'))},
+    { path: '/dashboard/cpucases/edit/:id',exact:true, name: 'Edit CPU Case', component: React.lazy(()=>import('../pages/casings/Edit'))},
+
+    //monitors
+    { path: '/dashboard/monitors',exact:true, name: 'Monitors', component: React.lazy(()=>import('../pages/monitors/Monitors'))},
+    { path: '/dashboard/monitors/create',exact:true, name: 'Monitor create', component: React.lazy(()=>import('../pages/monitors/Create'))},
+    { path: '/dashboard/monitors/edit/:id',exact:true, name: 'Edit Monitor', component: React.lazy(()=>import('../pages/monitors/Edit'))},
 ]
 
 export default routes

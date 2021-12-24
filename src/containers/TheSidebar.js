@@ -77,6 +77,8 @@ const TheSidebar = () => {
           <CSidebarNavItem to="/dashboard/graphics" name="Graphics Cards" className="vo-navItem"></CSidebarNavItem>
           <CSidebarNavItem to="/dashboard/motherboards" name="Mother Boards" className="vo-navItem"></CSidebarNavItem>
           <CSidebarNavItem to="/dashboard/powersupplies" name="Power Supplies" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/cpucases" name="CPU Case" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/monitors" name="Monitors" className="vo-navItem"></CSidebarNavItem>
         </CSidebarNavDropdown>
         <CSidebarNavDropdown icon="cib-ghost" name="Accessories" className="vo-navItem">
           <CSidebarNavItem to="/dashboard/headphones" name="Head Phones" className="vo-navItem"></CSidebarNavItem>
@@ -92,10 +94,7 @@ const TheSidebar = () => {
           <CSidebarNavItem to="/dashboard/orders" name="List" className="vo-navItem"  ></CSidebarNavItem>
           {/* <CSidebarNavItem to="/dashboard/WBS/board" name="Board" className="vo-navItem" ></CSidebarNavItem> */}
         </CSidebarNavDropdown>
-        <CSidebarNavDropdown icon="cil-spreadsheet" name="Sales" className="vo-navItem">
-          <CSidebarNavItem to="/dashboard/sales" name="List" className="vo-navItem"  ></CSidebarNavItem>
-          {/* <CSidebarNavItem to="/dashboard/WBS/board" name="Board" className="vo-navItem" ></CSidebarNavItem> */}
-        </CSidebarNavDropdown>
+        <CSidebarNavItem icon="cil-spreadsheet" to="/dashboard/sales" name="Sales" className="vo-navItem"  ></CSidebarNavItem>
         <CSidebarNavDropdown icon="cil-settings" name="Settings" className="vo-navItem">
           <CSidebarNavItem to="/dashboard/headphones" name="Mail Box" className="vo-navItem"></CSidebarNavItem>
           <CSidebarNavItem to="/dashboard/speakers" name="Maintenence" className="vo-navItem"></CSidebarNavItem>
