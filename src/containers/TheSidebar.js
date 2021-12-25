@@ -46,7 +46,6 @@ const TheSidebar = () => {
         <span className="c-sidebar-brand-minimized name-brand1">SB</span>
       </CSidebarBrand>
       <CSidebarNav className="vo-sidebar">
-
         {/* <CCreateElement
           items={navigation}
           components={{
@@ -77,8 +76,10 @@ const TheSidebar = () => {
           <CSidebarNavItem to="/dashboard/graphics" name="Graphics Cards" className="vo-navItem"></CSidebarNavItem>
           <CSidebarNavItem to="/dashboard/motherboards" name="Mother Boards" className="vo-navItem"></CSidebarNavItem>
           <CSidebarNavItem to="/dashboard/powersupplies" name="Power Supplies" className="vo-navItem"></CSidebarNavItem>
-          <CSidebarNavItem to="/dashboard/cpucases" name="CPU Case" className="vo-navItem"></CSidebarNavItem>
           <CSidebarNavItem to="/dashboard/monitors" name="Monitors" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/cpucases" name="CPU Case" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/cpu-coolers" name="CPU Cooler" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/case-coolers" name="Case Cooler" className="vo-navItem"></CSidebarNavItem>
         </CSidebarNavDropdown>
         <CSidebarNavDropdown icon="cib-ghost" name="Accessories" className="vo-navItem">
           <CSidebarNavItem to="/dashboard/headphones" name="Head Phones" className="vo-navItem"></CSidebarNavItem>
@@ -87,9 +88,9 @@ const TheSidebar = () => {
         <CSidebarNavDropdown icon="cil-spreadsheet" name="Basic Data" className="vo-navItem">
           <CSidebarNavItem to="/dashboard/brands" name="Brands" className="vo-navItem"  ></CSidebarNavItem>
           {/* <CSidebarNavItem to="/dashboard/WBS/board" name="Board" className="vo-navItem" ></CSidebarNavItem> */}
-
         </CSidebarNavDropdown>
         <hr/>
+        {/* <CSidebarNavDivider/> */}
         <CSidebarNavDropdown icon="cil-spreadsheet" name="Orders" className="vo-navItem">
           <CSidebarNavItem to="/dashboard/orders" name="List" className="vo-navItem"  ></CSidebarNavItem>
           {/* <CSidebarNavItem to="/dashboard/WBS/board" name="Board" className="vo-navItem" ></CSidebarNavItem> */}

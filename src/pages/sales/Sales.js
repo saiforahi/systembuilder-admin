@@ -1,11 +1,16 @@
-import React from 'react'
-import { CContainer, CRow,CCol,CCard,CCardHeader,CCardBody, CLabel, CInput, CButton } from '@coreui/react'
+import React, { useState } from 'react'
+import { CContainer, CRow,CCol,CCard,CCardHeader,CCardBody, CLabel, CInput, CButton, CDataTable,CBadge } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { useFormik } from 'formik'
 import './Sales.css'
+import { API } from '../../Config'
 const Sales = () => {
-    const searchSales=()=>{
-
+    const [found_sales,setFoundSales]=useState([])
+    const searchSales=(values,{setSubmitting})=>{
+        console.log(values)
+        API.get('orders/sales/'+values.from+'/'+values.to).then((res)=>{
+            console.log(res.data)
+        })
     }
     const validateSearchForm=(values)=>{
         const errors = {}
@@ -19,6 +24,9 @@ const Sales = () => {
         // if (!values.part_number) errors.part_number = "Part Number is required"
        
         return errors
+    }
+    const is_trashed=(deleted_at)=>{
+        return deleted_at==null?false:true
     }
     const searchForm=useFormik({
         initialValues:{
@@ -49,7 +57,7 @@ const Sales = () => {
                                             </CCol>
                                             <CCol sm={6}>
                                                 <div className="border-start border-start-4 border-start-danger py-1 px-3 mb-3">
-                                                    <div className="text-medium-emphasis small">Recurring Clients</div>
+                                                    <div className="text-medium-emphasis small">Last Year Total</div>
                                                     <div className="fs-5 fw-semibold">22,643</div>
                                                 </div>
                                             </CCol>
@@ -60,13 +68,13 @@ const Sales = () => {
                                         <CRow>
                                             <CCol sm={6}>
                                                 <div className="border-start border-start-4 border-start-warning py-1 px-3 mb-3">
-                                                    <div className="text-medium-emphasis small">Pageviews</div>
+                                                    <div className="text-medium-emphasis small">Last Month Total</div>
                                                     <div className="fs-5 fw-semibold">78,623</div>
                                                 </div>
                                             </CCol>
                                             <CCol sm={6}>
                                                 <div className="border-start border-start-4 border-start-success py-1 px-3 mb-3">
-                                                    <div className="text-medium-emphasis small">Organic</div>
+                                                    <div className="text-medium-emphasis small">Last Week Total</div>
                                                     <div className="fs-5 fw-semibold">49,123</div>
                                                 </div>
                                             </CCol>
@@ -98,6 +106,53 @@ const Sales = () => {
                         <div className="button-holder--3">
                             <CButton className="generate-card-button" onClick={searchForm.handleSubmit}>Find Sales</CButton>
                         </div>
+                    </CCol>
+                </CRow>
+                <hr/>
+                <CRow>
+                    <CCol>
+                    <CCard>
+                        <CCardBody>
+                            <CDataTable
+                                items={found_sales}
+                                fields={[
+                                    {
+                                        key: "#",
+                                        _style: { width: "5%" },
+                                        _classes: "font-weight-bold",
+                                    },
+                                    "Name",
+                                    "Stock",
+                                    {
+                                        key: "Action",
+                                        label: "Actions",
+                                        _style: { maxWidth: "5%" },
+                                        sorter: true,
+                                        filter: false,
+                                    },
+                                ]}
+                                light
+                                hover
+                                striped
+                                bordered
+                                sorter
+                                columnFilter
+                                size="sm"
+                                itemsPerPage={10}
+                                pagination
+                                scopedSlots={{
+                                    'Action':
+                                        (item) => (
+                                            <td>
+                                                <CBadge> 
+                                                    <CButton disabled={is_trashed(item.deleted_at)} onClick={() => {}} type="button" size="sm" color="danger">Delete</CButton> {is_trashed(item.deleted_at)==false &&<CButton onClick={() => {}} size="sm" type="button" color="primary">Details</CButton>} {/*onClick={() => { history.push('/dashboard/orders/details/'+item.id)}} */}
+                                                </CBadge>
+                                            </td>
+                                        )
+                                }}
+                            />
+                        </CCardBody>
+                    </CCard>
                     </CCol>
                 </CRow>
             </CContainer>

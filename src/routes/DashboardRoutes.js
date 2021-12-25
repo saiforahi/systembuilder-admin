@@ -47,6 +47,16 @@ const routes = [
     { path: '/dashboard/monitors',exact:true, name: 'Monitors', component: React.lazy(()=>import('../pages/monitors/Monitors'))},
     { path: '/dashboard/monitors/create',exact:true, name: 'Monitor create', component: React.lazy(()=>import('../pages/monitors/Create'))},
     { path: '/dashboard/monitors/edit/:id',exact:true, name: 'Edit Monitor', component: React.lazy(()=>import('../pages/monitors/Edit'))},
+
+    //case-coolers
+    { path: '/dashboard/case-coolers',exact:true, name: 'Case Coolers', component: React.lazy(()=>import('../pages/case-coolers/CaseCoolers'))},
+    { path: '/dashboard/case-coolers/create',exact:true, name: 'Case Cooler create', component: React.lazy(()=>import('../pages/case-coolers/Create'))},
+    { path: '/dashboard/case-coolers/edit/:id',exact:true, name: 'Edit Case Cooler', component: React.lazy(()=>import('../pages/case-coolers/Edit'))},
+
+    //cpu-coolers
+    { path: '/dashboard/cpu-coolers',exact:true, name: 'CPU Coolers', component: React.lazy(()=>import('../pages/cpu-coolers/CpuCoolers'))},
+    { path: '/dashboard/cpu-coolers/create',exact:true, name: 'CPU Cooler create', component: React.lazy(()=>import('../pages/cpu-coolers/Create'))},
+    { path: '/dashboard/cpu-coolers/edit/:id',exact:true, name: 'Edit CPU Cooler', component: React.lazy(()=>import('../pages/cpu-coolers/Edit'))},
 ]
 
 export default routes

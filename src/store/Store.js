@@ -15,6 +15,8 @@ import motherboardsSlice from './slices/motherboardsSlice'
 import powerSuppliesSlice from './slices/powerSuppliesSlice'
 import casingsSlice from './slices/casingsSlice'
 import monitorsSlice from './slices/monitorsSlice'
+import caseCoolersSlice from './slices/caseCoolersSlice'
+import cpucoolersSlice from './slices/cpucoolersSlice'
 
 export default configureStore({
   reducer: {
@@ -33,6 +35,8 @@ export default configureStore({
     motherboards: motherboardsSlice,
     powersupplies: powerSuppliesSlice,
     cases : casingsSlice,
-    monitors: monitorsSlice
+    monitors: monitorsSlice,
+    caseCoolers: caseCoolersSlice,
+    cpuCoolers: cpucoolersSlice
   },
 })
