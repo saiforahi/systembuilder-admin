@@ -80,6 +80,8 @@ const TheSidebar = () => {
           <CSidebarNavItem to="/dashboard/cpucases" name="CPU Case" className="vo-navItem"></CSidebarNavItem>
           <CSidebarNavItem to="/dashboard/cpu-coolers" name="CPU Cooler" className="vo-navItem"></CSidebarNavItem>
           <CSidebarNavItem to="/dashboard/case-coolers" name="Case Cooler" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/keyboards" name="Keyboards" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/mice" name="Mice" className="vo-navItem"></CSidebarNavItem>
         </CSidebarNavDropdown>
         <CSidebarNavDropdown icon="cib-ghost" name="Accessories" className="vo-navItem">
           <CSidebarNavItem to="/dashboard/headphones" name="Head Phones" className="vo-navItem"></CSidebarNavItem>

@@ -80,7 +80,7 @@ const Orders = () => {
                     <CContainer>
                         <CForm>
                             <CRow>
-                                <div className="card-header-portion-ongoing">
+                                {/* <div className="card-header-portion-ongoing">
                                     <h4 className="ongoing-card-header-1">
                                         <IconButton aria-label="favourite" disabled size="medium" color="primary">
                                             <GradeIcon fontSize="inherit" className="fav-button" />
@@ -88,7 +88,7 @@ const Orders = () => {
                                         
                                     </h4>
 
-                                </div>
+                                </div> */}
                                 <div className="justify-content-center">
                                     <div className="col-md-12 col-sm-12 col-xs-12 col-lg-12 mt-1 mb-2">
                                         <CCard className="card-ongoing-project">

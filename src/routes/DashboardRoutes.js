@@ -57,6 +57,14 @@ const routes = [
     { path: '/dashboard/cpu-coolers',exact:true, name: 'CPU Coolers', component: React.lazy(()=>import('../pages/cpu-coolers/CpuCoolers'))},
     { path: '/dashboard/cpu-coolers/create',exact:true, name: 'CPU Cooler create', component: React.lazy(()=>import('../pages/cpu-coolers/Create'))},
     { path: '/dashboard/cpu-coolers/edit/:id',exact:true, name: 'Edit CPU Cooler', component: React.lazy(()=>import('../pages/cpu-coolers/Edit'))},
+
+    //keyboards
+    { path: '/dashboard/keyboards',exact:true, name: 'Keyboards', component: React.lazy(()=>import('../pages/keyboards/Keyboards'))},
+    { path: '/dashboard/keyboards/create',exact:true, name: 'Create Keyboard', component: React.lazy(()=>import('../pages/keyboards/Create'))},
+
+    //mice
+    { path: '/dashboard/mice',exact:true, name: 'Mice', component: React.lazy(()=>import('../pages/mice/Mice'))},
+    { path: '/dashboard/mice/create',exact:true, name: 'Create Mouse', component: React.lazy(()=>import('../pages/mice/Create'))},
 ]
 
 export default routes
