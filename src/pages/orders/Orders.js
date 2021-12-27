@@ -7,6 +7,7 @@ import {API} from '../../Config'
 import { fetchOrdersThunk } from '../../store/slices/ordersSlice'
 import GradeIcon from '@material-ui/icons/Grade';
 import IconButton from '@material-ui/core/IconButton';
+import { LinearProgress } from '@material-ui/core'
 import './myProjects.css'
 
 const Orders = () => {
@@ -18,7 +19,11 @@ const Orders = () => {
         let temp=[]
         for (const [key, value] of Object.entries(state.orders.data)) {
             console.log(`${key}: ${value}`);
-            temp.push({'#':temp.length+1,id:value[0].id,'Tracking Code':key,'Customer':value[0].customer_name,'Payment Type':value[0].payment_type.name,'Payment Status':value[0].payment_status,deleted_at:value[0].deleted_at,data:value})
+            let sale_total=0
+            value.forEach((item,idx)=>{
+                sale_total+=parseInt(item.product.price)
+            })
+            temp.push({'#':temp.length+1,id:value[0].id,'Tracking Code':key,'Customer':value[0].customer_name,"Total TK":sale_total,'Payment Type':value[0].payment_type.name,'Payment Status':value[0].payment_status,deleted_at:value[0].deleted_at,data:value})
           }
         // Array.from(state.orders.data).forEach((element,idx) => {
         //     temp.push({'#':idx+1,id:element.id,'Tracking Code':element.tracking_code,'Customer':element.customer_name,'Payment Type':element.payment_type.name,'Payment Status':element.payment_status,deleted_at:element.deleted_at,data:element})
@@ -64,6 +69,18 @@ const Orders = () => {
     }
     const is_trashed=(deleted_at)=>{
         return deleted_at==null?false:true
+    }
+    const [updating,setUpdating]=useState(false)
+    const make_paid=(tracking_code)=>{
+        setUpdating(true)
+        API.get('orders/make-paid/'+tracking_code).then((res)=>{
+            setUpdating(false)
+            setShowModal(false)
+            dispatch(fetchOrdersThunk())
+            swal('Updated!','Payment Status updated','success')
+        }).catch(err=>{
+            setUpdating(true)
+        })
     }
     React.useEffect(()=>{
         dispatch(fetchOrdersThunk())
@@ -117,9 +134,7 @@ const Orders = () => {
                                                     <div className="tasks-done-2 col-lg-4"><h6 className="">Payment Type</h6>
                                                         <h6 className="project-point-details">{selectedOrder.data[0].payment_type.name}</h6>
                                                     </div>
-                                                    <div className="tasks-done-2 col-lg-4"><h6 className="">Remaining Hours</h6>
-                                                        <h6 className="project-point-details"></h6>
-                                                    </div>
+                                                    
                                                 </div>
 
                                                 <div className="col-md-12 mt-4 mb-2">
@@ -147,7 +162,8 @@ const Orders = () => {
                             </CRow>
                             {/**forward to wbs button  */}
                             <CRow className="justify-content-center">
-                                <CButton type='button' disabled className="create-wbs-from-modal" onClick={() => {}}>Make Paid</CButton>
+                                {updating? <LinearProgress/>:
+                                <CButton type='button' onClick={()=>make_paid(selectedOrder.data[0].tracking_code)} disabled={selectedOrder.data[0].payment_status == 'paid'} className="create-wbs-from-modal">Make Paid</CButton>}
                             </CRow>
                         </CForm>
                     </CContainer>
@@ -157,14 +173,8 @@ const Orders = () => {
             {/* data table */}
 
             <CContainer>
-                <CRow className="align-items-center">
-                    <CCol md="8" className="mb-3 mb-xl-0 text-left offset-md-2">
-                        <Link to="/dashboard/processors/create"><CButton shape="round" color="primary">Add</CButton></Link>
-                    </CCol>
-                </CRow>
-                <hr></hr>
                 <CRow>
-                    <CCol md="8" className="offset-md-2">
+                    <CCol md="10" className="offset-md-1">
                         <CCard className="custom-wbs-card-1">
                             <CCardHeader>
                                 <h3>Orders</h3>
@@ -178,7 +188,7 @@ const Orders = () => {
                                             _style: { width: "5%" },
                                             _classes: "font-weight-bold",
                                         },
-                                        "Tracking Code","Customer","Payment Type","Payment Status",
+                                        "Tracking Code","Customer","Total TK","Payment Type","Payment Status",
                                         {
                                             key: "Action",
                                             label: "Actions",

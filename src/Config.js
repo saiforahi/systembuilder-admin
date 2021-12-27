@@ -1,5 +1,5 @@
 import axios from 'axios';
-const status = 'dev'
+const status = 'prod'
 export const API_URL = status === 'prod' ? 'https://systembuilderbd.com/api/' : 'http://localhost:8000/api/'
 export const TOKEN = "access_token"
 export const USER = "auth_user"

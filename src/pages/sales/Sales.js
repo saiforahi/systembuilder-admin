@@ -5,23 +5,35 @@ import { useFormik } from 'formik'
 import './Sales.css'
 import GradeIcon from '@material-ui/icons/Grade';
 import IconButton from '@material-ui/core/IconButton';
+import { LinearProgress } from '@material-ui/core'
+
 import { API } from '../../Config'
+import swal from 'sweetalert'
 const Sales = () => {
     const [found_sales,setFoundSales]=useState([])
     const [found_total,setFoundTotal]=useState(0)
     const [selectedOrder,setSelectedOrder]=useState()
     const [showModal,setShowModal]=useState()
+    // const [searching,setSearching] = useState(false)
     const searchSales=(values,{setSubmitting})=>{
         console.log(values)
         API.get('orders/sales/'+values.from+'/'+values.to).then((res)=>{
+            setSubmitting(false)
             console.log(res.data)
             let temp=[]
             for (const [key, value] of Object.entries(res.data.data)) {
                 console.log(`${key}: ${value}`);
-                temp.push({'#':temp.length+1,id:value[0].id,'Tracking Code':key,'Customer':value[0].customer_name,'Payment Type':value[0].payment_type.name,'Payment Status':value[0].payment_status,deleted_at:value[0].deleted_at,data:value})
+                let sale_total=0
+                value.forEach((item,idx)=>{
+                    sale_total+=parseInt(item.product.price)
+                })
+                temp.push({'#':temp.length+1,id:value[0].id,'Tracking Code':key,'Customer':value[0].customer_name,'Total':sale_total,'Payment Type':value[0].payment_type.name,'Payment Status':value[0].payment_status,"Placed At":value[0].created_at,deleted_at:value[0].deleted_at,data:value})
             }
             setFoundSales(temp)
             setFoundTotal(res.data.total_sale)
+            if(res.data.total_sale ==0 && temp.length==0){
+                swal('No Sale!','There are no sale history between given dates','warning')
+            }
         })
     }
     const show_details=(item)=>{
@@ -142,7 +154,7 @@ const Sales = () => {
             </CModal>}
             <CContainer>
                 <CRow>
-                    <CCol xs>
+                    <CCol lg="10" className={"offset-lg-1"}>
                         <CCard className="mb-4">
                             <CCardHeader>Sales</CCardHeader>
                             <CCardBody>
@@ -152,13 +164,13 @@ const Sales = () => {
                                             <CCol sm={6}>
                                                 <div className="border-start border-start-4 border-start-info py-1 px-3">
                                                     <div className="text-medium-emphasis small">Total Sales</div>
-                                                    <div className="fs-5 fw-semibold">9,123</div>
+                                                    <div className="fs-5 fw-semibold">N/A</div>
                                                 </div>
                                             </CCol>
                                             <CCol sm={6}>
                                                 <div className="border-start border-start-4 border-start-danger py-1 px-3 mb-3">
                                                     <div className="text-medium-emphasis small">Last Year Total</div>
-                                                    <div className="fs-5 fw-semibold">22,643</div>
+                                                    <div className="fs-5 fw-semibold">N/A</div>
                                                 </div>
                                             </CCol>
                                         </CRow>
@@ -169,13 +181,13 @@ const Sales = () => {
                                             <CCol sm={6}>
                                                 <div className="border-start border-start-4 border-start-warning py-1 px-3 mb-3">
                                                     <div className="text-medium-emphasis small">Last Month Total</div>
-                                                    <div className="fs-5 fw-semibold">78,623</div>
+                                                    <div className="fs-5 fw-semibold">N/A</div>
                                                 </div>
                                             </CCol>
                                             <CCol sm={6}>
                                                 <div className="border-start border-start-4 border-start-success py-1 px-3 mb-3">
                                                     <div className="text-medium-emphasis small">Last Week Total</div>
-                                                    <div className="fs-5 fw-semibold">49,123</div>
+                                                    <div className="fs-5 fw-semibold">N/A</div>
                                                 </div>
                                             </CCol>
                                         </CRow>
@@ -209,6 +221,7 @@ const Sales = () => {
                     </CCol>
                 </CRow>
                 <hr/>
+                {searchForm.isSubmitting && <LinearProgress/>}
                 {found_sales.length>0 && <CRow>
                     <CCol>
                     <CCard>
@@ -234,6 +247,7 @@ const Sales = () => {
                                     },
                                     "Customer",
                                     "Total",
+                                    "Placed At",
                                     {
                                         key: "Action",
                                         label: "Actions",
