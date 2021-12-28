@@ -4,13 +4,12 @@ import '../brands/brands-styles.css'
 import { useDispatch, useSelector } from 'react-redux';
 import LinearProgress from '@mui/material/LinearProgress';
 import CreatableSelect from 'react-select/creatable';
-import Select from "react-select";
 import { useFormik } from 'formik';
 import { FILE_API, API } from '../../Config';
 import swal from 'sweetalert';
 import { useHistory } from 'react-router-dom';
 import ImageUploader from "react-images-upload";
-import { fetchMonitorsThunk } from '../../store/slices/monitorsSlice';
+import { fetchMiceThunk } from '../../store/slices/miceSlice';
 const Create = (props) => {
     const dispatch = useDispatch()
     const [submitted,setSubmitted]=useState(false)
@@ -25,6 +24,7 @@ const Create = (props) => {
         setSubmitted(true)
         let formData = new FormData()
         formData.append('name', values.name)
+        formData.append('short_name', values.short_name)
         formData.append('stock',values.stock)
         if (pictures.length > 0) {
             formData.append('total_images', pictures[0].length)
@@ -42,13 +42,13 @@ const Create = (props) => {
         for (var pair of formData.entries()) {
             console.log(pair[0]+ ', ' + pair[1]); 
         }
-        FILE_API.post('monitors/create', formData).then((res) => {
+        FILE_API.post('mouses/create', formData).then((res) => {
             setSubmitted(false)
             console.log(res)
             if (res.status == 201) {
-                dispatch(fetchMonitorsThunk())
-                history.push('/dashboard/monitors')
-                swal('Created!', 'A new Monitor Created', 'success')
+                dispatch(fetchMiceThunk())
+                history.push('/dashboard/mice')
+                swal('Created!', 'A new Mouse Created', 'success')
             }
         }).catch(err=>{
             setSubmitted(false)
@@ -61,12 +61,12 @@ const Create = (props) => {
     const handleBrandChange = (option, value, actionMeta) => {
         console.log(option, value)
         setSelectedBrand(option)
-        formCreateMonitor.setFieldValue('brand',option.value)
+        formCreateMouse.setFieldValue('brand',option.value)
     }
     const handleBrandCreate = (value) => {
         console.log('create', value)
         setSelectedBrand({ value: value, label: value })
-        formCreateMonitor.setFieldValue('brand',value)
+        formCreateMouse.setFieldValue('brand',value)
         setBrands([...brands, { value: value, label: value }])
     }
     
@@ -78,24 +78,25 @@ const Create = (props) => {
     const [selectedModel, setSelectedModel] = useState('')
     const handleModelChange = (option, value, actionMeta) => {
         console.log(option, value)
-        formCreateMonitor.setFieldValue('model',option.value)
+        formCreateMouse.setFieldValue('model',option.value)
         setSelectedModel(option)
     }
     const handleModelCreate = (value) => {
         console.log('create', value)
         setSelectedModel({ value: value, label: value })
-        formCreateMonitor.setFieldValue('model',value)
+        formCreateMouse.setFieldValue('model',value)
         setModels([...models, { value: value, label: value }])
     }
     const [price, setPrice] = useState()
     
     const reset_form = () => {
-        formCreateMonitor.handleReset()
+        formCreateMouse.handleReset()
         setPictures([])
     }
     const validateForm = (values) => {
         const errors = {}
         if (!values.name) errors.name = "Name is required"
+        if (!values.short_name) errors.short_name = "Short Name is required"
         if (!values.brand) errors.brand = "Brand is required"
         if (!values.model) errors.model = "Model is required"
         // if (!values.price) errors.price = "Price is required"
@@ -107,9 +108,10 @@ const Create = (props) => {
        
         return errors
     }
-    const formCreateMonitor = useFormik({
+    const formCreateMouse = useFormik({
         initialValues: {
             name: '',
+            short_name:'',
             brand: '',
             model:'',
             price:'',
@@ -121,7 +123,7 @@ const Create = (props) => {
         onSubmit: createMotherboard
     })
     function initialize() {
-        API.get('monitors/specification/list/model/none').then(res => {
+        API.get('mouses/specification/list/model/none').then(res => {
             console.log('models', res.data)
             let temp = []
             Array.from(res.data.data).forEach((item, idx) => {
@@ -129,7 +131,7 @@ const Create = (props) => {
             })
             setModels(temp)
         })
-        API.get('monitors/specification/list/brand/none').then(res => {
+        API.get('mouses/specification/list/brand/none').then(res => {
             console.log('brands', res.data)
             let temp = []
             Array.from(res.data.data).forEach((item, idx) => {
@@ -150,7 +152,7 @@ const Create = (props) => {
                 <CRow>
                     <div className="col-md-12 col-sm-12">
                         <CCard className="custom-wbs-card-1">
-                            <CCardHeader className="project-wbs-1"> <h4 className="section-name-wbscreate">Add Monitor</h4>
+                            <CCardHeader className="project-wbs-1"> <h4 className="section-name-wbscreate">Add Mouse</h4>
                             </CCardHeader>
                             <CCardBody>
                                 <CContainer>
@@ -161,8 +163,15 @@ const Create = (props) => {
                                                 <CLabel className="custom-label-wbs5">
                                                     Name
                                                 </CLabel>
-                                                <CInput className="custom-forminput-6" id="name" name="name" type="text" values={formCreateMonitor.values.name} onChange={formCreateMonitor.handleChange} />
-                                                {formCreateMonitor.errors.name && formCreateMonitor.touched.name && <small class="error">{formCreateMonitor.errors.name}</small>}
+                                                <CInput className="custom-forminput-6" id="name" name="name" type="text" values={formCreateMouse.values.name} onChange={formCreateMouse.handleChange} />
+                                                {formCreateMouse.errors.name && formCreateMouse.touched.name && <small class="error">{formCreateMouse.errors.name}</small>}
+                                            </div>
+                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Short Name
+                                                </CLabel>
+                                                <CInput className="custom-forminput-6" id="short_name" name="short_name" type="text" values={formCreateMouse.values.short_name} onChange={formCreateMouse.handleChange} />
+                                                {formCreateMouse.errors.short_name && formCreateMouse.touched.short_name && <small class="error">{formCreateMouse.errors.short_name}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -179,7 +188,7 @@ const Create = (props) => {
                                                     value={selectedBrand}
                                                     isClearable={true}
                                                 />
-                                                {formCreateMonitor.errors.brand && formCreateMonitor.touched.brand && <small class="error">{formCreateMonitor.errors.brand}</small>}
+                                                {formCreateMouse.errors.brand && formCreateMouse.touched.brand && <small class="error">{formCreateMouse.errors.brand}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -196,13 +205,13 @@ const Create = (props) => {
                                                     value={selectedModel}
                                                     isClearable={true}
                                                 />
-                                                {formCreateMonitor.errors.model && formCreateMonitor.touched.model && <small class="error">{formCreateMonitor.errors.model}</small>}
+                                                {formCreateMouse.errors.model && formCreateMouse.touched.model && <small class="error">{formCreateMouse.errors.model}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Stock
                                                 </CLabel>
-                                                <CInput className="custom-forminput-6" id="stock" name="stock" type="number" values={formCreateMonitor.values.stock} onChange={formCreateMonitor.handleChange} />
+                                                <CInput className="custom-forminput-6" id="stock" name="stock" type="number" values={formCreateMouse.values.stock} onChange={formCreateMouse.handleChange} />
                                                 {/* {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>} */}
                                             </div>
                                             
@@ -211,7 +220,7 @@ const Create = (props) => {
                                                     Price (BDT)
                                                 </CLabel>
                                                 <CInput type="number" value={price} onChange={(event) => setPrice(event.target.value)} />
-                                                {formCreateMonitor.errors.price && formCreateMonitor.touched.price && <small>{formCreateMonitor.errors.price}</small>}
+                                                {formCreateMouse.errors.price && formCreateMouse.touched.price && <small>{formCreateMouse.errors.price}</small>}
                                             </div>
 
                                             <div className="col-lg-12 mb-3">
@@ -234,7 +243,7 @@ const Create = (props) => {
                             <CCardFooter>
                                 <div className="col-md-12">{ submitted? <LinearProgress/>:
                                     <div className="projectwbs-form-button-holders mt-3">
-                                        <CButton type="button" disabled={!formCreateMonitor.isValid} onClick={formCreateMonitor.handleSubmit} className="create-btn-prjctwbs create-wbs">Add</CButton>
+                                        <CButton type="button" disabled={!formCreateMouse.isValid} onClick={formCreateMouse.handleSubmit} className="create-btn-prjctwbs create-wbs">Add</CButton>
                                         <CButton type="button" onClick={reset_form} className="create-btn-prjctwbs cancel-wbs">Reset</CButton>
                                     </div>}
                                 </div>

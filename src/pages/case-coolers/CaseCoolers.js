@@ -13,7 +13,7 @@ const CaseCoolers = () => {
     const casecoolers = useSelector(state =>{
         let temp=[]
         Array.from(state.caseCoolers.data).forEach((element,idx) => {
-            temp.push({'#':idx+1,id:element.id,'Name':element.name,'Stock':element.product.stock?element.product.stock:0,deleted_at:element.deleted_at})
+            temp.push({'#':idx+1,id:element.id,'Name':element.name,"Brand":element.product.brand,'Stock':element.product.stock?element.product.stock:0,"Price":element.product.price,deleted_at:element.deleted_at})
         });
         return temp
     })
@@ -77,7 +77,9 @@ const CaseCoolers = () => {
                                             _classes: "font-weight-bold",
                                         },
                                         "Name",
+                                        "Brand",
                                         "Stock",
+                                        "Price",
                                         {
                                             key: "Action",
                                             label: "Actions",

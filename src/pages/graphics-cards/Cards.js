@@ -13,7 +13,7 @@ const Cards = () => {
     const graphics = useSelector(state =>{
         let temp=[]
         Array.from(state.graphics.data).forEach((element,idx) => {
-            temp.push({'#':idx+1,id:element.id,'Name':element.name,'Stock':element.product.stock,deleted_at:element.deleted_at})
+            temp.push({'#':idx+1,id:element.id,'Name':element.name,"Brand":element.product.brand,'Stock':element.product.stock,"Price":element.product.price,deleted_at:element.deleted_at})
         });
         return temp
     })
@@ -56,13 +56,13 @@ const Cards = () => {
         <>
             <CContainer>
                 <CRow className="align-items-center">
-                    <CCol md="8" className="mb-3 mb-xl-0 text-left offset-md-2">
+                    <CCol md="10" className="mb-3 mb-xl-0 text-left offset-md-1">
                         <Link to="/dashboard/graphics/create"><CButton shape="round" color="primary">Add</CButton></Link>
                     </CCol>
                 </CRow>
                 <hr></hr>
                 <CRow>
-                    <CCol md="8" className="offset-md-2">
+                    <CCol md="10" className="offset-md-1">
                         <CCard className="custom-wbs-card-1">
                             <CCardHeader>
                                 <h5>Graphics Cards</h5>
@@ -77,7 +77,9 @@ const Cards = () => {
                                             _classes: "font-weight-bold",
                                         },
                                         "Name",
+                                        "Brand",
                                         "Stock",
+                                        "Price",
                                         {
                                             key: "Action",
                                             label: "Actions",
