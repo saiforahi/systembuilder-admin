@@ -5,6 +5,7 @@ import swal from 'sweetalert'
 import { Link, useHistory } from 'react-router-dom'
 import {API} from '../../Config'
 import { fetchStoragesList } from '../../store/slices/storagesSlice'
+import { fetchMiceThunk } from '../../store/slices/miceSlice'
 
 const Mice = () => {
     const dispatch = useDispatch()
@@ -30,7 +31,7 @@ const Mice = () => {
             if (willDelete) {
               API.delete('mouses/delete/'+mouse_id).then(response=>{
                 if(response.data.success==true){
-                  dispatch(fetchStoragesList())
+                  dispatch(fetchMiceThunk())
                   swal("Poof! Your selected Car record has been deleted!", {
                     icon: "success",
                   });

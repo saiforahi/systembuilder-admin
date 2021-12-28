@@ -308,7 +308,7 @@ const Create = (props) => {
                                                 />
                                                 {/* {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>} */}
                                             </div>
-                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                            <div className="col-lg-12 col-md-12 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Stock
                                                 </CLabel>
@@ -421,8 +421,8 @@ const Create = (props) => {
                                                 <CLabel className="custom-label-wbs5">
                                                     Price (BDT)
                                                 </CLabel>
-                                                <CInput type="number" value={price} onChange={(event)=>setPrice(event.target.value)}/>
-                                                {formCreateLaptop.errors.name && formCreateLaptop.touched.name && <small>{formCreateLaptop.errors.name}</small>}
+                                                <CInput type="number" id='price' name='price' value={formCreateLaptop.values.price} onChange={formCreateLaptop.handleChange}/>
+                                                {formCreateLaptop.errors.price && formCreateLaptop.touched.price && <small>{formCreateLaptop.errors.price}</small>}
                                             </div>
                                             <div className="col-lg-12 mb-3">
                                                 <ImageUploader

@@ -5,6 +5,7 @@ import swal from 'sweetalert'
 import { Link, useHistory } from 'react-router-dom'
 import {API} from '../../Config'
 import { fetchStoragesList } from '../../store/slices/storagesSlice'
+import { fetchCaseCoolersThunk } from '../../store/slices/caseCoolersSlice'
 
 const CaseCoolers = () => {
     const dispatch = useDispatch()
@@ -30,7 +31,7 @@ const CaseCoolers = () => {
             if (willDelete) {
               API.delete('casecoolers/delete/'+casecooler_id).then(response=>{
                 if(response.data.success==true){
-                  dispatch(fetchStoragesList())
+                  dispatch(fetchCaseCoolersThunk())
                   swal("Poof! Your selected Car record has been deleted!", {
                     icon: "success",
                   });

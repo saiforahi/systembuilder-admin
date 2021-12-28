@@ -37,6 +37,7 @@ const Create = (props) => {
         setSubmitted(true)
         let formData = new FormData()
         formData.append('name', values.name)
+        formData.append('short_name', values.short_name)
         formData.append('stock',values.stock)
         if (pictures.length > 0) {
             formData.append('total_images', pictures[0].length)
@@ -62,7 +63,7 @@ const Create = (props) => {
         const reliability_specs = {
             encryption: selectedEncryption.value
         }
-        formData.append('price', price)
+        formData.append('price', values.price)
         formData.append('brand', selectedBrand.value)
         formData.append('model', selectedModel.value)
         formData.append('storage_specs', JSON.stringify(storage_specs))
@@ -82,11 +83,13 @@ const Create = (props) => {
             }
         }).catch(err=>{
             setSubmitted(false)
+            console.log(err.response)
         })
     }
     const validateForm = (values) => {
         const errors = {}
         if (!values.name) errors.name = "Name is required"
+        if(!values.short_name ) errors.short_name = "Short Name is required"
         return errors
     }
     
@@ -210,7 +213,9 @@ const Create = (props) => {
     const formCreateStorage = useFormik({
         initialValues: {
             name: '',
-            stock:''
+            stock:'',
+            short_name:'',
+            price:''
         },
         validate: validateForm,
         validateOnBlur: true,
@@ -307,6 +312,13 @@ const Create = (props) => {
                                                 </CLabel>
                                                 <CInput className="custom-forminput-6" id="name" name="name" type="text" values={formCreateStorage.values.name} onChange={formCreateStorage.handleChange} />
                                                 {formCreateStorage.errors.name && formCreateStorage.touched.name && <small class="error">{formCreateStorage.errors.name}</small>}
+                                            </div>
+                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Short Name
+                                                </CLabel>
+                                                <CInput className="custom-forminput-6" id="short_name" name="short_name" type="text" values={formCreateStorage.values.short_name} onChange={formCreateStorage.handleChange} />
+                                                {formCreateStorage.errors.short_name && formCreateStorage.touched.short_name && <small class="error">{formCreateStorage.errors.short_name}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -472,8 +484,8 @@ const Create = (props) => {
                                                 <CLabel className="custom-label-wbs5">
                                                     Price (BDT)
                                                 </CLabel>
-                                                <CInput type="number" value={price} onChange={(event) => setPrice(event.target.value)} />
-                                                {formCreateStorage.errors.name && formCreateStorage.touched.name && <small>{formCreateStorage.errors.name}</small>}
+                                                <CInput type="number" id='price' name='price' value={formCreateStorage.values.price} onChange={formCreateStorage.handleChange} />
+                                                {formCreateStorage.errors.price && formCreateStorage.touched.price && <small>{formCreateStorage.errors.price}</small>}
                                             </div>
 
                                             <div className="col-lg-12 mb-3">

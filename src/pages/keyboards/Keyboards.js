@@ -5,6 +5,7 @@ import swal from 'sweetalert'
 import { Link, useHistory } from 'react-router-dom'
 import {API} from '../../Config'
 import { fetchStoragesList } from '../../store/slices/storagesSlice'
+import { fetchKeyboardsThunk } from '../../store/slices/keyboardsSlice'
 
 const Keyboards = () => {
     const dispatch = useDispatch()
@@ -30,7 +31,7 @@ const Keyboards = () => {
             if (willDelete) {
               API.delete('keyboards/delete/'+keyboard_id).then(response=>{
                 if(response.data.success==true){
-                  dispatch(fetchStoragesList())
+                  dispatch(fetchKeyboardsThunk())
                   swal("Poof! Your selected Car record has been deleted!", {
                     icon: "success",
                   });

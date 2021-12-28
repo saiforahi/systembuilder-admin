@@ -9,7 +9,7 @@ import { FILE_API, API } from '../../Config';
 import swal from 'sweetalert';
 import { useHistory } from 'react-router-dom';
 import ImageUploader from "react-images-upload";
-import { fetchMotherboardsThunk } from '../../store/slices/motherboardsSlice';
+import { fetchPowerSuppliesThunk } from '../../store/slices/powerSuppliesSlice';
 const Create = (props) => {
     const dispatch = useDispatch()
     const [submitted,setSubmitted]=useState(false)
@@ -40,13 +40,13 @@ const Create = (props) => {
         for (var pair of formData.entries()) {
             console.log(pair[0]+ ', ' + pair[1]); 
         }
-        FILE_API.post('motherboards/create', formData).then((res) => {
+        FILE_API.post('powersupplies/create', formData).then((res) => {
             setSubmitted(false)
             console.log(res)
             if (res.status == 201) {
-                dispatch(fetchMotherboardsThunk())
-                history.push('/dashboard/motherboards')
-                swal('Created!', 'A new motherboard Created', 'success')
+                dispatch(fetchPowerSuppliesThunk())
+                history.push('/dashboard/powersupplies')
+                swal('Created!', 'A new Power Supply Created', 'success')
             }
         }).catch(err=>{
             setSubmitted(false)

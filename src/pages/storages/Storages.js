@@ -13,7 +13,7 @@ const Storages = () => {
     const storages = useSelector(state =>{
         let temp=[]
         Array.from(state.storages.data).forEach((element,idx) => {
-            temp.push({'#':idx+1,id:element.id,'Name':element.name,"Brand":element.product.brand,'Stock':element.stock,"Price":element.product.price,deleted_at:element.deleted_at})
+            temp.push({'#':idx+1,id:element.id,'Name':element.name,"Brand":element.product.brand,'Stock':element.product.stock,"Price":element.product.price,deleted_at:element.deleted_at})
         });
         return temp
     })

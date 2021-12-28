@@ -77,8 +77,8 @@ const Laptops = () => {
                                         "Name",
                                         "Brand",
                                         "Model",
-                                        "Stock",
                                         "Processor",
+                                        "Stock",
                                         {
                                             key: "Action",
                                             label: "Actions",

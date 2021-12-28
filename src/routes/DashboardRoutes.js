@@ -38,7 +38,7 @@ const routes = [
     { path: '/dashboard/powersupplies/create',exact:true, name: 'Create Power Supply', component: React.lazy(()=>import('../pages/powersupplies/Create'))},
     { path: '/dashboard/powersupplies/edit/:id',exact:true, name: 'Edit Power Supply', component: React.lazy(()=>import('../pages/powersupplies/Edit'))},
 
-    //power supplies
+    //cpucases
     { path: '/dashboard/cpucases',exact:true, name: 'CPU Casings', component: React.lazy(()=>import('../pages/casings/Casings'))},
     { path: '/dashboard/cpucases/create',exact:true, name: 'Create CPU Case', component: React.lazy(()=>import('../pages/casings/Create'))},
     { path: '/dashboard/cpucases/edit/:id',exact:true, name: 'Edit CPU Case', component: React.lazy(()=>import('../pages/casings/Edit'))},

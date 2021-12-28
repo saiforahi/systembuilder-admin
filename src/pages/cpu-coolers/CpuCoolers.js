@@ -5,6 +5,7 @@ import swal from 'sweetalert'
 import { Link, useHistory } from 'react-router-dom'
 import {API} from '../../Config'
 import { fetchStoragesList } from '../../store/slices/storagesSlice'
+import { fetchCPUcoolersThunk } from '../../store/slices/cpucoolersSlice'
 
 const CpuCoolers = () => {
     const dispatch = useDispatch()
@@ -30,7 +31,7 @@ const CpuCoolers = () => {
             if (willDelete) {
               API.delete('cpucoolers/delete/'+cpucooler_id).then(response=>{
                 if(response.data.success==true){
-                  dispatch(fetchStoragesList())
+                  dispatch(fetchCPUcoolersThunk())
                   swal("Poof! Your selected Car record has been deleted!", {
                     icon: "success",
                   });
@@ -77,7 +78,9 @@ const CpuCoolers = () => {
                                             _classes: "font-weight-bold",
                                         },
                                         "Name",
+                                        "Brand",
                                         "Stock",
+                                        "Price",
                                         {
                                             key: "Action",
                                             label: "Actions",

@@ -10,7 +10,7 @@ import { FILE_API, API } from '../../Config';
 import swal from 'sweetalert';
 import { useHistory } from 'react-router-dom';
 import ImageUploader from "react-images-upload";
-import { fetchMonitorsThunk } from '../../store/slices/monitorsSlice';
+import { fetchCPUcoolersThunk } from '../../store/slices/cpucoolersSlice';
 const Create = (props) => {
     const dispatch = useDispatch()
     const [submitted,setSubmitted]=useState(false)
@@ -36,19 +36,19 @@ const Create = (props) => {
             }
         }
         
-        formData.append('price', price)
+        formData.append('price', values.price)
         formData.append('brand', selectedBrand.value)
         formData.append('model', selectedModel.value)
         for (var pair of formData.entries()) {
             console.log(pair[0]+ ', ' + pair[1]); 
         }
-        FILE_API.post('monitors/create', formData).then((res) => {
+        FILE_API.post('cpucoolers/create', formData).then((res) => {
             setSubmitted(false)
             console.log(res)
             if (res.status == 201) {
-                dispatch(fetchMonitorsThunk())
-                history.push('/dashboard/monitors')
-                swal('Created!', 'A new Monitor Created', 'success')
+                dispatch(fetchCPUcoolersThunk())
+                history.push('/dashboard/cpu-coolers')
+                swal('Created!', 'A new CPU Cooler Created', 'success')
             }
         }).catch(err=>{
             setSubmitted(false)
@@ -61,12 +61,12 @@ const Create = (props) => {
     const handleBrandChange = (option, value, actionMeta) => {
         console.log(option, value)
         setSelectedBrand(option)
-        formCreateMonitor.setFieldValue('brand',option.value)
+        formCreateCPUcooler.setFieldValue('brand',option.value)
     }
     const handleBrandCreate = (value) => {
         console.log('create', value)
         setSelectedBrand({ value: value, label: value })
-        formCreateMonitor.setFieldValue('brand',value)
+        formCreateCPUcooler.setFieldValue('brand',value)
         setBrands([...brands, { value: value, label: value }])
     }
     
@@ -78,25 +78,24 @@ const Create = (props) => {
     const [selectedModel, setSelectedModel] = useState('')
     const handleModelChange = (option, value, actionMeta) => {
         console.log(option, value)
-        formCreateMonitor.setFieldValue('model',option.value)
+        formCreateCPUcooler.setFieldValue('model',option.value)
         setSelectedModel(option)
     }
     const handleModelCreate = (value) => {
         console.log('create', value)
         setSelectedModel({ value: value, label: value })
-        formCreateMonitor.setFieldValue('model',value)
+        formCreateCPUcooler.setFieldValue('model',value)
         setModels([...models, { value: value, label: value }])
     }
-    const [price, setPrice] = useState()
-    
     const reset_form = () => {
-        formCreateMonitor.handleReset()
+        formCreateCPUcooler.handleReset()
         setPictures([])
     }
     const validateForm = (values) => {
         const errors = {}
         if (!values.name) errors.name = "Name is required"
         if (!values.brand) errors.brand = "Brand is required"
+        if (!values.short_name) errors.short_name = "Short Name is required"
         if (!values.model) errors.model = "Model is required"
         // if (!values.price) errors.price = "Price is required"
         // if (!values.memory) errors.memory = "Memory is required"
@@ -107,7 +106,7 @@ const Create = (props) => {
        
         return errors
     }
-    const formCreateMonitor = useFormik({
+    const formCreateCPUcooler = useFormik({
         initialValues: {
             name: '',
             brand: '',
@@ -121,7 +120,7 @@ const Create = (props) => {
         onSubmit: createMotherboard
     })
     function initialize() {
-        API.get('monitors/specification/list/model/none').then(res => {
+        API.get('cpucoolers/specification/list/model/none').then(res => {
             console.log('models', res.data)
             let temp = []
             Array.from(res.data.data).forEach((item, idx) => {
@@ -129,7 +128,7 @@ const Create = (props) => {
             })
             setModels(temp)
         })
-        API.get('monitors/specification/list/brand/none').then(res => {
+        API.get('cpucoolers/specification/list/brand/none').then(res => {
             console.log('brands', res.data)
             let temp = []
             Array.from(res.data.data).forEach((item, idx) => {
@@ -150,7 +149,7 @@ const Create = (props) => {
                 <CRow>
                     <div className="col-md-12 col-sm-12">
                         <CCard className="custom-wbs-card-1">
-                            <CCardHeader className="project-wbs-1"> <h4 className="section-name-wbscreate">Add Monitor</h4>
+                            <CCardHeader className="project-wbs-1"> <h4 className="section-name-wbscreate">Add CPU Cooler</h4>
                             </CCardHeader>
                             <CCardBody>
                                 <CContainer>
@@ -161,8 +160,15 @@ const Create = (props) => {
                                                 <CLabel className="custom-label-wbs5">
                                                     Name
                                                 </CLabel>
-                                                <CInput className="custom-forminput-6" id="name" name="name" type="text" values={formCreateMonitor.values.name} onChange={formCreateMonitor.handleChange} />
-                                                {formCreateMonitor.errors.name && formCreateMonitor.touched.name && <small class="error">{formCreateMonitor.errors.name}</small>}
+                                                <CInput className="custom-forminput-6" id="name" name="name" type="text" values={formCreateCPUcooler.values.name} onChange={formCreateCPUcooler.handleChange} />
+                                                {formCreateCPUcooler.errors.name && formCreateCPUcooler.touched.name && <small class="error">{formCreateCPUcooler.errors.name}</small>}
+                                            </div>
+                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Short Name
+                                                </CLabel>
+                                                <CInput className="custom-forminput-6" id="short_name" name="short_name" type="text" values={formCreateCPUcooler.values.short_name} onChange={formCreateCPUcooler.handleChange} />
+                                                {formCreateCPUcooler.errors.short_name && formCreateCPUcooler.touched.short_name && <small class="error">{formCreateCPUcooler.errors.short_name}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -179,7 +185,7 @@ const Create = (props) => {
                                                     value={selectedBrand}
                                                     isClearable={true}
                                                 />
-                                                {formCreateMonitor.errors.brand && formCreateMonitor.touched.brand && <small class="error">{formCreateMonitor.errors.brand}</small>}
+                                                {formCreateCPUcooler.errors.brand && formCreateCPUcooler.touched.brand && <small class="error">{formCreateCPUcooler.errors.brand}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -196,13 +202,13 @@ const Create = (props) => {
                                                     value={selectedModel}
                                                     isClearable={true}
                                                 />
-                                                {formCreateMonitor.errors.model && formCreateMonitor.touched.model && <small class="error">{formCreateMonitor.errors.model}</small>}
+                                                {formCreateCPUcooler.errors.model && formCreateCPUcooler.touched.model && <small class="error">{formCreateCPUcooler.errors.model}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Stock
                                                 </CLabel>
-                                                <CInput className="custom-forminput-6" id="stock" name="stock" type="number" values={formCreateMonitor.values.stock} onChange={formCreateMonitor.handleChange} />
+                                                <CInput className="custom-forminput-6" id="stock" name="stock" type="number" values={formCreateCPUcooler.values.stock} onChange={formCreateCPUcooler.handleChange} />
                                                 {/* {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>} */}
                                             </div>
                                             
@@ -210,8 +216,8 @@ const Create = (props) => {
                                                 <CLabel className="custom-label-wbs5">
                                                     Price (BDT)
                                                 </CLabel>
-                                                <CInput type="number" value={price} onChange={(event) => setPrice(event.target.value)} />
-                                                {formCreateMonitor.errors.price && formCreateMonitor.touched.price && <small>{formCreateMonitor.errors.price}</small>}
+                                                <CInput type="number" id='price' name='price' value={formCreateCPUcooler.values.price} onChange={formCreateCPUcooler.handleChange} />
+                                                {formCreateCPUcooler.errors.price && formCreateCPUcooler.touched.price && <small>{formCreateCPUcooler.errors.price}</small>}
                                             </div>
 
                                             <div className="col-lg-12 mb-3">
@@ -234,7 +240,7 @@ const Create = (props) => {
                             <CCardFooter>
                                 <div className="col-md-12">{ submitted? <LinearProgress/>:
                                     <div className="projectwbs-form-button-holders mt-3">
-                                        <CButton type="button" disabled={!formCreateMonitor.isValid} onClick={formCreateMonitor.handleSubmit} className="create-btn-prjctwbs create-wbs">Add</CButton>
+                                        <CButton type="button" disabled={!formCreateCPUcooler.isValid} onClick={formCreateCPUcooler.handleSubmit} className="create-btn-prjctwbs create-wbs">Add</CButton>
                                         <CButton type="button" onClick={reset_form} className="create-btn-prjctwbs cancel-wbs">Reset</CButton>
                                     </div>}
                                 </div>
