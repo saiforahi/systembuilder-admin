@@ -37,22 +37,20 @@ const Create = (props) => {
             }
         }
         const general_specs = {
-            part_number: selectedPartNumber.value
-        }
-        const memory_specs = {
+            chipset: selectedChipSet.value,
             memory: selectedMemory.value!==null?selectedMemory.value:'',
-            ram_size: selectedChipSet.value,
-            latency: selectedLatency.value
         }
-        const additional_specs={
-            dimm:selectedDimmType.value
+        const clock_specs = {
+            base_clock_speed: selectedPartNumber.value,
+            clock_speed: selectedLatency.value
         }
+        
         formData.append('price', price)
         formData.append('brand', selectedBrand.value)
         formData.append('model', selectedModel.value)
         formData.append('general_specs', JSON.stringify(general_specs))
-        formData.append('memory_specs', JSON.stringify(memory_specs))
-        formData.append('additional_specs', JSON.stringify(additional_specs))
+        formData.append('clock_specs', JSON.stringify(clock_specs))
+        
         for (var pair of formData.entries()) {
             console.log(pair[0]+ ', ' + pair[1]); 
         }
@@ -61,7 +59,7 @@ const Create = (props) => {
             console.log(res)
             if (res.status == 201) {
                 dispatch(fetchGraphicsCardsThunk())
-                history.push('/dashboard/memories')
+                history.push('/dashboard/graphics')
                 swal('Created!', 'A new Graphics Card Created', 'success')
             }
         }).catch(err=>{
@@ -94,7 +92,7 @@ const Create = (props) => {
         formCreateGraphicsCard.setFieldValue('brand',value)
         setBrands([...brands, { value: value, label: value }])
     }
-    const [memories, setMemories] = useState([])
+    const [graphics, setMemories] = useState([])
     const [selectedMemory, setSelectedMemory] = useState(null)
     const handleMemoryChange = (option, value, actionMeta) => {
         console.log(option, value)
@@ -105,7 +103,7 @@ const Create = (props) => {
         console.log('create', value)
         setSelectedMemory({ value: value, label: value })
         formCreateGraphicsCard.setFieldValue('memory',value)
-        setMemories([...memories, { value: value, label: value }])
+        setMemories([...graphics, { value: value, label: value }])
     }
 
     //write speed
@@ -204,7 +202,7 @@ const Create = (props) => {
         onSubmit: createStorage
     })
     function initialize() {
-        API.get('memories/specification/list/model/none').then(res => {
+        API.get('graphics/specification/list/model/none').then(res => {
             console.log('models', res.data)
             let temp = []
             Array.from(res.data.data).forEach((item, idx) => {
@@ -212,7 +210,7 @@ const Create = (props) => {
             })
             setModels(temp)
         })
-        API.get('memories/specification/list/brand/none').then(res => {
+        API.get('graphics/specification/list/brand/none').then(res => {
             console.log('brands', res.data)
             let temp = []
             Array.from(res.data.data).forEach((item, idx) => {
@@ -220,15 +218,15 @@ const Create = (props) => {
             })
             setBrands(temp)
         })
-        API.get('memories/specification/list/memory/memory').then(res => {
-            console.log('memories', res.data)
+        API.get('graphics/specification/list/memory/memory').then(res => {
+            console.log('graphics', res.data)
             let temp = []
             Array.from(res.data.data).forEach((item, idx) => {
                 temp.push({ value: item, label: item })
             })
             setMemories(temp)
         })
-        API.get('memories/specification/list/memory/ram').then(res => {
+        API.get('graphics/specification/list/memory/ram').then(res => {
             console.log('chipsets', res.data)
             let temp = []
             Array.from(res.data.data).forEach((item, idx) => {
@@ -236,7 +234,7 @@ const Create = (props) => {
             })
             setChipSets(temp)
         })
-        API.get('memories/specification/list/memory/latency').then(res => {
+        API.get('graphics/specification/list/memory/latency').then(res => {
             console.log('write_speed', res.data)
             let temp = []
             Array.from(res.data.data).forEach((item, idx) => {
@@ -244,7 +242,7 @@ const Create = (props) => {
             })
             setLatencies(temp)
         })
-        API.get('memories/specification/list/additional/dimm').then(res => {
+        API.get('graphics/specification/list/additional/dimm').then(res => {
             console.log('read_speed', res.data)
             let temp = []
             Array.from(res.data.data).forEach((item, idx) => {
@@ -330,7 +328,7 @@ const Create = (props) => {
                                                     onChange={handleMemoryChange}
                                                     // onInputChange={handleOSInputChange}
                                                     onCreateOption={handleMemoryCreate}
-                                                    options={memories}
+                                                    options={graphics}
                                                     value={selectedMemory}
                                                     isClearable={true}
                                                 />
@@ -355,7 +353,7 @@ const Create = (props) => {
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
-                                                CAS Latency
+                                                Clock Speed
                                                 </CLabel>
                                                 <CreatableSelect
                                                     aria-labelledby="Operating Systems"
@@ -370,26 +368,10 @@ const Create = (props) => {
                                                 />
                                                 {/* {formCreateGraphicsCard.errors.name && formCreateGraphicsCard.touched.name && <small class="error">{formCreateGraphicsCard.errors.name}</small>} */}
                                             </div>
+                                            
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
-                                                DIMM type
-                                                </CLabel>
-                                                <CreatableSelect
-                                                    aria-labelledby="Operating Systems"
-                                                    closeMenuOnSelect={true}
-                                                    classNamePrefix="custom-forminput-6"
-                                                    onChange={handleDimmChange}
-                                                    // onInputChange={handleOSInputChange}
-                                                    onCreateOption={handleDimmCreate}
-                                                    options={dimm_types}
-                                                    value={selectedDimmType}
-                                                    isClearable={true}
-                                                />
-                                                {/* {formCreateGraphicsCard.errors.name && formCreateGraphicsCard.touched.name && <small class="error">{formCreateGraphicsCard.errors.name}</small>} */}
-                                            </div>
-                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
-                                                <CLabel className="custom-label-wbs5">
-                                                    Part Number
+                                                    Base Clock Speed
                                                 </CLabel>
                                                 <CreatableSelect
                                                     aria-labelledby="Storages"
