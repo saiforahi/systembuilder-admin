@@ -25,6 +25,7 @@ const Create = (props) => {
         setSubmitted(true)
         let formData = new FormData()
         formData.append('name', values.name)
+        formData.append('short_name', values.short_name)
         formData.append('stock',values.stock)
         if (pictures.length > 0) {
             formData.append('total_images', pictures[0].length)
@@ -98,7 +99,7 @@ const Create = (props) => {
         if (!values.name) errors.name = "Name is required"
         if (!values.brand) errors.brand = "Brand is required"
         if (!values.model) errors.model = "Model is required"
-        // if (!values.price) errors.price = "Price is required"
+        if (!values.short_name) errors.short_name = "Short Name is required"
         // if (!values.memory) errors.memory = "Memory is required"
         // if (!values.ram_size) errors.ram_size = "RAM Size is required"
         // if (!values.latency) errors.latency = "Latency is required"
@@ -110,6 +111,7 @@ const Create = (props) => {
     const formCreateMonitor = useFormik({
         initialValues: {
             name: '',
+            short_name:'',
             brand: '',
             model:'',
             price:'',
@@ -163,6 +165,13 @@ const Create = (props) => {
                                                 </CLabel>
                                                 <CInput className="custom-forminput-6" id="name" name="name" type="text" values={formCreateMonitor.values.name} onChange={formCreateMonitor.handleChange} />
                                                 {formCreateMonitor.errors.name && formCreateMonitor.touched.name && <small class="error">{formCreateMonitor.errors.name}</small>}
+                                            </div>
+                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Short Name
+                                                </CLabel>
+                                                <CInput className="custom-forminput-6" id="short_name" name="short_name" type="text" values={formCreateMonitor.values.short_name} onChange={formCreateMonitor.handleChange} />
+                                                {formCreateMonitor.errors.short_name && formCreateMonitor.touched.short_name && <small class="error">{formCreateMonitor.errors.short_name}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">

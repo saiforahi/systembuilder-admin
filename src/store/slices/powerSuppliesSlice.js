@@ -8,7 +8,7 @@ const initialState = {
 
 
 export const fetchPowerSuppliesThunk = createAsyncThunk('powerSupplies/fetchPowerSuppliesThunk', async (user_id) => {
-  const response = await JsonClient.get('powerSupplies/all')
+  const response = await JsonClient.get('powersupplies/all')
   console.log("powerSupplies", response.data)
   return response.data
 })

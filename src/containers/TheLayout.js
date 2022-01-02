@@ -22,6 +22,7 @@ import { fetchCaseCoolersThunk } from '../store/slices/caseCoolersSlice';
 import {fetchKeyboardsThunk} from '../store/slices/keyboardsSlice'
 import {fetchMiceThunk} from '../store/slices/miceSlice'
 import { fetchGraphicsCardsThunk } from '../store/slices/graphicsCardsSlice';
+import { fetchPowerSuppliesThunk } from '../store/slices/powerSuppliesSlice';
 const TheLayout = () => {
   const dispatch = useDispatch()
   React.useEffect(()=>{
@@ -39,6 +40,7 @@ const TheLayout = () => {
     dispatch(fetchKeyboardsThunk())
     dispatch(fetchMiceThunk())
     dispatch(fetchGraphicsCardsThunk())
+    dispatch(fetchPowerSuppliesThunk())
   },[])
   return (
     <div className="c-app c-default-layout">
