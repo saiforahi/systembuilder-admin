@@ -10,12 +10,19 @@ import { useHistory } from 'react-router-dom';
 import ImageUploader from "react-images-upload";
 import LinearProgress from '@mui/material/LinearProgress';
 import { fetchProcessorsList } from '../../store/slices/processorsSlice';
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState } from 'draft-js';
+import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+
 const Create = (props) => {
     const dispatch = useDispatch()
     let history = useHistory()
     const [images, setImages] = useState([])
     const [avatars, setAvatars] = useState([])
     const [pictures, setPictures] = useState([])
+    const [editorState, setEditorState] = React.useState(
+        () => EditorState.createEmpty(),
+      );
     const onDrop = picture => {
         setPictures([...pictures, picture]);
     };
@@ -362,7 +369,18 @@ const Create = (props) => {
                                                 <CInput type="number" value={price} onChange={(event) => setPrice(event.target.value)} />
                                                 {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>}
                                             </div>
-
+                                            <div className="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Description
+                                                </CLabel>
+                                                <Editor
+                                                    editorState={editorState}
+                                                    wrapperClassName="demo-wrapper border rounded p-2"
+                                                    editorClassName="demo-editor border p-2"
+                                                    onEditorStateChange={setEditorState}
+                                                />
+                                            </div>
+                                            
                                             <div className="col-lg-12 mb-3">
                                                 <ImageUploader
                                                     {...props}
