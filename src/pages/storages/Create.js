@@ -11,9 +11,19 @@ import swal from 'sweetalert';
 import { useHistory } from 'react-router-dom';
 import ImageUploader from "react-images-upload";
 import { fetchStoragesList } from '../../store/slices/storagesSlice';
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState,convertToRaw } from 'draft-js';
+import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import draftToHtml from 'draftjs-to-html';
 const Create = (props) => {
     const dispatch = useDispatch()
     const [submitted,setSubmitted]=useState(false)
+    const [editorState, setEditorState] = React.useState(
+        () => EditorState.createEmpty(),
+    );
+    const [features, setFeatures] = React.useState(
+        () => EditorState.createEmpty(),
+    );
     let history = useHistory()
     const [images, setImages] = useState([])
     const [avatars, setAvatars] = useState([])
@@ -39,6 +49,8 @@ const Create = (props) => {
         formData.append('name', values.name)
         formData.append('short_name', values.short_name)
         formData.append('stock',values.stock)
+        formData.append('description',draftToHtml(convertToRaw(editorState.getCurrentContent())))
+        formData.append('features',draftToHtml(convertToRaw(features.getCurrentContent())))
         if (pictures.length > 0) {
             formData.append('total_images', pictures[0].length)
             // formData.append('images',pictures[0])
@@ -48,28 +60,28 @@ const Create = (props) => {
                 formData.append('image' + (index + 1), pictures[0][index])
             }
         }
-        const storage_specs = {
-            drive_capacity: selectedDriveCapacity.value
-        }
-        const performance_specs = {
-            interface: selectedInterface.value,
-            write_speed: selectedWriteSpeed.value,
-            read_speed: selectedReadSpeed.value
-        }
-        const physical_specs = {
-            drive_type: selectedDriveType.value,
-            form_factor: selectedFormFactor.value
-        }
-        const reliability_specs = {
-            encryption: selectedEncryption.value
-        }
+        // const storage_specs = {
+        //     drive_capacity: selectedDriveCapacity.value
+        // }
+        // const performance_specs = {
+        //     interface: selectedInterface.value,
+        //     write_speed: selectedWriteSpeed.value,
+        //     read_speed: selectedReadSpeed.value
+        // }
+        // const physical_specs = {
+        //     drive_type: selectedDriveType.value,
+        //     form_factor: selectedFormFactor.value
+        // }
+        // const reliability_specs = {
+        //     encryption: selectedEncryption.value
+        // }
         formData.append('price', values.price)
         formData.append('brand', selectedBrand.value)
         formData.append('model', selectedModel.value)
-        formData.append('storage_specs', JSON.stringify(storage_specs))
-        formData.append('performance_specs', JSON.stringify(performance_specs))
-        formData.append('physical_specs', JSON.stringify(physical_specs))
-        formData.append('reliability_specs', JSON.stringify(reliability_specs))
+        // formData.append('storage_specs', JSON.stringify(storage_specs))
+        // formData.append('performance_specs', JSON.stringify(performance_specs))
+        // formData.append('physical_specs', JSON.stringify(physical_specs))
+        // formData.append('reliability_specs', JSON.stringify(reliability_specs))
         for (var pair of formData.entries()) {
             console.log(pair[0]+ ', ' + pair[1]); 
         }
@@ -361,7 +373,7 @@ const Create = (props) => {
                                                 <CInput className="custom-forminput-6" id="stock" name="stock" type="number" values={formCreateStorage.values.stock} onChange={formCreateStorage.handleChange} />
                                                 {/* {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>} */}
                                             </div>
-                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                            {/* <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Drive Capacity
                                                 </CLabel>
@@ -376,9 +388,9 @@ const Create = (props) => {
                                                     value={selectedDriveCapacity}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateStorage.errors.name && formCreateStorage.touched.name && <small>{formCreateStorage.errors.name}</small>} */}
-                                            </div>
-                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                                
+                                            </div> */}
+                                            {/* <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Interface
                                                 </CLabel>
@@ -393,9 +405,8 @@ const Create = (props) => {
                                                     value={selectedInterface}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateStorage.errors.name && formCreateStorage.touched.name && <small>{formCreateStorage.errors.name}</small>} */}
-                                            </div>
-                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                            </div> */}
+                                            {/* <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                 Write Speed
                                                 </CLabel>
@@ -410,9 +421,8 @@ const Create = (props) => {
                                                     value={selectedWriteSpeed}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateStorage.errors.name && formCreateStorage.touched.name && <small>{formCreateStorage.errors.name}</small>} */}
-                                            </div>
-                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                            </div> */}
+                                            {/* <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                 Read Speed
                                                 </CLabel>
@@ -427,9 +437,8 @@ const Create = (props) => {
                                                     value={selectedReadSpeed}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateStorage.errors.name && formCreateStorage.touched.name && <small>{formCreateStorage.errors.name}</small>} */}
-                                            </div>
-                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                            </div> */}
+                                            {/* <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Drive Type
                                                 </CLabel>
@@ -444,9 +453,8 @@ const Create = (props) => {
                                                     value={selectedDriveType}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateStorage.errors.name && formCreateStorage.touched.name && <small>{formCreateStorage.errors.name}</small>} */}
-                                            </div>
-                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                            </div> */}
+                                            {/* <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Form Factor
                                                 </CLabel>
@@ -461,9 +469,9 @@ const Create = (props) => {
                                                     value={selectedFormFactor}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateStorage.errors.name && formCreateStorage.touched.name && <small>{formCreateStorage.errors.name}</small>} */}
-                                            </div>
-                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                                
+                                            </div> */}
+                                            {/* <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Encryption
                                                 </CLabel>
@@ -478,8 +486,8 @@ const Create = (props) => {
                                                     value={selectedEncryption}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateStorage.errors.name && formCreateStorage.touched.name && <small>{formCreateStorage.errors.name}</small>} */}
-                                            </div>
+                                                
+                                            </div> */}
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Price (BDT)
@@ -487,6 +495,39 @@ const Create = (props) => {
                                                 <CInput type="number" id='price' name='price' value={formCreateStorage.values.price} onChange={formCreateStorage.handleChange} />
                                                 {formCreateStorage.errors.price && formCreateStorage.touched.price && <small>{formCreateStorage.errors.price}</small>}
                                             </div>
+                                            <div className="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Description
+                                                </CLabel>
+                                                <Editor
+                                                    editorState={editorState}
+                                                    wrapperClassName="demo-wrapper border rounded p-2"
+                                                    editorClassName="demo-editor border p-2"
+                                                    onEditorStateChange={setEditorState}
+                                                    // toolbar={{
+                                                    //     inline: { inDropdown: true },
+                                                    //     list: { inDropdown: true },
+                                                    //     textAlign: { inDropdown: true },
+                                                    //     link: { inDropdown: true },
+                                                    //     history: { inDropdown: true },
+                                                    // }}
+                                                    localization={{
+                                                        locale: 'en',
+                                                      }}
+                                                />
+                                            </div>
+                                            <div className="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Features
+                                                </CLabel>
+                                                <Editor
+                                                    editorState={features}
+                                                    wrapperClassName="demo-wrapper border rounded p-2"
+                                                    editorClassName="demo-editor border p-2"
+                                                    onEditorStateChange={setFeatures}
+                                                />
+                                            </div>
+                                            
 
                                             <div className="col-lg-12 mb-3">
                                                 <ImageUploader

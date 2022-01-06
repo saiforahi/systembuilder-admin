@@ -11,8 +11,9 @@ import ImageUploader from "react-images-upload";
 import LinearProgress from '@mui/material/LinearProgress';
 import { fetchProcessorsList } from '../../store/slices/processorsSlice';
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState } from 'draft-js';
+import { EditorState,convertToRaw } from 'draft-js';
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import draftToHtml from 'draftjs-to-html';
 
 const Create = (props) => {
     const dispatch = useDispatch()
@@ -22,7 +23,10 @@ const Create = (props) => {
     const [pictures, setPictures] = useState([])
     const [editorState, setEditorState] = React.useState(
         () => EditorState.createEmpty(),
-      );
+    );
+    const [features, setFeatures] = React.useState(
+        () => EditorState.createEmpty(),
+    );
     const onDrop = picture => {
         setPictures([...pictures, picture]);
     };
@@ -38,11 +42,15 @@ const Create = (props) => {
     }
     // const [selectedBrand,setSelectedBrand] = useState()
     const [submitted,setSubmitted]=useState(false)
-    const createlaptop = (values) => {
+    
+    const createProcessor = (values) => {
         setSubmitted(true)
         let formData = new FormData()
         formData.append('name', values.name)
+        formData.append('short_name', values.short_name)
         formData.append('stock', values.stock)
+        formData.append('description',draftToHtml(convertToRaw(editorState.getCurrentContent())))
+        formData.append('features',draftToHtml(convertToRaw(features.getCurrentContent())))
         if (pictures.length > 0) {
             formData.append('total_images', pictures[0].length)
             // formData.append('images',pictures[0])
@@ -62,7 +70,7 @@ const Create = (props) => {
         formData.append('model', selectedModel.value)
         formData.append('general_specs', JSON.stringify(general_specs))
         for (var pair of formData.entries()) {
-            console.log(pair[0]+ ', ' + pair[1]); 
+            console.log(pair[0]+ ', ' + pair[1]);
         }
         FILE_API.post('processors/create', formData).then((res) => {
             setSubmitted(false)
@@ -79,6 +87,7 @@ const Create = (props) => {
     const validateForm = (values) => {
         const errors = {}
         if (!values.name) errors.name = "Name is required"
+        if (!values.short_name) errors.short_name = "Short Name is required"
         return errors
     }
     
@@ -162,12 +171,13 @@ const Create = (props) => {
         initialValues: {
             name: '',
             brand: '',
+            short_name:'',
             stock:''
         },
         validate: validateForm,
         validateOnBlur: true,
         validateOnChange: true,
-        onSubmit: createlaptop
+        onSubmit: createProcessor
     })
     function initialize() {
         API.get('processors/specification/list/general/pcie').then(res => {
@@ -235,6 +245,13 @@ const Create = (props) => {
                                                 </CLabel>
                                                 <CInput className="custom-forminput-6" id="name" name="name" type="text" values={formCreateProcessor.values.name} onChange={formCreateProcessor.handleChange} />
                                                 {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>}
+                                            </div>
+                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Short Name
+                                                </CLabel>
+                                                <CInput className="custom-forminput-6" id="short_name" name="short_name" type="text" values={formCreateProcessor.values.short_name} onChange={formCreateProcessor.handleChange} />
+                                                {formCreateProcessor.errors.short_name && formCreateProcessor.touched.short_name && <small>{formCreateProcessor.errors.short_name}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -378,6 +395,27 @@ const Create = (props) => {
                                                     wrapperClassName="demo-wrapper border rounded p-2"
                                                     editorClassName="demo-editor border p-2"
                                                     onEditorStateChange={setEditorState}
+                                                    // toolbar={{
+                                                    //     inline: { inDropdown: true },
+                                                    //     list: { inDropdown: true },
+                                                    //     textAlign: { inDropdown: true },
+                                                    //     link: { inDropdown: true },
+                                                    //     history: { inDropdown: true },
+                                                    // }}
+                                                    localization={{
+                                                        locale: 'en',
+                                                      }}
+                                                />
+                                            </div>
+                                            <div className="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Features
+                                                </CLabel>
+                                                <Editor
+                                                    editorState={features}
+                                                    wrapperClassName="demo-wrapper border rounded p-2"
+                                                    editorClassName="demo-editor border p-2"
+                                                    onEditorStateChange={setFeatures}
                                                 />
                                             </div>
                                             
