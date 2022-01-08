@@ -54,7 +54,7 @@
     "auto-changelog": "~2.2.1",
     "formik": "^2.2.9",
     "jquery": "^3.6.0",
-    "react-scripts": "^5.0.0",
+    "react-scripts": "^4.0.3",
     "react-trello": "^2.2.11",
     "sweetalert": "^2.1.2"
   },
