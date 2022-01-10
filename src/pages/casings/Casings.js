@@ -56,13 +56,13 @@ const Cases = () => {
         <>
             <CContainer>
                 <CRow className="align-items-center">
-                    <CCol md="8" className="mb-3 mb-xl-0 text-left offset-md-2">
+                    <CCol md="10" className="mb-3 mb-xl-0 text-left offset-md-1">
                         <Link to="/dashboard/cpucases/create"><CButton shape="round" color="primary">Add</CButton></Link>
                     </CCol>
                 </CRow>
                 <hr></hr>
                 <CRow>
-                    <CCol md="8" className="offset-md-2">
+                    <CCol md="10" className="offset-md-1">
                         <CCard className="custom-wbs-card-1">
                             <CCardHeader>
                                 <h5>Cases</h5>

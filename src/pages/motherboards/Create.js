@@ -10,9 +10,12 @@ import { FILE_API, API } from '../../Config';
 import swal from 'sweetalert';
 import { useHistory } from 'react-router-dom';
 import ImageUploader from "react-images-upload";
-import { fetchStoragesList } from '../../store/slices/storagesSlice';
-import { fetchMemoriesThunk } from '../../store/slices/memoriesSlice';
+
 import { fetchMotherboardsThunk } from '../../store/slices/motherboardsSlice';
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState,convertToRaw } from 'draft-js';
+import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import draftToHtml from 'draftjs-to-html';
 const Create = (props) => {
     const dispatch = useDispatch()
     const [submitted,setSubmitted]=useState(false)
@@ -22,12 +25,20 @@ const Create = (props) => {
         setPictures([...pictures, picture]);
     };
     // const [selectedBrand,setSelectedBrand] = useState()
-    
+    const [editorState, setEditorState] = React.useState(
+        () => EditorState.createEmpty(),
+    );
+    const [features, setFeatures] = React.useState(
+        () => EditorState.createEmpty(),
+    );
     const createMotherboard = (values) => {
         setSubmitted(true)
         let formData = new FormData()
         formData.append('name', values.name)
         formData.append('stock',values.stock)
+        formData.append('short_name',values.short_name)
+        formData.append('description',draftToHtml(convertToRaw(editorState.getCurrentContent())))
+        formData.append('features',draftToHtml(convertToRaw(features.getCurrentContent())))
         if (pictures.length > 0) {
             formData.append('total_images', pictures[0].length)
             // formData.append('images',pictures[0])
@@ -37,23 +48,23 @@ const Create = (props) => {
                 formData.append('image' + (index + 1), pictures[0][index])
             }
         }
-        const cpu_specs = {
-            chipset: selectedChipset.value,
-            cpu_socket: selectedCpuSocket.value
-        }
-        const memory_specs = {
-            memory_slots: selectedMemorySlot.value!==null?selectedMemorySlot.value:'',
-            memory_support: selectedMemorySupport.value,
-        }
-        const physical_specs={
-            form_factor:selectedFormFactor.value
-        }
+        // const cpu_specs = {
+        //     chipset: selectedChipset.value,
+        //     cpu_socket: selectedCpuSocket.value
+        // }
+        // const memory_specs = {
+        //     memory_slots: selectedMemorySlot.value!==null?selectedMemorySlot.value:'',
+        //     memory_support: selectedMemorySupport.value,
+        // }
+        // const physical_specs={
+        //     form_factor:selectedFormFactor.value
+        // }
         formData.append('price', price)
         formData.append('brand', selectedBrand.value)
         formData.append('model', selectedModel.value)
-        formData.append('cpu_specs', JSON.stringify(cpu_specs))
-        formData.append('memory_specs', JSON.stringify(memory_specs))
-        formData.append('physical_specs', JSON.stringify(physical_specs))
+        // formData.append('cpu_specs', JSON.stringify(cpu_specs))
+        // formData.append('memory_specs', JSON.stringify(memory_specs))
+        // formData.append('physical_specs', JSON.stringify(physical_specs))
         for (var pair of formData.entries()) {
             console.log(pair[0]+ ', ' + pair[1]); 
         }
@@ -291,6 +302,13 @@ const Create = (props) => {
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
+                                                    Short Name
+                                                </CLabel>
+                                                <CInput className="custom-forminput-6" id="short_name" name="short_name" type="text" values={formCreateMotherboard.values.short_name} onChange={formCreateMotherboard.handleChange} />
+                                                {formCreateMotherboard.errors.short_name && formCreateMotherboard.touched.short_name && <small class="error">{formCreateMotherboard.errors.short_name}</small>}
+                                            </div>
+                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
                                                     Brand
                                                 </CLabel>
                                                 <CreatableSelect
@@ -330,7 +348,7 @@ const Create = (props) => {
                                                 <CInput className="custom-forminput-6" id="stock" name="stock" type="number" values={formCreateMotherboard.values.stock} onChange={formCreateMotherboard.handleChange} />
                                                 {/* {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>} */}
                                             </div>
-                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                            {/* <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Memory Slots
                                                 </CLabel>
@@ -345,7 +363,7 @@ const Create = (props) => {
                                                     value={selectedMemorySlot}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateMotherboard.errors.name && formCreateMotherboard.touched.name && <small class="error">{formCreateMotherboard.errors.name}</small>} */}
+                                                
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -362,7 +380,7 @@ const Create = (props) => {
                                                     value={selectedChipset}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateMotherboard.errors.name && formCreateMotherboard.touched.name && <small class="error">{formCreateMotherboard.errors.name}</small>} */}
+                                                
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -379,7 +397,7 @@ const Create = (props) => {
                                                     value={selectedMemorySupport}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateMotherboard.errors.name && formCreateMotherboard.touched.name && <small class="error">{formCreateMotherboard.errors.name}</small>} */}
+                                                
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -396,7 +414,7 @@ const Create = (props) => {
                                                     value={selectedCpuSocket}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateMotherboard.errors.name && formCreateMotherboard.touched.name && <small class="error">{formCreateMotherboard.errors.name}</small>} */}
+                                                
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -413,8 +431,8 @@ const Create = (props) => {
                                                     value={selectedFormFactor}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateMotherboard.errors.name && formCreateMotherboard.touched.name && <small class="error">{formCreateMotherboard.errors.name}</small>} */}
-                                            </div>
+                                                
+                                            </div> */}
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Price (BDT)
@@ -422,7 +440,38 @@ const Create = (props) => {
                                                 <CInput type="number" value={price} onChange={(event) => setPrice(event.target.value)} />
                                                 {formCreateMotherboard.errors.price && formCreateMotherboard.touched.price && <small>{formCreateMotherboard.errors.price}</small>}
                                             </div>
-
+                                            <div className="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Description
+                                                </CLabel>
+                                                <Editor
+                                                    editorState={editorState}
+                                                    wrapperClassName="demo-wrapper border rounded p-2"
+                                                    editorClassName="demo-editor border p-2"
+                                                    onEditorStateChange={setEditorState}
+                                                    // toolbar={{
+                                                    //     inline: { inDropdown: true },
+                                                    //     list: { inDropdown: true },
+                                                    //     textAlign: { inDropdown: true },
+                                                    //     link: { inDropdown: true },
+                                                    //     history: { inDropdown: true },
+                                                    // }}
+                                                    localization={{
+                                                        locale: 'en',
+                                                      }}
+                                                />
+                                            </div>
+                                            <div className="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Features
+                                                </CLabel>
+                                                <Editor
+                                                    editorState={features}
+                                                    wrapperClassName="demo-wrapper border rounded p-2"
+                                                    editorClassName="demo-editor border p-2"
+                                                    onEditorStateChange={setFeatures}
+                                                />
+                                            </div>
                                             <div className="col-lg-12 mb-3">
                                                 <ImageUploader
                                                     {...props}

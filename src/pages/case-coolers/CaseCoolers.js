@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import swal from 'sweetalert'
 import { Link, useHistory } from 'react-router-dom'
 import {API} from '../../Config'
-import { fetchStoragesList } from '../../store/slices/storagesSlice'
 import { fetchCaseCoolersThunk } from '../../store/slices/caseCoolersSlice'
 
 const CaseCoolers = () => {
@@ -57,13 +56,13 @@ const CaseCoolers = () => {
         <>
             <CContainer>
                 <CRow className="align-items-center">
-                    <CCol md="8" className="mb-3 mb-xl-0 text-left offset-md-2">
+                    <CCol md="10" className="mb-3 mb-xl-0 text-left offset-md-1">
                         <Link to="/dashboard/case-coolers/create"><CButton shape="round" color="primary">Add</CButton></Link>
                     </CCol>
                 </CRow>
                 <hr></hr>
                 <CRow>
-                    <CCol md="8" className="offset-md-2">
+                    <CCol md="10" className="offset-md-1">
                         <CCard className="custom-wbs-card-1">
                             <CCardHeader>
                                 <h5>Case Coolers</h5>

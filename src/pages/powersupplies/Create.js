@@ -10,6 +10,10 @@ import swal from 'sweetalert';
 import { useHistory } from 'react-router-dom';
 import ImageUploader from "react-images-upload";
 import { fetchPowerSuppliesThunk } from '../../store/slices/powerSuppliesSlice';
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState,convertToRaw } from 'draft-js';
+import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import draftToHtml from 'draftjs-to-html';
 const Create = (props) => {
     const dispatch = useDispatch()
     const [submitted,setSubmitted]=useState(false)
@@ -18,6 +22,12 @@ const Create = (props) => {
     const onDrop = picture => {
         setPictures([...pictures, picture]);
     };
+    const [editorState, setEditorState] = React.useState(
+        () => EditorState.createEmpty(),
+    );
+    const [features, setFeatures] = React.useState(
+        () => EditorState.createEmpty(),
+    );
     // const [selectedBrand,setSelectedBrand] = useState()
     
     const createPowerSupply = (values) => {
@@ -25,6 +35,9 @@ const Create = (props) => {
         let formData = new FormData()
         formData.append('name', values.name)
         formData.append('stock',values.stock)
+        formData.append('short_name', values.short_name)
+        formData.append('description',draftToHtml(convertToRaw(editorState.getCurrentContent())))
+        formData.append('features',draftToHtml(convertToRaw(features.getCurrentContent())))
         if (pictures.length > 0) {
             formData.append('total_images', pictures[0].length)
             // formData.append('images',pictures[0])
@@ -94,7 +107,7 @@ const Create = (props) => {
         if (!values.name) errors.name = "Name is required"
         if (!values.brand) errors.brand = "Brand is required"
         if (!values.model) errors.model = "Model is required"
-        // if (!values.price) errors.price = "Price is required"
+        if (!values.short_name) errors.short_name = "Short Name is required"
         // if (!values.memory) errors.memory = "Memory is required"
         // if (!values.ram_size) errors.ram_size = "RAM Size is required"
         // if (!values.latency) errors.latency = "Latency is required"
@@ -109,7 +122,8 @@ const Create = (props) => {
             brand: '',
             model:'',
             price:'',
-            stock:''
+            stock:'',
+            short_name:''
         },
         validate: validateForm,
         validateOnBlur: true,
@@ -161,6 +175,13 @@ const Create = (props) => {
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
+                                                    Short Name
+                                                </CLabel>
+                                                <CInput className="custom-forminput-6" id="short_name" name="short_name" type="text" values={formCreatePowerSupply.values.short_name} onChange={formCreatePowerSupply.handleChange} />
+                                                {formCreatePowerSupply.errors.short_name && formCreatePowerSupply.touched.short_name && <small class="error">{formCreatePowerSupply.errors.short_name}</small>}
+                                            </div>
+                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
                                                     Brand
                                                 </CLabel>
                                                 <CreatableSelect
@@ -208,7 +229,38 @@ const Create = (props) => {
                                                 <CInput type="number" value={price} onChange={(event) => setPrice(event.target.value)} />
                                                 {formCreatePowerSupply.errors.price && formCreatePowerSupply.touched.price && <small>{formCreatePowerSupply.errors.price}</small>}
                                             </div>
-
+                                            <div className="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Description
+                                                </CLabel>
+                                                <Editor
+                                                    editorState={editorState}
+                                                    wrapperClassName="demo-wrapper border rounded p-2"
+                                                    editorClassName="demo-editor border p-2"
+                                                    onEditorStateChange={setEditorState}
+                                                    // toolbar={{
+                                                    //     inline: { inDropdown: true },
+                                                    //     list: { inDropdown: true },
+                                                    //     textAlign: { inDropdown: true },
+                                                    //     link: { inDropdown: true },
+                                                    //     history: { inDropdown: true },
+                                                    // }}
+                                                    localization={{
+                                                        locale: 'en',
+                                                      }}
+                                                />
+                                            </div>
+                                            <div className="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Features
+                                                </CLabel>
+                                                <Editor
+                                                    editorState={features}
+                                                    wrapperClassName="demo-wrapper border rounded p-2"
+                                                    editorClassName="demo-editor border p-2"
+                                                    onEditorStateChange={setFeatures}
+                                                />
+                                            </div>
                                             <div className="col-lg-12 mb-3">
                                                 <ImageUploader
                                                     {...props}

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import swal from 'sweetalert'
 import { Link, useHistory } from 'react-router-dom'
 import {API} from '../../Config'
-import { fetchProcessorsList } from '../../store/slices/processorsSlice'
+
 import { fetchPowerSuppliesThunk } from '../../store/slices/powerSuppliesSlice'
 const PowerSupplies = () => {
     const dispatch = useDispatch()
@@ -55,13 +55,13 @@ const PowerSupplies = () => {
         <>
             <CContainer>
                 <CRow className="align-items-center">
-                    <CCol md="8" className="mb-3 mb-xl-0 text-left offset-md-2">
+                    <CCol md="10" className="mb-3 mb-xl-0 text-left offset-md-1">
                         <Link to="/dashboard/powersupplies/create"><CButton shape="round" color="primary">Add</CButton></Link>
                     </CCol>
                 </CRow>
                 <hr></hr>
                 <CRow>
-                    <CCol md="8" className="offset-md-2">
+                    <CCol md="10" className="offset-md-1">
                         <CCard className="custom-wbs-card-1">
                             <CCardHeader>
                                 <h3>Power Supplies</h3>

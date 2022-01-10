@@ -384,7 +384,7 @@ const Create = (props) => {
                                                     Price (BDT)
                                                 </CLabel>
                                                 <CInput type="number" value={price} onChange={(event) => setPrice(event.target.value)} />
-                                                {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>}
+                                                {formCreateProcessor.errors.price && formCreateProcessor.touched.price && <small>{formCreateProcessor.errors.price}</small>}
                                             </div>
                                             <div className="col-lg-12 col-md-12 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">

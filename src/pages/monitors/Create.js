@@ -11,6 +11,10 @@ import swal from 'sweetalert';
 import { useHistory } from 'react-router-dom';
 import ImageUploader from "react-images-upload";
 import { fetchMonitorsThunk } from '../../store/slices/monitorsSlice';
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState,convertToRaw } from 'draft-js';
+import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import draftToHtml from 'draftjs-to-html';
 const Create = (props) => {
     const dispatch = useDispatch()
     const [submitted,setSubmitted]=useState(false)
@@ -20,12 +24,19 @@ const Create = (props) => {
         setPictures([...pictures, picture]);
     };
     // const [selectedBrand,setSelectedBrand] = useState()
-    
+    const [editorState, setEditorState] = React.useState(
+        () => EditorState.createEmpty(),
+    );
+    const [features, setFeatures] = React.useState(
+        () => EditorState.createEmpty(),
+    );
     const createMotherboard = (values) => {
         setSubmitted(true)
         let formData = new FormData()
         formData.append('name', values.name)
         formData.append('short_name', values.short_name)
+        formData.append('description',draftToHtml(convertToRaw(editorState.getCurrentContent())))
+        formData.append('features',draftToHtml(convertToRaw(features.getCurrentContent())))
         formData.append('stock',values.stock)
         if (pictures.length > 0) {
             formData.append('total_images', pictures[0].length)
@@ -70,9 +81,6 @@ const Create = (props) => {
         formCreateMonitor.setFieldValue('brand',value)
         setBrands([...brands, { value: value, label: value }])
     }
-    
-
-    
     
     //model
     const [models, setModels] = useState([])
@@ -222,7 +230,38 @@ const Create = (props) => {
                                                 <CInput type="number" value={price} onChange={(event) => setPrice(event.target.value)} />
                                                 {formCreateMonitor.errors.price && formCreateMonitor.touched.price && <small>{formCreateMonitor.errors.price}</small>}
                                             </div>
-
+                                            <div className="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Description
+                                                </CLabel>
+                                                <Editor
+                                                    editorState={editorState}
+                                                    wrapperClassName="demo-wrapper border rounded p-2"
+                                                    editorClassName="demo-editor border p-2"
+                                                    onEditorStateChange={setEditorState}
+                                                    // toolbar={{
+                                                    //     inline: { inDropdown: true },
+                                                    //     list: { inDropdown: true },
+                                                    //     textAlign: { inDropdown: true },
+                                                    //     link: { inDropdown: true },
+                                                    //     history: { inDropdown: true },
+                                                    // }}
+                                                    localization={{
+                                                        locale: 'en',
+                                                      }}
+                                                />
+                                            </div>
+                                            <div className="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Features
+                                                </CLabel>
+                                                <Editor
+                                                    editorState={features}
+                                                    wrapperClassName="demo-wrapper border rounded p-2"
+                                                    editorClassName="demo-editor border p-2"
+                                                    onEditorStateChange={setFeatures}
+                                                />
+                                            </div>
                                             <div className="col-lg-12 mb-3">
                                                 <ImageUploader
                                                     {...props}

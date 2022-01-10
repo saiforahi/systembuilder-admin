@@ -11,7 +11,10 @@ import swal from 'sweetalert';
 import { useHistory } from 'react-router-dom';
 import ImageUploader from "react-images-upload";
 import { fetchCasingsThunk } from '../../store/slices/casingsSlice';
-
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState,convertToRaw } from 'draft-js';
+import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import draftToHtml from 'draftjs-to-html';
 const Create = (props) => {
     const dispatch = useDispatch()
     const [submitted,setSubmitted]=useState(false)
@@ -20,6 +23,12 @@ const Create = (props) => {
     const onDrop = picture => {
         setPictures([...pictures, picture]);
     };
+    const [editorState, setEditorState] = React.useState(
+        () => EditorState.createEmpty(),
+    );
+    const [features, setFeatures] = React.useState(
+        () => EditorState.createEmpty(),
+    );
     // const [selectedBrand,setSelectedBrand] = useState()
     
     const createCasing = (values) => {
@@ -27,6 +36,9 @@ const Create = (props) => {
         let formData = new FormData()
         formData.append('name', values.name)
         formData.append('stock',values.stock)
+        formData.append('short_name', values.short_name)
+        formData.append('description',draftToHtml(convertToRaw(editorState.getCurrentContent())))
+        formData.append('features',draftToHtml(convertToRaw(features.getCurrentContent())))
         if (pictures.length > 0) {
             formData.append('total_images', pictures[0].length)
             // formData.append('images',pictures[0])
@@ -36,18 +48,18 @@ const Create = (props) => {
                 formData.append('image' + (index + 1), pictures[0][index])
             }
         }
-        const physical_specs = {
-            material: selectedMaterial.value
-        }
-        const compatibility_specs={
-            motherboard_support: selectedMotherboardSupport.value
-        }
+        // const physical_specs = {
+        //     material: selectedMaterial.value
+        // }
+        // const compatibility_specs={
+        //     motherboard_support: selectedMotherboardSupport.value
+        // }
         formData.append('price', price)
         formData.append('brand', selectedBrand.value)
         formData.append('model', selectedModel.value)
         
-        formData.append('physical_specs', JSON.stringify(physical_specs))
-        formData.append('compatibility_specs', JSON.stringify(compatibility_specs))
+        // formData.append('physical_specs', JSON.stringify(physical_specs))
+        // formData.append('compatibility_specs', JSON.stringify(compatibility_specs))
         for (var pair of formData.entries()) {
             console.log(pair[0]+ ', ' + pair[1]); 
         }
@@ -133,6 +145,7 @@ const Create = (props) => {
         if (!values.name) errors.name = "Name is required"
         if (!values.brand) errors.brand = "Brand is required"
         if (!values.model) errors.model = "Model is required"
+        if (!values.short_name) errors.short_name = "Short Name is required"
         // if (!values.price) errors.price = "Price is required"
         // if (!values.memory) errors.memory = "Memory is required"
         // if (!values.ram_size) errors.ram_size = "RAM Size is required"
@@ -150,7 +163,8 @@ const Create = (props) => {
             price:'',
             material:'',
             motherboard_support:'',
-            stock:''
+            stock:'',
+            short_name:''
         },
         validate: validateForm,
         validateOnBlur: true,
@@ -174,22 +188,22 @@ const Create = (props) => {
             })
             setBrands(temp)
         })
-        API.get('cases/specification/list/physical/material').then(res => {
-            console.log('material', res.data)
-            let temp = []
-            Array.from(res.data.data).forEach((item, idx) => {
-                temp.push({ value: item, label: item })
-            })
-            setMaterials(temp)
-        })
-        API.get('cases/specification/list/compatibility/motherboard_support').then(res => {
-            console.log('motherboard_support', res.data)
-            let temp = []
-            Array.from(res.data.data).forEach((item, idx) => {
-                temp.push({ value: item, label: item })
-            })
-            setMotherboardSupports(temp)
-        })
+        // API.get('cases/specification/list/physical/material').then(res => {
+        //     console.log('material', res.data)
+        //     let temp = []
+        //     Array.from(res.data.data).forEach((item, idx) => {
+        //         temp.push({ value: item, label: item })
+        //     })
+        //     setMaterials(temp)
+        // })
+        // API.get('cases/specification/list/compatibility/motherboard_support').then(res => {
+        //     console.log('motherboard_support', res.data)
+        //     let temp = []
+        //     Array.from(res.data.data).forEach((item, idx) => {
+        //         temp.push({ value: item, label: item })
+        //     })
+        //     setMotherboardSupports(temp)
+        // })
     }
     React.useEffect(() => {
         initialize()
@@ -216,6 +230,13 @@ const Create = (props) => {
                                                 </CLabel>
                                                 <CInput className="custom-forminput-6" id="name" name="name" type="text" values={formCreateCasing.values.name} onChange={formCreateCasing.handleChange} />
                                                 {formCreateCasing.errors.name && formCreateCasing.touched.name && <small class="error">{formCreateCasing.errors.name}</small>}
+                                            </div>
+                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Short Name
+                                                </CLabel>
+                                                <CInput className="custom-forminput-6" id="short_name" name="short_name" type="text" values={formCreateCasing.values.short_name} onChange={formCreateCasing.handleChange} />
+                                                {formCreateCasing.errors.short_name && formCreateCasing.touched.short_name && <small class="error">{formCreateCasing.errors.short_name}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -259,7 +280,7 @@ const Create = (props) => {
                                                 {/* {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>} */}
                                             </div>
                                             
-                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                            {/* <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Material
                                                 </CLabel>
@@ -274,7 +295,7 @@ const Create = (props) => {
                                                     value={selectedMaterial}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateCasing.errors.name && formCreateCasing.touched.name && <small class="error">{formCreateCasing.errors.name}</small>} */}
+                                                
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -291,17 +312,48 @@ const Create = (props) => {
                                                     value={selectedMotherboardSupport}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateCasing.errors.name && formCreateCasing.touched.name && <small class="error">{formCreateCasing.errors.name}</small>} */}
-                                            </div>
+                                                
+                                            </div> */}
                                             
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Price (BDT)
                                                 </CLabel>
                                                 <CInput type="number" value={price} onChange={(event) => setPrice(event.target.value)} />
-                                                {formCreateCasing.errors.name && formCreateCasing.touched.name && <small>{formCreateCasing.errors.name}</small>}
+                                                {formCreateCasing.errors.price && formCreateCasing.touched.price && <small>{formCreateCasing.errors.price}</small>}
                                             </div>
-
+                                            <div className="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Description
+                                                </CLabel>
+                                                <Editor
+                                                    editorState={editorState}
+                                                    wrapperClassName="demo-wrapper border rounded p-2"
+                                                    editorClassName="demo-editor border p-2"
+                                                    onEditorStateChange={setEditorState}
+                                                    // toolbar={{
+                                                    //     inline: { inDropdown: true },
+                                                    //     list: { inDropdown: true },
+                                                    //     textAlign: { inDropdown: true },
+                                                    //     link: { inDropdown: true },
+                                                    //     history: { inDropdown: true },
+                                                    // }}
+                                                    localization={{
+                                                        locale: 'en',
+                                                      }}
+                                                />
+                                            </div>
+                                            <div className="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Features
+                                                </CLabel>
+                                                <Editor
+                                                    editorState={features}
+                                                    wrapperClassName="demo-wrapper border rounded p-2"
+                                                    editorClassName="demo-editor border p-2"
+                                                    onEditorStateChange={setFeatures}
+                                                />
+                                            </div>
                                             <div className="col-lg-12 mb-3">
                                                 <ImageUploader
                                                     {...props}

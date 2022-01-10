@@ -11,6 +11,10 @@ import swal from 'sweetalert';
 import { useHistory } from 'react-router-dom';
 import ImageUploader from "react-images-upload";
 import { fetchGraphicsCardsThunk } from '../../store/slices/graphicsCardsSlice';
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState,convertToRaw } from 'draft-js';
+import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import draftToHtml from 'draftjs-to-html';
 
 const Create = (props) => {
     const dispatch = useDispatch()
@@ -21,12 +25,20 @@ const Create = (props) => {
         setPictures([...pictures, picture]);
     };
     // const [selectedBrand,setSelectedBrand] = useState()
-    
+    const [editorState, setEditorState] = React.useState(
+        () => EditorState.createEmpty(),
+    );
+    const [features, setFeatures] = React.useState(
+        () => EditorState.createEmpty(),
+    );
     const createStorage = (values) => {
         setSubmitted(true)
         let formData = new FormData()
         formData.append('name', values.name)
         formData.append('stock',values.stock)
+        formData.append('short_name',values.short_name)
+        formData.append('description',draftToHtml(convertToRaw(editorState.getCurrentContent())))
+        formData.append('features',draftToHtml(convertToRaw(features.getCurrentContent())))
         if (pictures.length > 0) {
             formData.append('total_images', pictures[0].length)
             // formData.append('images',pictures[0])
@@ -36,20 +48,20 @@ const Create = (props) => {
                 formData.append('image' + (index + 1), pictures[0][index])
             }
         }
-        const general_specs = {
-            chipset: selectedChipSet.value,
-            memory: selectedMemory.value!==null?selectedMemory.value:'',
-        }
-        const clock_specs = {
-            base_clock_speed: selectedPartNumber.value,
-            clock_speed: selectedLatency.value
-        }
+        // const general_specs = {
+        //     chipset: selectedChipSet.value,
+        //     memory: selectedMemory.value!==null?selectedMemory.value:'',
+        // }
+        // const clock_specs = {
+        //     base_clock_speed: selectedPartNumber.value,
+        //     clock_speed: selectedLatency.value
+        // }
         
         formData.append('price', price)
         formData.append('brand', selectedBrand.value)
         formData.append('model', selectedModel.value)
-        formData.append('general_specs', JSON.stringify(general_specs))
-        formData.append('clock_specs', JSON.stringify(clock_specs))
+        // formData.append('general_specs', JSON.stringify(general_specs))
+        // formData.append('clock_specs', JSON.stringify(clock_specs))
         
         for (var pair of formData.entries()) {
             console.log(pair[0]+ ', ' + pair[1]); 
@@ -175,6 +187,7 @@ const Create = (props) => {
         if (!values.brand) errors.brand = "Brand is required"
         if (!values.model) errors.model = "Model is required"
         // if (!values.price) errors.price = "Price is required"
+        if (!values.short_name) errors.short_name = "Short Name is required"
         // if (!values.memory) errors.memory = "Memory is required"
         // if (!values.ram_size) errors.ram_size = "RAM Size is required"
         // if (!values.latency) errors.latency = "Latency is required"
@@ -194,7 +207,8 @@ const Create = (props) => {
             latency:'',
             part_number:'',
             dimm_type:'',
-            stock:''
+            stock:'',
+            short_name:''
         },
         validate: validateForm,
         validateOnBlur: true,
@@ -218,38 +232,38 @@ const Create = (props) => {
             })
             setBrands(temp)
         })
-        API.get('graphics/specification/list/memory/memory').then(res => {
-            console.log('graphics', res.data)
-            let temp = []
-            Array.from(res.data.data).forEach((item, idx) => {
-                temp.push({ value: item, label: item })
-            })
-            setMemories(temp)
-        })
-        API.get('graphics/specification/list/memory/ram').then(res => {
-            console.log('chipsets', res.data)
-            let temp = []
-            Array.from(res.data.data).forEach((item, idx) => {
-                temp.push({ value: item, label: item })
-            })
-            setChipSets(temp)
-        })
-        API.get('graphics/specification/list/memory/latency').then(res => {
-            console.log('write_speed', res.data)
-            let temp = []
-            Array.from(res.data.data).forEach((item, idx) => {
-                temp.push({ value: item, label: item })
-            })
-            setLatencies(temp)
-        })
-        API.get('graphics/specification/list/additional/dimm').then(res => {
-            console.log('read_speed', res.data)
-            let temp = []
-            Array.from(res.data.data).forEach((item, idx) => {
-                temp.push({ value: item, label: item })
-            })
-            setDimmTypes(temp)
-        })
+        // API.get('graphics/specification/list/memory/memory').then(res => {
+        //     console.log('graphics', res.data)
+        //     let temp = []
+        //     Array.from(res.data.data).forEach((item, idx) => {
+        //         temp.push({ value: item, label: item })
+        //     })
+        //     setMemories(temp)
+        // })
+        // API.get('graphics/specification/list/memory/ram').then(res => {
+        //     console.log('chipsets', res.data)
+        //     let temp = []
+        //     Array.from(res.data.data).forEach((item, idx) => {
+        //         temp.push({ value: item, label: item })
+        //     })
+        //     setChipSets(temp)
+        // })
+        // API.get('graphics/specification/list/memory/latency').then(res => {
+        //     console.log('write_speed', res.data)
+        //     let temp = []
+        //     Array.from(res.data.data).forEach((item, idx) => {
+        //         temp.push({ value: item, label: item })
+        //     })
+        //     setLatencies(temp)
+        // })
+        // API.get('graphics/specification/list/additional/dimm').then(res => {
+        //     console.log('read_speed', res.data)
+        //     let temp = []
+        //     Array.from(res.data.data).forEach((item, idx) => {
+        //         temp.push({ value: item, label: item })
+        //     })
+        //     setDimmTypes(temp)
+        // })
     }
     React.useEffect(() => {
         initialize()
@@ -275,6 +289,13 @@ const Create = (props) => {
                                                 </CLabel>
                                                 <CInput className="custom-forminput-6" id="name" name="name" type="text" values={formCreateGraphicsCard.values.name} onChange={formCreateGraphicsCard.handleChange} />
                                                 {formCreateGraphicsCard.errors.name && formCreateGraphicsCard.touched.name && <small class="error">{formCreateGraphicsCard.errors.name}</small>}
+                                            </div>
+                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Short Name
+                                                </CLabel>
+                                                <CInput className="custom-forminput-6" id="short_name" name="short_name" type="text" values={formCreateGraphicsCard.values.short_name} onChange={formCreateGraphicsCard.handleChange} />
+                                                {formCreateGraphicsCard.errors.short_name && formCreateGraphicsCard.touched.short_name && <small class="error">{formCreateGraphicsCard.errors.short_name}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -317,7 +338,7 @@ const Create = (props) => {
                                                 <CInput className="custom-forminput-6" id="stock" name="stock" type="number" values={formCreateGraphicsCard.values.stock} onChange={formCreateGraphicsCard.handleChange} />
                                                 {/* {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>} */}
                                             </div>
-                                            <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                            {/* <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Memory
                                                 </CLabel>
@@ -332,7 +353,7 @@ const Create = (props) => {
                                                     value={selectedMemory}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateGraphicsCard.errors.name && formCreateGraphicsCard.touched.name && <small class="error">{formCreateGraphicsCard.errors.name}</small>} */}
+                                                
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -349,7 +370,7 @@ const Create = (props) => {
                                                     value={selectedChipSet}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateGraphicsCard.errors.name && formCreateGraphicsCard.touched.name && <small class="error">{formCreateGraphicsCard.errors.name}</small>} */}
+                                                
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -366,7 +387,7 @@ const Create = (props) => {
                                                     value={selectedLatency}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateGraphicsCard.errors.name && formCreateGraphicsCard.touched.name && <small class="error">{formCreateGraphicsCard.errors.name}</small>} */}
+                                                
                                             </div>
                                             
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
@@ -384,16 +405,47 @@ const Create = (props) => {
                                                     value={selectedPartNumber}
                                                     isClearable={true}
                                                 />
-                                                {/* {formCreateGraphicsCard.errors.name && formCreateGraphicsCard.touched.name && <small class="error">{formCreateGraphicsCard.errors.name}</small>} */}
-                                            </div>
+                                                
+                                            </div> */}
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Price (BDT)
                                                 </CLabel>
                                                 <CInput type="number" value={price} onChange={(event) => setPrice(event.target.value)} />
-                                                {formCreateGraphicsCard.errors.name && formCreateGraphicsCard.touched.name && <small>{formCreateGraphicsCard.errors.name}</small>}
+                                                {formCreateGraphicsCard.errors.price && formCreateGraphicsCard.touched.price && <small>{formCreateGraphicsCard.errors.price}</small>}
                                             </div>
-
+                                            <div className="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Description
+                                                </CLabel>
+                                                <Editor
+                                                    editorState={editorState}
+                                                    wrapperClassName="demo-wrapper border rounded p-2"
+                                                    editorClassName="demo-editor border p-2"
+                                                    onEditorStateChange={setEditorState}
+                                                    // toolbar={{
+                                                    //     inline: { inDropdown: true },
+                                                    //     list: { inDropdown: true },
+                                                    //     textAlign: { inDropdown: true },
+                                                    //     link: { inDropdown: true },
+                                                    //     history: { inDropdown: true },
+                                                    // }}
+                                                    localization={{
+                                                        locale: 'en',
+                                                      }}
+                                                />
+                                            </div>
+                                            <div className="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                <CLabel className="custom-label-wbs5">
+                                                    Features
+                                                </CLabel>
+                                                <Editor
+                                                    editorState={features}
+                                                    wrapperClassName="demo-wrapper border rounded p-2"
+                                                    editorClassName="demo-editor border p-2"
+                                                    onEditorStateChange={setFeatures}
+                                                />
+                                            </div>
                                             <div className="col-lg-12 mb-3">
                                                 <ImageUploader
                                                     {...props}
