@@ -65,6 +65,10 @@ const routes = [
     //mice
     { path: '/dashboard/mice',exact:true, name: 'Mice', component: React.lazy(()=>import('../pages/mice/Mice'))},
     { path: '/dashboard/mice/create',exact:true, name: 'Create Mouse', component: React.lazy(()=>import('../pages/mice/Create'))},
+
+    //prebuild
+    { path: '/dashboard/prebuild',exact:true, name: 'PreBuildPc', component: React.lazy(()=>import('../pages/prebuild/PreBuildPc'))},
+    { path: '/dashboard/prebuild/create',exact:true, name: 'Create PreBuildPc', component: React.lazy(()=>import('../pages/prebuild/Create'))},
 ]
 
 export default routes

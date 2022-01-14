@@ -19,6 +19,7 @@ import caseCoolersSlice from './slices/caseCoolersSlice'
 import cpucoolersSlice from './slices/cpucoolersSlice'
 import miceSlice from './slices/miceSlice'
 import keyboardsSlice from './slices/keyboardsSlice'
+import prebuildSlice from './slices/prebuildSlice'
 
 export default configureStore({
   reducer: {
@@ -41,6 +42,7 @@ export default configureStore({
     caseCoolers: caseCoolersSlice,
     cpuCoolers: cpucoolersSlice,
     mice:miceSlice,
-    keyboards:keyboardsSlice
+    keyboards:keyboardsSlice,
+    prebuilds:prebuildSlice
   },
 })

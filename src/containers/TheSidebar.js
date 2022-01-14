@@ -26,8 +26,8 @@ const TheSidebar = () => {
     console.log('has group',has_group('pm'))
   },[])
   return (
-    <CSidebar colorScheme="light"
-      show={show}
+    <CSidebar colorScheme="dark"
+      show={show} placement={'end'} narrow={true}
       onShowChange={(val) => dispatch(changeState(val))}
     >
       <CSidebarBrand className="d-md-down-none custom-color" to="/">
@@ -55,13 +55,13 @@ const TheSidebar = () => {
             CSidebarNavTitle
           }}
         /> */}
-        <hr/>
         <CSidebarNavItem to="/dashboard" icon="cil-speedometer" name="Dashboard" className="vo-navItem"></CSidebarNavItem>
         {/**Projects */}
         <CSidebarNavDropdown icon="cil-laptop" name="Computers" className="vo-navItem">
           {has_group('admin') && <CSidebarNavItem to="/dashboard/products/create-new-product" name="Add New Product" className="vo-navItem" ></CSidebarNavItem>}
           <CSidebarNavItem to="/dashboard/products" name="All Products" className="vo-navItem"></CSidebarNavItem>
           <CSidebarNavItem to="/dashboard/laptops" name="Laptops" className="vo-navItem"></CSidebarNavItem>
+          <CSidebarNavItem to="/dashboard/prebuild" name="PreBuild" className="vo-navItem"></CSidebarNavItem>
           
           {/* <CSidebarNavItem to="/dashboard/Projects/completed-projects" name="Completed Projects" className="vo-navItem" ></CSidebarNavItem> */}
         </CSidebarNavDropdown>
