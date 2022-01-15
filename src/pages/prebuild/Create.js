@@ -96,6 +96,11 @@ const Create = (props) => {
         if (!values.stock) errors.stock = "Stock is required"
         if (!values.price) errors.price = "Price is required"
         if (!values.processor) errors.processor = "Processor is required"
+        if (!values.storage) errors.storage = "Storage is required"
+        if (!values.memory) errors.memory = "Memory is required"
+        if (!values.color) errors.color = "Color is required"
+        if (!values.os) errors.os = "OS is required"
+        // if (!values.gpu) errors.gpu = "GPU is required"
         if (!values.type) errors.type = "Type is required"
         console.log('errors',errors,'values',values)
         return errors
@@ -330,14 +335,14 @@ const Create = (props) => {
                                                     Name
                                                 </CLabel>
                                                 <CInput className="custom-forminput-6" id="name" name="name" type="text" values={formCreateProcessor.values.name} onChange={formCreateProcessor.handleChange} />
-                                                {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>}
+                                                {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small style={{color:'red'}}>{formCreateProcessor.errors.name}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
                                                     Short Name
                                                 </CLabel>
                                                 <CInput className="custom-forminput-6" id="short_name" name="short_name" type="text" values={formCreateProcessor.values.short_name} onChange={formCreateProcessor.handleChange} />
-                                                {formCreateProcessor.errors.short_name && formCreateProcessor.touched.short_name && <small>{formCreateProcessor.errors.short_name}</small>}
+                                                {formCreateProcessor.errors.short_name && formCreateProcessor.touched.short_name && <small style={{color:'red'}}>{formCreateProcessor.errors.short_name}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -348,7 +353,7 @@ const Create = (props) => {
                                                     <option value="cheap">Cheap</option>
                                                 </CSelect>
                                                 {/* <CInput className="custom-forminput-6" id="short_name" name="short_name" type="text" values={formCreateProcessor.values.short_name} onChange={formCreateProcessor.handleChange} /> */}
-                                                {formCreateProcessor.errors.type && formCreateProcessor.touched.type && <small>{formCreateProcessor.errors.type}</small>}
+                                                {formCreateProcessor.errors.type && formCreateProcessor.touched.type && <small style={{color:'red'}}>{formCreateProcessor.errors.type}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -389,7 +394,7 @@ const Create = (props) => {
                                                     Stock
                                                 </CLabel>
                                                 <CInput className="custom-forminput-6" id="stock" name="stock" type="number" values={formCreateProcessor.values.stock} onChange={formCreateProcessor.handleChange} />
-                                                {/* {formCreateProcessor.errors.name && formCreateProcessor.touched.name && <small>{formCreateProcessor.errors.name}</small>} */}
+                                                {formCreateProcessor.errors.stock && formCreateProcessor.touched.stock && <small style={{color:'red'}}>{formCreateProcessor.errors.stock}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -406,7 +411,7 @@ const Create = (props) => {
                                                     value={selectedOS}
                                                     isClearable={true}
                                                 />
-                                                {formCreateProcessor.errors.os && formCreateProcessor.touched.os && <small>{formCreateProcessor.errors.os}</small>}
+                                                {formCreateProcessor.errors.os && formCreateProcessor.touched.os && <small style={{color:'red'}}>{formCreateProcessor.errors.os}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -423,7 +428,7 @@ const Create = (props) => {
                                                     value={selectedProcessor}
                                                     isClearable={true}
                                                 />
-                                                {formCreateProcessor.errors.processor && formCreateProcessor.touched.processor && <small>{formCreateProcessor.errors.processor}</small>}
+                                                {formCreateProcessor.errors.processor && formCreateProcessor.touched.processor && <small style={{color:'red'}}>{formCreateProcessor.errors.processor}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -440,7 +445,7 @@ const Create = (props) => {
                                                     value={selectedGraphic}
                                                     isClearable={true}
                                                 />
-                                                {formCreateProcessor.errors.gpu && formCreateProcessor.touched.gpu && <small>{formCreateProcessor.errors.gpu}</small>}
+                                                {formCreateProcessor.errors.gpu && formCreateProcessor.touched.gpu && <small style={{color:'red'}}>{formCreateProcessor.errors.gpu}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -457,7 +462,7 @@ const Create = (props) => {
                                                     value={selectedStorage}
                                                     isClearable={true}
                                                 />
-                                                {formCreateProcessor.errors.storage && formCreateProcessor.touched.storage && <small>{formCreateProcessor.errors.storage}</small>}
+                                                {formCreateProcessor.errors.storage && formCreateProcessor.touched.storage && <small style={{color:'red'}}>{formCreateProcessor.errors.storage}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -474,7 +479,7 @@ const Create = (props) => {
                                                     value={selectedMemory}
                                                     isClearable={true}
                                                 />
-                                                {formCreateProcessor.errors.memory && formCreateProcessor.touched.memory && <small>{formCreateProcessor.errors.memory}</small>}
+                                                {formCreateProcessor.errors.memory && formCreateProcessor.touched.memory && <small style={{color:'red'}}>{formCreateProcessor.errors.memory}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
@@ -491,7 +496,7 @@ const Create = (props) => {
                                                     value={selectedColor}
                                                     isClearable={true}
                                                 />
-                                                {formCreateProcessor.errors.color && formCreateProcessor.touched.color && <small>{formCreateProcessor.errors.color}</small>}
+                                                {formCreateProcessor.errors.color && formCreateProcessor.touched.color && <small style={{color:'red'}}>{formCreateProcessor.errors.color}</small>}
                                             </div>
                                             <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <CLabel className="custom-label-wbs5">
