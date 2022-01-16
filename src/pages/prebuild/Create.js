@@ -350,7 +350,8 @@ const Create = (props) => {
                                                 </CLabel>
                                                 <CSelect id='type' name='type' value={formCreateProcessor.values.type} onChange={(e)=>formCreateProcessor.setFieldValue('type',e.target.value)}>
                                                     <option value="gaming">Gaming</option>
-                                                    <option value="cheap">Cheap</option>
+                                                    {/* <option value="cheap">Cheap</option> */}
+                                                    <option value="hybrid">Hybrid</option>
                                                 </CSelect>
                                                 {/* <CInput className="custom-forminput-6" id="short_name" name="short_name" type="text" values={formCreateProcessor.values.short_name} onChange={formCreateProcessor.handleChange} /> */}
                                                 {formCreateProcessor.errors.type && formCreateProcessor.touched.type && <small style={{color:'red'}}>{formCreateProcessor.errors.type}</small>}
