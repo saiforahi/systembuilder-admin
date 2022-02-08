@@ -15,6 +15,7 @@ const Orders = () => {
     let history = useHistory()
     const [showModal,setShowModal]=useState(false)
     const [selectedOrder,setSelectedOrder]=useState()
+    const [tableData,setTableData]=useState([])
     const orders = useSelector(state =>{
         let temp=[]
         for (const [key, value] of Object.entries(state.orders.data)) {
@@ -31,6 +32,12 @@ const Orders = () => {
         return temp
     })
     const show_details=(item)=>{
+        console.log('item',item)
+        let temp=[]
+        Array.from(item.data).forEach((data,idx)=>{
+            temp.push({"#":idx+1,'Product':data.product.name,"Quantity":data.product_qty})
+        })
+        setTableData(temp)
         setSelectedOrder(item)
         setShowModal(true)
         
@@ -136,8 +143,50 @@ const Orders = () => {
                                                     </div>
                                                     
                                                 </div>
+                                                <div className='col-md-12 mt-4 mt-2'>
+                                                    <h5 className="projectName mb-3">Product(s)-({selectedOrder.data.length})</h5>
+                                                    <div className="file-show-ongoing-details row">
+                                                    <CDataTable
+                                                    items={tableData}
+                                                    fields={[
+                                                        {
+                                                            key: "#",
+                                                            _style: { width: "5%" },
+                                                            _classes: "font-weight-bold",
+                                                        },
+                                                        "Product","Quantity",
+                                                        // {
+                                                        //     key: "Action",
+                                                        //     label: "Actions",
+                                                        //     _style: { maxWidth: "5%" },
+                                                        //     sorter: true,
+                                                        //     filter: false,
+                                                        // },
+                                                    ]}
+                                                    light
+                                                    hover
+                                                    striped
+                                                    bordered
+                                                    sorter
+                                                    columnFilter
+                                                    size="sm"
+                                                    itemsPerPage={10}
+                                                    pagination
+                                                    // scopedSlots={{
+                                                    //     'Action':
+                                                    //         (item) => (
+                                                    //             <td>
+                                                    //                 <CBadge> 
+                                                    //                     <CButton onClick={() => {}} type="button" size="sm" color="danger">Delete</CButton> 
+                                                    //                 </CBadge>
+                                                    //             </td>
+                                                    //         )
+                                                    // }}
+                                                />
+                                                    </div>
 
-                                                <div className="col-md-12 mt-4 mb-2">
+                                                </div>
+                                                {/* <div className="col-md-12 mt-4 mb-2">
                                                     <h5 className="projectName mb-3">Product(s)-({selectedOrder.data.length})</h5>
                                                     <div className="file-show-ongoing-details row">
                                                         {selectedOrder.data != undefined && Array.from(selectedOrder.data).map((item, idx) => (
@@ -148,7 +197,7 @@ const Orders = () => {
                                                             </div>
                                                         ))}
                                                     </div>
-                                                </div>
+                                                </div> */}
                                                 {/* <div className="col-md-12 mt-2 mb-2">
                                                     <div className="project-actions">
                                                         <CButton className="edit-project-ongoing-task" onClick={() => editInfoForm(subtask)} ><CIcon name="cil-pencil" className="mr-1" /> Edit </CButton>
